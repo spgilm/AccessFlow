@@ -1053,3 +1053,248 @@ select:focus-visible {
     align-items: start;
   }
 }
+
+
+.documentation-panel {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.documentation-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.documentation-stat-card {
+  display: grid;
+  gap: 0.15rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.85rem;
+  background: var(--surface-strong);
+}
+
+.documentation-stat-card span {
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.documentation-stat-card strong {
+  color: var(--primary-strong);
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.documentation-stat-card small {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.activity-breakdown-details {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.85rem;
+  background: var(--surface-strong);
+  margin-bottom: 1rem;
+}
+
+.activity-breakdown-details summary {
+  cursor: pointer;
+  color: var(--primary-strong);
+  font-weight: 950;
+}
+
+.activity-breakdown-details pre {
+  white-space: pre-wrap;
+  margin: 0.75rem 0 0;
+  color: var(--text);
+  font-family: inherit;
+  font-weight: 650;
+}
+
+.documentation-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+.generated-note-block {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.generated-note-block textarea {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  background: #fbfdff;
+}
+
+.copy-status {
+  margin: 0 0 0.75rem;
+  color: var(--success);
+  font-weight: 900;
+}
+
+@media (min-width: 680px) {
+  .documentation-summary-grid {
+    grid-template-columns: 1.2fr 0.9fr 0.9fr;
+    align-items: end;
+  }
+
+  .documentation-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+.data-management-panel {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.data-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.file-input-button {
+  display: grid;
+  place-items: center;
+  min-height: var(--tap-target);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  background: white;
+  color: var(--primary-strong);
+  font-weight: 950;
+  text-align: center;
+  cursor: pointer;
+}
+
+.file-input-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.data-file-name {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+@media (min-width: 680px) {
+  .data-actions-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+.supabase-sync-panel {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.backend-status-card {
+  display: grid;
+  gap: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  background: var(--surface-strong);
+}
+
+.backend-status-card.is-configured {
+  border-color: #80c99a;
+  background: var(--success-soft);
+}
+
+.backend-status-card.is-local {
+  border-color: var(--border-strong);
+}
+
+.backend-status-card span {
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.backend-status-card strong {
+  color: var(--primary-strong);
+  font-size: 1.2rem;
+}
+
+.backend-status-card p,
+.backend-warning {
+  margin: 0;
+  color: var(--muted);
+}
+
+.backend-checklist {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  color: var(--primary-strong);
+  font-weight: 900;
+}
+
+.check-good,
+.check-missing {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-right: 0.45rem;
+  border-radius: 999px;
+  color: white;
+  font-weight: 950;
+}
+
+.check-good {
+  background: var(--success);
+}
+
+.check-missing {
+  background: var(--danger);
+}
+
+
+.auth-panel {
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.signed-in-card {
+  display: grid;
+  gap: 0.5rem;
+  border: 1px solid #80c99a;
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  background: var(--success-soft);
+}
+
+.signed-in-card span {
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.signed-in-card strong {
+  color: var(--primary-strong);
+  overflow-wrap: anywhere;
+}
+
+.auth-help {
+  margin-top: 1rem;
+}

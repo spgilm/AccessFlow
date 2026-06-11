@@ -8,6 +8,7 @@ export const starterProfiles = [
     notes:
       "Sample profile for testing AccessFlow. Replace this with the student/client's real support notes.",
     activities: starterActivities,
+    documentationByDate: {},
   },
 ];
 
@@ -17,5 +18,6 @@ export function createBlankProfile(name = "New Student") {
     name,
     notes: "",
     activities: [],
+    documentationByDate: {},
   };
 }

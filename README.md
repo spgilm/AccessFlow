@@ -1,18 +1,102 @@
-# AccessFlow v4
+# AccessFlow v8
 
 AccessFlow is a mobile-first adaptive visual schedule web app for students/clients who benefit from visual structure, task analysis, and simplified daily routines.
 
-## Version 4 focus
+## Version 8 focus
 
-Version 4 adds the first real staff-side organization layer:
+Version 8 adds the first real authentication and user-scoped backend boundary:
 
-- Student/client profiles
-- Profile-specific schedules
-- Reusable schedule templates
-- Apply templates to selected profiles
-- Save a selected profile's current schedule as a reusable template
+- Optional Supabase email/password auth
+- Auth status panel
+- Sign up
+- Sign in
+- Sign out
+- Authenticated user-scoped cloud snapshots
+- Authenticated row-level-security schema
+- LocalStorage fallback when Supabase is not configured
+- Manual JSON backup/import preserved
 
-This keeps the app frontend-only while making it feel more like a real support tool.
+This version is still a prototype, but it is a more serious backend foundation than the v7 anon snapshot sync.
+
+## Default behavior
+
+Without Supabase environment variables, AccessFlow still works as a local static app:
+
+```txt
+browser localStorage only
+```
+
+## Optional Supabase setup
+
+### 1. Create a Supabase project
+
+Create a project in Supabase.
+
+### 2. Run the v8 SQL schema
+
+Open Supabase SQL Editor and run:
+
+```txt
+database/supabase-schema.sql
+```
+
+This creates or updates:
+
+```txt
+accessflow_workspace_snapshots
+```
+
+The table uses:
+
+```txt
+user_id = auth.uid()
+```
+
+and row-level security so each authenticated user can only access their own snapshots.
+
+### 3. Enable email/password auth
+
+In Supabase Auth settings, enable email/password signups. Depending on your Supabase project settings, users may need to confirm email before signing in.
+
+### 4. Add environment variables to Render
+
+In Render, add:
+
+```txt
+VITE_SUPABASE_URL=your Supabase project URL
+VITE_SUPABASE_ANON_KEY=your Supabase anon key
+VITE_ACCESSFLOW_WORKSPACE_LABEL=prototype
+```
+
+Then redeploy.
+
+### 5. Use Staff Mode
+
+Staff Mode will show:
+
+- Account panel
+- Supabase sync panel
+
+After signing in, staff can:
+
+- Save cloud snapshot
+- Load latest snapshot
+
+## Security warning
+
+v8 is safer than v7 because snapshots are scoped to authenticated users by RLS.
+
+It is still not production-complete for real student/client data.
+
+Before using with real PII/PHI, add:
+
+- organization accounts
+- staff roles
+- student/client profile permissions
+- audit logging
+- explicit data retention rules
+- image storage with access policies
+- normalized database tables instead of full JSON snapshots
 
 ## Included features
 
@@ -47,52 +131,19 @@ This keeps the app frontend-only while making it feel more like a real support t
 - Add steps
 - Delete steps
 - Move steps up/down
-- Move activities up/down
 - Delete activities
+- Daily documentation note
+- Copy-ready staff progress note
+- Download daily progress note as `.txt`
+- Download activity completion breakdown as `.csv`
+- Export all AccessFlow data as JSON
+- Import AccessFlow JSON backup
+- Optional Supabase auth
+- Optional authenticated Supabase manual snapshot sync
 - Reset demo data
 - Clear selected profile schedule
 - localStorage persistence
 - Render-ready static site config
-
-## Important prototype limitations
-
-This version stores everything in browser localStorage:
-
-- Profiles
-- Schedules
-- Templates
-- Uploaded images as data URLs
-
-That is acceptable for a prototype, but not production.
-
-For production, these should move to a backend database and object storage:
-
-- PostgreSQL/Supabase for profiles, schedules, templates, and completion logs
-- Supabase Storage, Cloudinary, S3-compatible storage, or Firebase Storage for images
-
-## Why no real AI image API yet?
-
-Version 4 still avoids direct AI image generation from the browser.
-
-Reason:
-
-- Frontend-only apps cannot safely store API keys.
-- Browser-exposed API keys can be copied.
-- Generated images should be moderated, cached, and stored through a backend.
-
-The placeholder remains in:
-
-```txt
-src/services/imageProvider.js
-```
-
-Later, this can call a backend endpoint:
-
-```txt
-POST /api/generate-image
-```
-
-The backend would hold API keys in environment variables.
 
 ## Install locally
 
@@ -121,29 +172,11 @@ Publish Directory: dist
 
 This repo also includes `render.yaml`.
 
-## Useful demo prompts
+## Recommended v9
 
-Try:
+The next version should either:
 
-- brush teeth
-- wash hands
-- get dressed
-- eat breakfast
-- pack backpack
-- take medication
-- clean table
-- go outside
-- reading group
-- speech therapy
+1. Normalize the Supabase schema beyond JSON snapshots, or
+2. Add AI-generated task analysis through a backend API.
 
-Unknown prompts still create a simple schedule card with a best-guess emoji and generic steps.
-
-## Recommended v5
-
-The next version should probably add one of these:
-
-1. Completion history / documentation notes
-2. Export daily progress as a staff note
-3. Backend persistence
-4. Real authentication and staff/student permissions
-5. AI-generated task analysis through a backend
+For real-world deployment, normalized database tables should come before serious multi-user use.

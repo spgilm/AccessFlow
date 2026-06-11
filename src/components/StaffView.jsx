@@ -1,7 +1,11 @@
 import AddActivityForm from "./AddActivityForm.jsx";
+import AuthPanel from "./AuthPanel.jsx";
+import DataManagementPanel from "./DataManagementPanel.jsx";
+import DocumentationPanel from "./DocumentationPanel.jsx";
 import ProfileManager from "./ProfileManager.jsx";
 import StaffActivityEditor from "./StaffActivityEditor.jsx";
 import StaffActivityList from "./StaffActivityList.jsx";
+import SupabaseSyncPanel from "./SupabaseSyncPanel.jsx";
 import TemplateManager from "./TemplateManager.jsx";
 
 export default function StaffView({
@@ -12,6 +16,28 @@ export default function StaffView({
   activities,
   selectedActivity,
   selectedActivityId,
+  documentationDate,
+  dailyNote,
+  copyStatus,
+  exportStatus,
+  importStatus,
+  syncStatus,
+  isSyncing,
+  session,
+  authStatus,
+  isAuthWorking,
+  onSignIn,
+  onSignUp,
+  onSignOut,
+  onDocumentationDateChange,
+  onUpdateDailyNote,
+  onCopyDailyNote,
+  onDownloadDailyNote,
+  onDownloadActivityCsv,
+  onExportBackup,
+  onImportBackup,
+  onSaveCloudSnapshot,
+  onLoadCloudSnapshot,
   onSelectProfile,
   onAddProfile,
   onUpdateProfile,
@@ -50,6 +76,45 @@ export default function StaffView({
           onSaveCurrentScheduleAsTemplate={onSaveCurrentScheduleAsTemplate}
           onApplyTemplateToProfile={onApplyTemplateToProfile}
           onDeleteTemplate={onDeleteTemplate}
+        />
+      </div>
+
+      <DocumentationPanel
+        profile={selectedProfile}
+        activities={activities}
+        documentationDate={documentationDate}
+        dailyNote={dailyNote}
+        copyStatus={copyStatus}
+        onDocumentationDateChange={onDocumentationDateChange}
+        onUpdateDailyNote={onUpdateDailyNote}
+        onCopyDailyNote={onCopyDailyNote}
+        onDownloadDailyNote={onDownloadDailyNote}
+        onDownloadActivityCsv={onDownloadActivityCsv}
+      />
+
+      <DataManagementPanel
+        exportStatus={exportStatus}
+        importStatus={importStatus}
+        onExportBackup={onExportBackup}
+        onImportBackup={onImportBackup}
+      />
+
+      <div className="staff-management-grid">
+        <AuthPanel
+          session={session}
+          authStatus={authStatus}
+          isAuthWorking={isAuthWorking}
+          onSignIn={onSignIn}
+          onSignUp={onSignUp}
+          onSignOut={onSignOut}
+        />
+
+        <SupabaseSyncPanel
+          session={session}
+          syncStatus={syncStatus}
+          isSyncing={isSyncing}
+          onSaveCloudSnapshot={onSaveCloudSnapshot}
+          onLoadCloudSnapshot={onLoadCloudSnapshot}
         />
       </div>
 

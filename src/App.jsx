@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ModeToggle from "./components/ModeToggle.jsx";
 import StaffView from "./components/StaffView.jsx";
 import StudentView from "./components/StudentView.jsx";
@@ -7,14 +7,39 @@ import { starterTemplates } from "./data/starterTemplates.js";
 import { useLocalStorage } from "./hooks/useLocalStorage.js";
 import { generateActivityFromTask } from "./services/taskGenerator.js";
 import { areAllStepsComplete, moveItemById, updateActivityById } from "./utils/activityHelpers.js";
+import {
+  buildDailyProgressNote,
+  createBlankDailyNote,
+  getDailyNote,
+  getTodayDateKey,
+} from "./utils/documentationHelpers.js";
+import {
+  buildActivityCsv,
+  buildBackupPayload,
+  buildSafeFilename,
+  downloadTextFile,
+  validateBackupPayload,
+} from "./utils/exportHelpers.js";
+import { normalizeImportedBackupData } from "./utils/importHelpers.js";
+import {
+  getCurrentSession,
+  isSupabaseConfigured,
+  loadLatestWorkspaceSnapshot,
+  saveWorkspaceSnapshot,
+  signInWithEmail,
+  signOut,
+  signUpWithEmail,
+  subscribeToAuthChanges,
+} from "./services/supabaseWorkspace.js";
 import { createId } from "./utils/formatters.js";
 import { cloneActivitiesForProfile, cloneActivitiesForTemplate } from "./utils/templateHelpers.js";
 
-const PROFILES_STORAGE_KEY = "accessflow.profiles.v4";
-const SELECTED_PROFILE_STORAGE_KEY = "accessflow.selectedProfile.v4";
-const TEMPLATES_STORAGE_KEY = "accessflow.templates.v4";
-const MODE_STORAGE_KEY = "accessflow.mode.v4";
-const STUDENT_VIEW_STORAGE_KEY = "accessflow.studentView.v4";
+const PROFILES_STORAGE_KEY = "accessflow.profiles.v5";
+const SELECTED_PROFILE_STORAGE_KEY = "accessflow.selectedProfile.v5";
+const TEMPLATES_STORAGE_KEY = "accessflow.templates.v5";
+const MODE_STORAGE_KEY = "accessflow.mode.v5";
+const STUDENT_VIEW_STORAGE_KEY = "accessflow.studentView.v5";
+const DOCUMENTATION_DATE_STORAGE_KEY = "accessflow.documentationDate.v5";
 
 export default function App() {
   const [profiles, setProfiles] = useLocalStorage(PROFILES_STORAGE_KEY, starterProfiles);
@@ -28,10 +53,22 @@ export default function App() {
     STUDENT_VIEW_STORAGE_KEY,
     "schedule"
   );
+  const [documentationDate, setDocumentationDate] = useLocalStorage(
+    DOCUMENTATION_DATE_STORAGE_KEY,
+    getTodayDateKey()
+  );
   const [selectedActivityId, setSelectedActivityId] = useState(
     starterProfiles[0]?.activities[0]?.id ?? null
   );
   const [announcement, setAnnouncement] = useState("");
+  const [copyStatus, setCopyStatus] = useState("");
+  const [exportStatus, setExportStatus] = useState("");
+  const [importStatus, setImportStatus] = useState("");
+  const [syncStatus, setSyncStatus] = useState("");
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [session, setSession] = useState(null);
+  const [authStatus, setAuthStatus] = useState("");
+  const [isAuthWorking, setIsAuthWorking] = useState(false);
 
   const selectedProfile = useMemo(() => {
     return profiles.find((profile) => profile.id === selectedProfileId) ?? profiles[0] ?? null;
@@ -43,6 +80,40 @@ export default function App() {
     () => activities.find((activity) => activity.id === selectedActivityId) ?? null,
     [activities, selectedActivityId]
   );
+
+  const dailyNote = useMemo(
+    () => getDailyNote(selectedProfile, documentationDate),
+    [selectedProfile, documentationDate]
+  );
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) {
+      return undefined;
+    }
+
+    let active = true;
+
+    getCurrentSession()
+      .then((currentSession) => {
+        if (active) {
+          setSession(currentSession);
+        }
+      })
+      .catch((error) => {
+        if (active) {
+          setAuthStatus(`Could not read auth session: ${error.message}`);
+        }
+      });
+
+    const unsubscribe = subscribeToAuthChanges((nextSession) => {
+      setSession(nextSession);
+    });
+
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, []);
 
   function updateSelectedProfile(updater) {
     if (!selectedProfile) {
@@ -69,6 +140,58 @@ export default function App() {
     }
   }
 
+  function clearPortableStatuses() {
+    setCopyStatus("");
+    setExportStatus("");
+    setImportStatus("");
+    setSyncStatus("");
+  }
+
+  async function handleSignUp(email, password) {
+    setIsAuthWorking(true);
+    setAuthStatus("");
+
+    try {
+      await signUpWithEmail(email, password);
+      setAuthStatus("Account created. Check email confirmation settings if sign-in does not work immediately.");
+    } catch (error) {
+      setAuthStatus(`Sign-up failed: ${error.message}`);
+    } finally {
+      setIsAuthWorking(false);
+    }
+  }
+
+  async function handleSignIn(email, password) {
+    setIsAuthWorking(true);
+    setAuthStatus("");
+
+    try {
+      const data = await signInWithEmail(email, password);
+      setSession(data.session ?? null);
+      setAuthStatus("Signed in.");
+    } catch (error) {
+      setAuthStatus(`Sign-in failed: ${error.message}`);
+    } finally {
+      setIsAuthWorking(false);
+    }
+  }
+
+  async function handleSignOut() {
+    setIsAuthWorking(true);
+    setAuthStatus("");
+
+    try {
+      await signOut();
+      setSession(null);
+      setAuthStatus("Signed out.");
+      setSyncStatus("");
+    } catch (error) {
+      setAuthStatus(`Sign-out failed: ${error.message}`);
+    } finally {
+      setIsAuthWorking(false);
+    }
+  }
+
   async function handleAddActivity(taskText) {
     if (!selectedProfile) {
       return;
@@ -78,6 +201,7 @@ export default function App() {
 
     updateSelectedProfileActivities((currentActivities) => [...currentActivities, activity]);
     setSelectedActivityId(activity.id);
+    clearPortableStatuses();
     setAnnouncement(`${activity.label} added to ${selectedProfile.name}'s schedule.`);
   }
 
@@ -91,10 +215,197 @@ export default function App() {
     setAnnouncement(`${nextViewMode === "firstThen" ? "First / Then" : "Full Schedule"} view selected.`);
   }
 
+  function handleDocumentationDateChange(nextDate) {
+    setDocumentationDate(nextDate || getTodayDateKey());
+    clearPortableStatuses();
+  }
+
+  function handleUpdateDailyNote(nextDailyNote) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    updateSelectedProfile((profile) => ({
+      ...profile,
+      documentationByDate: {
+        ...(profile.documentationByDate ?? {}),
+        [documentationDate]: {
+          ...createBlankDailyNote(documentationDate),
+          ...nextDailyNote,
+          date: documentationDate,
+          updatedAt: new Date().toISOString(),
+        },
+      },
+    }));
+
+    clearPortableStatuses();
+  }
+
+  async function handleCopyDailyNote() {
+    const text = buildDailyProgressNote(selectedProfile, activities, dailyNote);
+
+    try {
+      if (!navigator.clipboard) {
+        throw new Error("Clipboard API unavailable.");
+      }
+
+      await navigator.clipboard.writeText(text);
+      setCopyStatus("Progress note copied.");
+    } catch {
+      setCopyStatus("Copy unavailable. Select the generated note text and copy it manually.");
+    }
+  }
+
+  function handleDownloadDailyNote() {
+    const filename = `${documentationDate}-${buildSafeFilename(selectedProfile?.name)}-accessflow-note.txt`;
+    const content = buildDailyProgressNote(selectedProfile, activities, dailyNote);
+
+    downloadTextFile(filename, content, "text/plain");
+    setCopyStatus("Daily note downloaded.");
+  }
+
+  function handleDownloadActivityCsv() {
+    const filename = `${documentationDate}-${buildSafeFilename(selectedProfile?.name)}-activity-summary.csv`;
+    const content = buildActivityCsv(selectedProfile, activities, dailyNote);
+
+    downloadTextFile(filename, content, "text/csv");
+    setCopyStatus("Activity CSV downloaded.");
+  }
+
+  function handleExportBackup() {
+    const payload = buildBackupPayload({
+      profiles,
+      templates,
+      selectedProfileId: selectedProfile?.id ?? selectedProfileId,
+      documentationDate,
+      mode,
+      studentViewMode,
+    });
+
+    const filename = `${getTodayDateKey()}-accessflow-backup.json`;
+    downloadTextFile(filename, JSON.stringify(payload, null, 2), "application/json");
+    setExportStatus("Backup exported.");
+    setImportStatus("");
+  }
+
+  function handleImportBackup(file) {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      try {
+        const payload = JSON.parse(String(reader.result));
+        const validationError = validateBackupPayload(payload);
+
+        if (validationError) {
+          setImportStatus(validationError);
+          return;
+        }
+
+        const imported = normalizeImportedBackupData(payload.data);
+
+        setProfiles(imported.profiles);
+        setTemplates(imported.templates);
+        setSelectedProfileId(imported.selectedProfileId);
+        setDocumentationDate(imported.documentationDate || getTodayDateKey());
+        setMode(imported.mode);
+        setStudentViewMode(imported.studentViewMode);
+
+        const nextProfile =
+          imported.profiles.find((profile) => profile.id === imported.selectedProfileId) ??
+          imported.profiles[0];
+
+        setSelectedActivityId(nextProfile?.activities?.[0]?.id ?? null);
+        setImportStatus("Backup imported.");
+        setExportStatus("");
+        setCopyStatus("");
+        setAnnouncement("AccessFlow backup imported.");
+      } catch {
+        setImportStatus("Could not import backup. Make sure the file is valid JSON.");
+      }
+    };
+
+    reader.onerror = () => {
+      setImportStatus("Could not read the selected backup file.");
+    };
+
+    reader.readAsText(file);
+  }
+
+  function restoreWorkspaceFromPayload(payload, sourceLabel = "backup") {
+    const validationError = validateBackupPayload(payload);
+
+    if (validationError) {
+      throw new Error(validationError);
+    }
+
+    const imported = normalizeImportedBackupData(payload.data);
+
+    setProfiles(imported.profiles);
+    setTemplates(imported.templates);
+    setSelectedProfileId(imported.selectedProfileId);
+    setDocumentationDate(imported.documentationDate || getTodayDateKey());
+    setMode(imported.mode);
+    setStudentViewMode(imported.studentViewMode);
+
+    const nextProfile =
+      imported.profiles.find((profile) => profile.id === imported.selectedProfileId) ??
+      imported.profiles[0];
+
+    setSelectedActivityId(nextProfile?.activities?.[0]?.id ?? null);
+    setCopyStatus("");
+    setExportStatus("");
+    setImportStatus("");
+    setSyncStatus(`Workspace restored from ${sourceLabel}.`);
+  }
+
+  async function handleSaveCloudSnapshot() {
+    setIsSyncing(true);
+    setSyncStatus("");
+
+    try {
+      const payload = buildBackupPayload({
+        profiles,
+        templates,
+        selectedProfileId: selectedProfile?.id ?? selectedProfileId,
+        documentationDate,
+        mode,
+        studentViewMode,
+      });
+
+      const saved = await saveWorkspaceSnapshot(payload);
+      setSyncStatus(`Cloud snapshot saved${saved?.updated_at ? ` at ${new Date(saved.updated_at).toLocaleString()}` : ""}.`);
+    } catch (error) {
+      setSyncStatus(`Cloud save failed: ${error.message}`);
+    } finally {
+      setIsSyncing(false);
+    }
+  }
+
+  async function handleLoadCloudSnapshot() {
+    setIsSyncing(true);
+    setSyncStatus("");
+
+    try {
+      const snapshot = await loadLatestWorkspaceSnapshot();
+
+      if (!snapshot?.payload) {
+        setSyncStatus("No cloud snapshot found.");
+        return;
+      }
+
+      restoreWorkspaceFromPayload(snapshot.payload, "Supabase");
+    } catch (error) {
+      setSyncStatus(`Cloud load failed: ${error.message}`);
+    } finally {
+      setIsSyncing(false);
+    }
+  }
+
   function handleSelectProfile(profileId) {
     const nextProfile = profiles.find((profile) => profile.id === profileId);
     setSelectedProfileId(profileId);
     setSelectedActivityId(nextProfile?.activities?.[0]?.id ?? null);
+    clearPortableStatuses();
     setAnnouncement(`${nextProfile?.name ?? "Profile"} selected.`);
   }
 
@@ -104,6 +415,7 @@ export default function App() {
     setProfiles((currentProfiles) => [...currentProfiles, profile]);
     setSelectedProfileId(profile.id);
     setSelectedActivityId(null);
+    clearPortableStatuses();
     setAnnouncement(`${profile.name} profile added.`);
   }
 
@@ -131,6 +443,7 @@ export default function App() {
       return nextProfiles;
     });
 
+    clearPortableStatuses();
     setAnnouncement("Profile deleted.");
   }
 
@@ -153,6 +466,7 @@ export default function App() {
           : activity
       )
     );
+    clearPortableStatuses();
   }
 
   function handleToggleStep(activityId, stepId) {
@@ -173,6 +487,7 @@ export default function App() {
         };
       })
     );
+    clearPortableStatuses();
   }
 
   function handleMoveActivity(activityId, direction) {
@@ -233,6 +548,7 @@ export default function App() {
         };
       })
     );
+    clearPortableStatuses();
   }
 
   function handleMoveStep(activityId, stepId, direction) {
@@ -251,6 +567,7 @@ export default function App() {
       return updatedActivities;
     });
 
+    clearPortableStatuses();
     setAnnouncement("Activity deleted.");
   }
 
@@ -267,6 +584,7 @@ export default function App() {
     };
 
     setTemplates((currentTemplates) => [...currentTemplates, template]);
+    clearPortableStatuses();
     setAnnouncement(`${name} template saved.`);
   }
 
@@ -285,6 +603,7 @@ export default function App() {
     }));
 
     setSelectedActivityId(clonedActivities[0]?.id ?? null);
+    clearPortableStatuses();
     setAnnouncement(`${template.name} applied to ${selectedProfile.name}.`);
   }
 
@@ -292,6 +611,7 @@ export default function App() {
     setTemplates((currentTemplates) =>
       currentTemplates.filter((template) => template.id !== templateId)
     );
+    clearPortableStatuses();
     setAnnouncement("Template deleted.");
   }
 
@@ -300,12 +620,15 @@ export default function App() {
     setTemplates(starterTemplates);
     setSelectedProfileId(starterProfiles[0]?.id ?? null);
     setSelectedActivityId(starterProfiles[0]?.activities[0]?.id ?? null);
+    setDocumentationDate(getTodayDateKey());
+    clearPortableStatuses();
     setAnnouncement("Demo data reset.");
   }
 
   function handleClearSchedule() {
     updateSelectedProfileActivities(() => []);
     setSelectedActivityId(null);
+    clearPortableStatuses();
     setAnnouncement("Selected profile schedule cleared.");
   }
 
@@ -316,7 +639,7 @@ export default function App() {
           <p className="app-kicker">Adaptive visual schedule</p>
           <h1>AccessFlow</h1>
           <p className="app-description">
-            Create, edit, save, reuse, and use visual schedules with step-by-step supports.
+            Create, edit, document, export, save, reuse, and use visual schedules with step-by-step supports.
           </p>
         </div>
 
@@ -349,6 +672,28 @@ export default function App() {
           activities={activities}
           selectedActivity={selectedActivity}
           selectedActivityId={selectedActivityId}
+          documentationDate={documentationDate}
+          dailyNote={dailyNote}
+          copyStatus={copyStatus}
+          exportStatus={exportStatus}
+          importStatus={importStatus}
+          syncStatus={syncStatus}
+          isSyncing={isSyncing}
+          session={session}
+          authStatus={authStatus}
+          isAuthWorking={isAuthWorking}
+          onSignIn={handleSignIn}
+          onSignUp={handleSignUp}
+          onSignOut={handleSignOut}
+          onDocumentationDateChange={handleDocumentationDateChange}
+          onUpdateDailyNote={handleUpdateDailyNote}
+          onCopyDailyNote={handleCopyDailyNote}
+          onDownloadDailyNote={handleDownloadDailyNote}
+          onDownloadActivityCsv={handleDownloadActivityCsv}
+          onExportBackup={handleExportBackup}
+          onImportBackup={handleImportBackup}
+          onSaveCloudSnapshot={handleSaveCloudSnapshot}
+          onLoadCloudSnapshot={handleLoadCloudSnapshot}
           onSelectProfile={handleSelectProfile}
           onAddProfile={handleAddProfile}
           onUpdateProfile={handleUpdateProfile}
