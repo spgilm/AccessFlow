@@ -1,30 +1,26 @@
-# AccessFlow v8
+# AccessFlow v9
 
 AccessFlow is a mobile-first adaptive visual schedule web app for students/clients who benefit from visual structure, task analysis, and simplified daily routines.
 
-## Version 8 focus
+## Version 9 focus
 
-Version 8 adds the first real authentication and user-scoped backend boundary:
+Version 9 builds on the working v8.1 Supabase prototype and improves sync safety/clarity:
 
-- Optional Supabase email/password auth
-- Auth status panel
-- Sign up
-- Sign in
-- Sign out
-- Authenticated user-scoped cloud snapshots
-- Authenticated row-level-security schema
-- LocalStorage fallback when Supabase is not configured
-- Manual JSON backup/import preserved
-
-This version is still a prototype, but it is a more serious backend foundation than the v7 anon snapshot sync.
+- Clearer Supabase connection status
+- Staff account shown in the sync panel
+- Last saved timestamp
+- Last loaded timestamp
+- Unsaved cloud changes indicator
+- Save reminder after local workspace changes
+- Confirmation prompt before loading a cloud snapshot
+- Better Supabase error messages for grants, RLS, sessions, and network issues
+- Stronger prototype/privacy warning in Staff Mode
+- v9 SQL schema includes explicit `authenticated` table grants
+- Render-safe npm settings preserved
 
 ## Default behavior
 
-Without Supabase environment variables, AccessFlow still works as a local static app:
-
-```txt
-browser localStorage only
-```
+Without Supabase environment variables, AccessFlow still works as a local static app using browser localStorage.
 
 ## Optional Supabase setup
 
@@ -32,7 +28,7 @@ browser localStorage only
 
 Create a project in Supabase.
 
-### 2. Run the v8 SQL schema
+### 2. Run the v9 SQL schema
 
 Open Supabase SQL Editor and run:
 
@@ -46,17 +42,11 @@ This creates or updates:
 accessflow_workspace_snapshots
 ```
 
-The table uses:
-
-```txt
-user_id = auth.uid()
-```
-
-and row-level security so each authenticated user can only access their own snapshots.
+It also grants signed-in users access to the table while RLS restricts each user to their own snapshots.
 
 ### 3. Enable email/password auth
 
-In Supabase Auth settings, enable email/password signups. Depending on your Supabase project settings, users may need to confirm email before signing in.
+In Supabase Auth settings, enable email/password signups. Set the Auth Site URL and Redirect URLs to your live Render URL.
 
 ### 4. Add environment variables to Render
 
@@ -64,7 +54,7 @@ In Render, add:
 
 ```txt
 VITE_SUPABASE_URL=your Supabase project URL
-VITE_SUPABASE_ANON_KEY=your Supabase anon key
+VITE_SUPABASE_ANON_KEY=your Supabase publishable/anon key
 VITE_ACCESSFLOW_WORKSPACE_LABEL=prototype
 ```
 
@@ -72,23 +62,13 @@ Then redeploy.
 
 ### 5. Use Staff Mode
 
-Staff Mode will show:
-
-- Account panel
-- Supabase sync panel
-
-After signing in, staff can:
-
-- Save cloud snapshot
-- Load latest snapshot
+After signing in, staff can manually save and load cloud snapshots. Loading a snapshot now asks for confirmation because it replaces the current browser workspace.
 
 ## Security warning
 
-v8 is safer than v7 because snapshots are scoped to authenticated users by RLS.
+v9 is a prototype. Use fake names and test records only.
 
-It is still not production-complete for real student/client data.
-
-Before using with real PII/PHI, add:
+Before using with real student/client data, add:
 
 - organization accounts
 - staff roles
@@ -97,6 +77,7 @@ Before using with real PII/PHI, add:
 - explicit data retention rules
 - image storage with access policies
 - normalized database tables instead of full JSON snapshots
+- legal/privacy review appropriate to the deployment context
 
 ## Included features
 
@@ -140,6 +121,8 @@ Before using with real PII/PHI, add:
 - Import AccessFlow JSON backup
 - Optional Supabase auth
 - Optional authenticated Supabase manual snapshot sync
+- Sync timestamps and save reminders
+- Confirm-before-load cloud restore
 - Reset demo data
 - Clear selected profile schedule
 - localStorage persistence
@@ -166,25 +149,15 @@ Use an existing or new Render Static Site connected to GitHub.
 Use:
 
 ```txt
-Build Command: npm install && npm run build
+Build Command: npm install --registry=https://registry.npmjs.org/ && npm run build
 Publish Directory: dist
 ```
 
 This repo also includes `render.yaml`.
 
-## Recommended v9
+## Render npm timeout fix preserved
 
-The next version should either:
-
-1. Normalize the Supabase schema beyond JSON snapshots, or
-2. Add AI-generated task analysis through a backend API.
-
-For real-world deployment, normalized database tables should come before serious multi-user use.
-
-
-## Render npm timeout fix
-
-This v8.1 package intentionally excludes `package-lock.json` and includes:
+This package intentionally excludes `package-lock.json` and includes:
 
 ```txt
 .npmrc
@@ -193,10 +166,8 @@ This v8.1 package intentionally excludes `package-lock.json` and includes:
 
 Reason: a lockfile generated in some hosted environments can contain internal registry tarball URLs. Render cannot fetch those URLs and may fail with `ETIMEDOUT`.
 
-Use this Render build command:
-
-```txt
-npm install --registry=https://registry.npmjs.org/ && npm run build
-```
-
 If your GitHub repo already has `package-lock.json`, delete it from the repo before deploying this version.
+
+## Recommended v10
+
+The next version should probably start normalizing the Supabase schema beyond full JSON snapshots, beginning with organization/profile/activity tables and role-based access boundaries.

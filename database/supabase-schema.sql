@@ -1,4 +1,4 @@
--- AccessFlow v8 Supabase auth-scoped prototype schema
+-- AccessFlow v9 Supabase auth-scoped prototype schema
 --
 -- This schema supports manual cloud snapshots from the static frontend.
 -- Each authenticated user can only access their own snapshots via RLS.
@@ -59,6 +59,13 @@ drop policy if exists "prototype_update_accessflow_snapshots"
 
 drop policy if exists "prototype_delete_accessflow_snapshots"
   on public.accessflow_workspace_snapshots;
+
+-- Explicit API grants for signed-in users.
+-- RLS policies below still restrict users to their own rows.
+grant usage on schema public to authenticated;
+grant select, insert, update, delete
+on table public.accessflow_workspace_snapshots
+to authenticated;
 
 -- Authenticated user-scoped policies.
 drop policy if exists "users_read_own_accessflow_snapshots"

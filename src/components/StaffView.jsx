@@ -23,6 +23,9 @@ export default function StaffView({
   importStatus,
   syncStatus,
   isSyncing,
+  syncMetadata,
+  hasUnsavedCloudChanges,
+  syncReminder,
   session,
   authStatus,
   isAuthWorking,
@@ -113,6 +116,9 @@ export default function StaffView({
           session={session}
           syncStatus={syncStatus}
           isSyncing={isSyncing}
+          syncMetadata={syncMetadata}
+          hasUnsavedCloudChanges={hasUnsavedCloudChanges}
+          syncReminder={syncReminder}
           onSaveCloudSnapshot={onSaveCloudSnapshot}
           onLoadCloudSnapshot={onLoadCloudSnapshot}
         />

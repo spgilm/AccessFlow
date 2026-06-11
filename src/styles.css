@@ -1298,3 +1298,75 @@ select:focus-visible {
 .auth-help {
   margin-top: 1rem;
 }
+
+.sync-metadata-card {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.sync-metadata-card > div {
+  display: grid;
+  gap: 0.2rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  background: white;
+}
+
+.sync-metadata-card span,
+.backend-account-line {
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.sync-metadata-card strong {
+  color: var(--primary-strong);
+  font-size: 1rem;
+}
+
+.sync-reminder,
+.prototype-warning,
+.load-warning {
+  border-radius: var(--radius-md);
+}
+
+.sync-reminder {
+  margin: 1rem 0;
+  border: 2px solid var(--warning-focus);
+  padding: 0.9rem;
+  background: #fff8df;
+  color: #4a3b00;
+}
+
+.sync-reminder strong,
+.prototype-warning strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.sync-reminder p,
+.prototype-warning p {
+  margin: 0.25rem 0 0;
+}
+
+.prototype-warning {
+  margin-top: 1rem;
+  border: 2px solid var(--danger);
+  padding: 0.9rem;
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.load-warning {
+  margin: 0.75rem 0;
+  border: 1px solid var(--border);
+  padding: 0.75rem;
+  background: var(--surface-strong);
+}
+
+@media (min-width: 680px) {
+  .sync-metadata-card {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -137,7 +137,7 @@ export async function loadLatestWorkspaceSnapshot() {
 
   const { data, error } = await supabase
     .from("accessflow_workspace_snapshots")
-    .select("id, payload, updated_at")
+    .select("id, payload, created_at, updated_at")
     .eq("workspace_label", workspaceLabel)
     .eq("user_id", session.user.id)
     .order("updated_at", { ascending: false })

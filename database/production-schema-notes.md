@@ -1,12 +1,12 @@
 # AccessFlow production schema direction
 
-The v8 SQL file uses an authenticated snapshot table:
+The v9 SQL file uses an authenticated snapshot table:
 
 ```txt
 accessflow_workspace_snapshots
 ```
 
-This is a safer prototype than v7 because rows are scoped to the signed-in user through Supabase Auth and RLS.
+This is a safer prototype than v7 because rows are scoped to the signed-in user through Supabase Auth and RLS. The v9 schema also includes explicit grants for the authenticated role so browser saves work through the Supabase Data API.
 
 It is still not the final production schema.
 
@@ -47,7 +47,7 @@ audit_log
 
 ## Suggested migration path
 
-1. Use v8 user-scoped snapshots for development.
+1. Use v9 user-scoped snapshots for development.
 2. Add organization accounts.
 3. Add staff roles.
 4. Move profiles and templates from JSON snapshots into normalized tables.

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ModeToggle from "./components/ModeToggle.jsx";
 import StaffView from "./components/StaffView.jsx";
 import StudentView from "./components/StudentView.jsx";
@@ -40,6 +40,7 @@ const TEMPLATES_STORAGE_KEY = "accessflow.templates.v5";
 const MODE_STORAGE_KEY = "accessflow.mode.v5";
 const STUDENT_VIEW_STORAGE_KEY = "accessflow.studentView.v5";
 const DOCUMENTATION_DATE_STORAGE_KEY = "accessflow.documentationDate.v5";
+const SYNC_METADATA_STORAGE_KEY = "accessflow.syncMetadata.v9";
 
 export default function App() {
   const [profiles, setProfiles] = useLocalStorage(PROFILES_STORAGE_KEY, starterProfiles);
@@ -69,6 +70,16 @@ export default function App() {
   const [session, setSession] = useState(null);
   const [authStatus, setAuthStatus] = useState("");
   const [isAuthWorking, setIsAuthWorking] = useState(false);
+  const [syncMetadata, setSyncMetadata] = useLocalStorage(SYNC_METADATA_STORAGE_KEY, {
+    lastSavedAt: null,
+    lastLoadedAt: null,
+    lastSnapshotId: null,
+  });
+  const [hasUnsavedCloudChanges, setHasUnsavedCloudChanges] = useState(false);
+  const [syncReminder, setSyncReminder] = useState("");
+  const dirtyBaselineRef = useRef("");
+  const hasInitializedDirtyTrackingRef = useRef(false);
+  const suppressNextDirtyCheckRef = useRef(false);
 
   const selectedProfile = useMemo(() => {
     return profiles.find((profile) => profile.id === selectedProfileId) ?? profiles[0] ?? null;
@@ -85,6 +96,69 @@ export default function App() {
     () => getDailyNote(selectedProfile, documentationDate),
     [selectedProfile, documentationDate]
   );
+
+  const workspaceData = useMemo(
+    () => ({
+      profiles,
+      templates,
+      selectedProfileId: selectedProfile?.id ?? selectedProfileId,
+      documentationDate,
+      mode,
+      studentViewMode,
+    }),
+    [profiles, templates, selectedProfile?.id, selectedProfileId, documentationDate, mode, studentViewMode]
+  );
+
+  const workspaceDataFingerprint = useMemo(
+    () => JSON.stringify(workspaceData),
+    [workspaceData]
+  );
+
+  function buildCurrentWorkspacePayload() {
+    return buildBackupPayload(workspaceData);
+  }
+
+  function formatCloudError(action, error) {
+    const message = error?.message || "Unknown Supabase error.";
+    const lowerMessage = message.toLowerCase();
+
+    if (lowerMessage.includes("permission denied")) {
+      return `${action} failed: table permission is missing. Run the v9 Supabase SQL schema or add grants for the authenticated role.`;
+    }
+
+    if (lowerMessage.includes("row-level security") || lowerMessage.includes("violates row-level security")) {
+      return `${action} failed: RLS blocked the request. Confirm the user_id column and auth.uid() policies are installed.`;
+    }
+
+    if (lowerMessage.includes("jwt") || lowerMessage.includes("invalid token")) {
+      return `${action} failed: the sign-in session looks expired. Sign out, sign back in, and try again.`;
+    }
+
+    if (lowerMessage.includes("failed to fetch") || lowerMessage.includes("network")) {
+      return `${action} failed: network or Supabase connection problem. Check the Render env vars and Supabase project status.`;
+    }
+
+    return `${action} failed: ${message}`;
+  }
+
+  useEffect(() => {
+    if (!hasInitializedDirtyTrackingRef.current) {
+      hasInitializedDirtyTrackingRef.current = true;
+      dirtyBaselineRef.current = workspaceDataFingerprint;
+      return;
+    }
+
+    if (suppressNextDirtyCheckRef.current) {
+      suppressNextDirtyCheckRef.current = false;
+      dirtyBaselineRef.current = workspaceDataFingerprint;
+      return;
+    }
+
+    if (workspaceDataFingerprint !== dirtyBaselineRef.current) {
+      setHasUnsavedCloudChanges(true);
+      setSyncReminder("This browser workspace has changes that have not been saved to Supabase yet.");
+    }
+  }, [workspaceDataFingerprint]);
 
   useEffect(() => {
     if (!isSupabaseConfigured()) {
@@ -273,14 +347,7 @@ export default function App() {
   }
 
   function handleExportBackup() {
-    const payload = buildBackupPayload({
-      profiles,
-      templates,
-      selectedProfileId: selectedProfile?.id ?? selectedProfileId,
-      documentationDate,
-      mode,
-      studentViewMode,
-    });
+    const payload = buildCurrentWorkspacePayload();
 
     const filename = `${getTodayDateKey()}-accessflow-backup.json`;
     downloadTextFile(filename, JSON.stringify(payload, null, 2), "application/json");
@@ -319,6 +386,8 @@ export default function App() {
         setExportStatus("");
         setCopyStatus("");
         setAnnouncement("AccessFlow backup imported.");
+        setHasUnsavedCloudChanges(true);
+        setSyncReminder("Imported backup is only in this browser until you save a new cloud snapshot.");
       } catch {
         setImportStatus("Could not import backup. Make sure the file is valid JSON.");
       }
@@ -331,7 +400,7 @@ export default function App() {
     reader.readAsText(file);
   }
 
-  function restoreWorkspaceFromPayload(payload, sourceLabel = "backup") {
+  function restoreWorkspaceFromPayload(payload, sourceLabel = "backup", options = {}) {
     const validationError = validateBackupPayload(payload);
 
     if (validationError) {
@@ -339,6 +408,16 @@ export default function App() {
     }
 
     const imported = normalizeImportedBackupData(payload.data);
+
+    if (options.markCloudClean) {
+      suppressNextDirtyCheckRef.current = true;
+      dirtyBaselineRef.current = JSON.stringify(payload.data);
+      setHasUnsavedCloudChanges(false);
+      setSyncReminder("");
+    } else {
+      setHasUnsavedCloudChanges(true);
+      setSyncReminder("Restored workspace is local until you save a new cloud snapshot.");
+    }
 
     setProfiles(imported.profiles);
     setTemplates(imported.templates);
@@ -363,25 +442,36 @@ export default function App() {
     setSyncStatus("");
 
     try {
-      const payload = buildBackupPayload({
-        profiles,
-        templates,
-        selectedProfileId: selectedProfile?.id ?? selectedProfileId,
-        documentationDate,
-        mode,
-        studentViewMode,
-      });
-
+      const payload = buildCurrentWorkspacePayload();
       const saved = await saveWorkspaceSnapshot(payload);
-      setSyncStatus(`Cloud snapshot saved${saved?.updated_at ? ` at ${new Date(saved.updated_at).toLocaleString()}` : ""}.`);
+      const savedAt = saved?.updated_at ?? new Date().toISOString();
+
+      dirtyBaselineRef.current = workspaceDataFingerprint;
+      setHasUnsavedCloudChanges(false);
+      setSyncReminder("");
+      setSyncMetadata((current) => ({
+        ...current,
+        lastSavedAt: savedAt,
+        lastSnapshotId: saved?.id ?? current.lastSnapshotId ?? null,
+      }));
+      setSyncStatus(`Cloud snapshot saved at ${new Date(savedAt).toLocaleString()}.`);
     } catch (error) {
-      setSyncStatus(`Cloud save failed: ${error.message}`);
+      setSyncStatus(formatCloudError("Cloud save", error));
     } finally {
       setIsSyncing(false);
     }
   }
 
   async function handleLoadCloudSnapshot() {
+    const shouldLoad = window.confirm(
+      "Load the latest cloud snapshot? This will replace the current browser workspace with the latest Supabase snapshot for this signed-in account."
+    );
+
+    if (!shouldLoad) {
+      setSyncStatus("Cloud load cancelled. Current browser workspace was not changed.");
+      return;
+    }
+
     setIsSyncing(true);
     setSyncStatus("");
 
@@ -389,13 +479,19 @@ export default function App() {
       const snapshot = await loadLatestWorkspaceSnapshot();
 
       if (!snapshot?.payload) {
-        setSyncStatus("No cloud snapshot found.");
+        setSyncStatus("No cloud snapshot found for this signed-in account.");
         return;
       }
 
-      restoreWorkspaceFromPayload(snapshot.payload, "Supabase");
+      restoreWorkspaceFromPayload(snapshot.payload, "Supabase", { markCloudClean: true });
+      const loadedAt = snapshot.updated_at ?? snapshot.created_at ?? new Date().toISOString();
+      setSyncMetadata((current) => ({
+        ...current,
+        lastLoadedAt: loadedAt,
+        lastSnapshotId: snapshot.id ?? current.lastSnapshotId ?? null,
+      }));
     } catch (error) {
-      setSyncStatus(`Cloud load failed: ${error.message}`);
+      setSyncStatus(formatCloudError("Cloud load", error));
     } finally {
       setIsSyncing(false);
     }
@@ -679,6 +775,9 @@ export default function App() {
           importStatus={importStatus}
           syncStatus={syncStatus}
           isSyncing={isSyncing}
+          syncMetadata={syncMetadata}
+          hasUnsavedCloudChanges={hasUnsavedCloudChanges}
+          syncReminder={syncReminder}
           session={session}
           authStatus={authStatus}
           isAuthWorking={isAuthWorking}
