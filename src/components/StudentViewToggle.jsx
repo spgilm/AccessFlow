@@ -7,7 +7,15 @@ export default function StudentViewToggle({ viewMode, onViewModeChange }) {
         onClick={() => onViewModeChange("schedule")}
         aria-pressed={viewMode === "schedule"}
       >
-        Full Schedule
+        Use Schedule
+      </button>
+      <button
+        type="button"
+        className={viewMode === "builder" ? "is-active" : ""}
+        onClick={() => onViewModeChange("builder")}
+        aria-pressed={viewMode === "builder"}
+      >
+        Plan My Day
       </button>
       <button
         type="button"

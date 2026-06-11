@@ -3,6 +3,7 @@ import EmptyState from "./EmptyState.jsx";
 import FirstThenView from "./FirstThenView.jsx";
 import ProgressSummary from "./ProgressSummary.jsx";
 import StudentActivityDetail from "./StudentActivityDetail.jsx";
+import StudentScheduleBuilder from "./StudentScheduleBuilder.jsx";
 import StudentViewToggle from "./StudentViewToggle.jsx";
 
 export default function StudentView({
@@ -11,10 +12,16 @@ export default function StudentView({
   selectedActivity,
   selectedActivityId,
   studentViewMode,
+  studentActivityLibrary,
+  independenceSettings,
   onStudentViewModeChange,
   onSelectActivity,
   onToggleActivityComplete,
   onToggleStep,
+  onStudentAddActivity,
+  onMoveActivity,
+  onRemoveActivity,
+  onStudentClearSchedule,
   onCloseDetail,
 }) {
   return (
@@ -34,7 +41,28 @@ export default function StudentView({
         onViewModeChange={onStudentViewModeChange}
       />
 
-      {studentViewMode === "firstThen" ? (
+      {studentViewMode === "builder" ? (
+        <div className="workspace-grid student-builder-workspace">
+          <StudentScheduleBuilder
+            profile={profile}
+            activities={activities}
+            libraryItems={studentActivityLibrary}
+            independenceSettings={independenceSettings}
+            onAddActivity={onStudentAddActivity}
+            onMoveActivity={onMoveActivity}
+            onRemoveActivity={onRemoveActivity}
+            onClearSchedule={onStudentClearSchedule}
+            onSelectActivity={onSelectActivity}
+          />
+
+          <StudentActivityDetail
+            activity={selectedActivity}
+            onClose={onCloseDetail}
+            onToggleStep={onToggleStep}
+            onToggleActivityComplete={onToggleActivityComplete}
+          />
+        </div>
+      ) : studentViewMode === "firstThen" ? (
         <div className="workspace-grid">
           <FirstThenView
             activities={activities}
@@ -55,7 +83,7 @@ export default function StudentView({
             <div className="section-heading-row">
               <div>
                 <p className="eyebrow">Student / client view</p>
-                <h2 id="schedule-heading">Today&apos;s schedule</h2>
+                <h2 id="schedule-heading">Use my schedule</h2>
               </div>
             </div>
 

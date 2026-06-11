@@ -3,6 +3,8 @@ import ModeToggle from "./components/ModeToggle.jsx";
 import StaffView from "./components/StaffView.jsx";
 import StudentView from "./components/StudentView.jsx";
 import { starterProfiles, createBlankProfile } from "./data/starterProfiles.js";
+import { getIndependenceSettings } from "./data/independenceSettings.js";
+import { studentActivityLibrary } from "./data/studentActivityLibrary.js";
 import { starterTemplates } from "./data/starterTemplates.js";
 import { useLocalStorage } from "./hooks/useLocalStorage.js";
 import { generateActivityFromTask } from "./services/taskGenerator.js";
@@ -123,7 +125,7 @@ export default function App() {
     const lowerMessage = message.toLowerCase();
 
     if (lowerMessage.includes("permission denied")) {
-      return `${action} failed: table permission is missing. Run the v9 Supabase SQL schema or add grants for the authenticated role.`;
+      return `${action} failed: table permission is missing. Run the v10 Supabase SQL schema or add grants for the authenticated role.`;
     }
 
     if (lowerMessage.includes("row-level security") || lowerMessage.includes("violates row-level security")) {
@@ -279,6 +281,51 @@ export default function App() {
     setAnnouncement(`${activity.label} added to ${selectedProfile.name}'s schedule.`);
   }
 
+  async function handleStudentAddActivity(taskText) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    const settings = getIndependenceSettings(selectedProfile);
+
+    if (!settings.studentCanBuildSchedule) {
+      setAnnouncement("Staff support is required to add activities for this profile.");
+      return;
+    }
+
+    const activity = await generateActivityFromTask(taskText);
+
+    updateSelectedProfileActivities((currentActivities) => [...currentActivities, activity]);
+    setSelectedActivityId(activity.id);
+    clearPortableStatuses();
+    setAnnouncement(`${activity.label} added to the schedule.`);
+  }
+
+  function handleStudentClearSchedule() {
+    if (!selectedProfile) {
+      return;
+    }
+
+    const settings = getIndependenceSettings(selectedProfile);
+
+    if (!settings.studentCanClearSchedule) {
+      setAnnouncement("Staff has not enabled schedule clearing for this profile.");
+      return;
+    }
+
+    const shouldClear = window.confirm("Start this schedule over? This clears the current activities for this profile in this browser.");
+
+    if (!shouldClear) {
+      setAnnouncement("Schedule was not cleared.");
+      return;
+    }
+
+    updateSelectedProfileActivities(() => []);
+    setSelectedActivityId(null);
+    clearPortableStatuses();
+    setAnnouncement("Schedule cleared. Choose new activities from Plan My Day.");
+  }
+
   function handleModeChange(nextMode) {
     setMode(nextMode);
     setAnnouncement(`${nextMode === "student" ? "Student" : "Staff"} Mode selected.`);
@@ -286,7 +333,15 @@ export default function App() {
 
   function handleStudentViewModeChange(nextViewMode) {
     setStudentViewMode(nextViewMode);
-    setAnnouncement(`${nextViewMode === "firstThen" ? "First / Then" : "Full Schedule"} view selected.`);
+
+    const viewLabel =
+      nextViewMode === "firstThen"
+        ? "First / Then"
+        : nextViewMode === "builder"
+          ? "Plan My Day"
+          : "Use Schedule";
+
+    setAnnouncement(`${viewLabel} view selected.`);
   }
 
   function handleDocumentationDateChange(nextDate) {
@@ -592,6 +647,31 @@ export default function App() {
     );
   }
 
+  function handleStudentMoveActivity(activityId, direction) {
+    const settings = getIndependenceSettings(selectedProfile);
+
+    if (!settings.studentCanReorderSchedule) {
+      setAnnouncement("Staff has not enabled schedule reordering for this profile.");
+      return;
+    }
+
+    handleMoveActivity(activityId, direction);
+    clearPortableStatuses();
+    setAnnouncement("Schedule order changed.");
+  }
+
+  function handleStudentRemoveActivity(activityId) {
+    const settings = getIndependenceSettings(selectedProfile);
+
+    if (!settings.studentCanRemoveActivities) {
+      setAnnouncement("Staff has not enabled activity removal for this profile.");
+      return;
+    }
+
+    handleDeleteActivity(activityId);
+    setAnnouncement("Activity removed from the schedule.");
+  }
+
   function handleUpdateActivity(activityId, patch) {
     updateSelectedProfileActivities((currentActivities) =>
       updateActivityById(currentActivities, activityId, (activity) => ({
@@ -735,7 +815,7 @@ export default function App() {
           <p className="app-kicker">Adaptive visual schedule</p>
           <h1>AccessFlow</h1>
           <p className="app-description">
-            Create, edit, document, export, save, reuse, and use visual schedules with step-by-step supports.
+            Build independence with student-planned visual schedules, step-by-step supports, staff documentation, and optional cloud snapshots.
           </p>
         </div>
 
@@ -753,10 +833,16 @@ export default function App() {
           selectedActivity={selectedActivity}
           selectedActivityId={selectedActivityId}
           studentViewMode={studentViewMode}
+          studentActivityLibrary={studentActivityLibrary}
+          independenceSettings={getIndependenceSettings(selectedProfile)}
           onStudentViewModeChange={handleStudentViewModeChange}
           onSelectActivity={handleSelectActivity}
           onToggleActivityComplete={handleToggleActivityComplete}
           onToggleStep={handleToggleStep}
+          onStudentAddActivity={handleStudentAddActivity}
+          onMoveActivity={handleStudentMoveActivity}
+          onRemoveActivity={handleStudentRemoveActivity}
+          onStudentClearSchedule={handleStudentClearSchedule}
           onCloseDetail={() => setSelectedActivityId(null)}
         />
       ) : (

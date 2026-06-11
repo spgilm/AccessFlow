@@ -1,4 +1,4 @@
--- AccessFlow v9 Supabase auth-scoped prototype schema
+-- AccessFlow v10 Supabase auth-scoped prototype schema
 --
 -- This schema supports manual cloud snapshots from the static frontend.
 -- Each authenticated user can only access their own snapshots via RLS.

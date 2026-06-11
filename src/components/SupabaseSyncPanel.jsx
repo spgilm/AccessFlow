@@ -119,7 +119,7 @@ export default function SupabaseSyncPanel({
       </div>
 
       <p className="field-help load-warning">
-        Loading a cloud snapshot replaces the current browser workspace. AccessFlow v9 asks for confirmation before loading.
+        Loading a cloud snapshot replaces the current browser workspace. AccessFlow asks for confirmation before loading.
       </p>
 
       {syncStatus ? (
@@ -131,7 +131,7 @@ export default function SupabaseSyncPanel({
       <div className="prototype-warning" role="note">
         <strong>Prototype data boundary</strong>
         <p>
-          Use fake names and test records only. v9 improves sync clarity, but it is still not approved for real student/client private data.
+          Use fake names and test records only. v10 improves sync clarity and student independence, but it is still not approved for real student/client private data.
         </p>
         <p>
           Production use still needs organization roles, audit logging, data retention rules, image storage policies, and a normalized database model.

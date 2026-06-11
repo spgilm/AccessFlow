@@ -1,5 +1,6 @@
 import { starterActivities } from "./starterActivities.js";
 import { createId } from "../utils/formatters.js";
+import { defaultIndependenceSettings } from "./independenceSettings.js";
 
 export const starterProfiles = [
   {
@@ -8,6 +9,7 @@ export const starterProfiles = [
     notes:
       "Sample profile for testing AccessFlow. Replace this with the student/client's real support notes.",
     activities: starterActivities,
+    independenceSettings: { ...defaultIndependenceSettings },
     documentationByDate: {},
   },
 ];
@@ -18,6 +20,7 @@ export function createBlankProfile(name = "New Student") {
     name,
     notes: "",
     activities: [],
+    independenceSettings: { ...defaultIndependenceSettings },
     documentationByDate: {},
   };
 }

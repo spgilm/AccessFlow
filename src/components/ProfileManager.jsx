@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getIndependenceSettings } from "../data/independenceSettings.js";
 
 export default function ProfileManager({
   profiles,
@@ -10,6 +11,7 @@ export default function ProfileManager({
   onDeleteProfile,
 }) {
   const [newProfileName, setNewProfileName] = useState("");
+  const independenceSettings = getIndependenceSettings(selectedProfile);
 
   function handleAddProfile(event) {
     event.preventDefault();
@@ -21,6 +23,19 @@ export default function ProfileManager({
 
     onAddProfile(trimmed);
     setNewProfileName("");
+  }
+
+  function updateIndependenceSetting(settingName, value) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    onUpdateProfile(selectedProfile.id, {
+      independenceSettings: {
+        ...independenceSettings,
+        [settingName]: value,
+      },
+    });
   }
 
   return (
@@ -87,6 +102,83 @@ export default function ProfileManager({
               }
             />
           </label>
+
+          <fieldset className="independence-settings">
+            <legend>Student independence settings</legend>
+            <p className="field-help">
+              These options decide how much the student/client can plan independently in Student Mode.
+            </p>
+
+            <label className="checkbox-row">
+              <input
+                type="checkbox"
+                checked={independenceSettings.studentCanBuildSchedule}
+                onChange={(event) =>
+                  updateIndependenceSetting("studentCanBuildSchedule", event.target.checked)
+                }
+              />
+              <span>
+                <strong>Student can build schedule</strong>
+                <small>Add approved activities from Plan My Day.</small>
+              </span>
+            </label>
+
+            <label className="checkbox-row">
+              <input
+                type="checkbox"
+                checked={independenceSettings.studentCanReorderSchedule}
+                onChange={(event) =>
+                  updateIndependenceSetting("studentCanReorderSchedule", event.target.checked)
+                }
+              />
+              <span>
+                <strong>Student can reorder schedule</strong>
+                <small>Move activities up or down in their own plan.</small>
+              </span>
+            </label>
+
+            <label className="checkbox-row">
+              <input
+                type="checkbox"
+                checked={independenceSettings.studentCanRemoveActivities}
+                onChange={(event) =>
+                  updateIndependenceSetting("studentCanRemoveActivities", event.target.checked)
+                }
+              />
+              <span>
+                <strong>Student can remove activities</strong>
+                <small>Remove an activity they added by mistake or no longer need.</small>
+              </span>
+            </label>
+
+            <label className="checkbox-row">
+              <input
+                type="checkbox"
+                checked={independenceSettings.studentCanAddCustomActivities}
+                onChange={(event) =>
+                  updateIndependenceSetting("studentCanAddCustomActivities", event.target.checked)
+                }
+              />
+              <span>
+                <strong>Student can add custom activity</strong>
+                <small>Type or dictate an activity that staff can refine later.</small>
+              </span>
+            </label>
+
+            <label className="checkbox-row">
+              <input
+                type="checkbox"
+                checked={independenceSettings.studentCanClearSchedule}
+                onChange={(event) =>
+                  updateIndependenceSetting("studentCanClearSchedule", event.target.checked)
+                }
+              />
+              <span>
+                <strong>Student can start schedule over</strong>
+                <small>Allows clearing the current schedule from Student Mode.</small>
+              </span>
+            </label>
+          </fieldset>
 
           <div className="profile-meta">
             <span>{selectedProfile.activities.length} activities in current schedule</span>

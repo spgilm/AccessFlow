@@ -1,22 +1,29 @@
-# AccessFlow v9
+# AccessFlow v10
 
 AccessFlow is a mobile-first adaptive visual schedule web app for students/clients who benefit from visual structure, task analysis, and simplified daily routines.
 
-## Version 9 focus
+## Version 10 focus
 
-Version 9 builds on the working v8.1 Supabase prototype and improves sync safety/clarity:
+Version 10 corrects the product direction back toward student/client independence. Staff still create the guardrails, but Student Mode now includes a self-directed schedule planning flow.
 
-- Clearer Supabase connection status
-- Staff account shown in the sync panel
-- Last saved timestamp
-- Last loaded timestamp
-- Unsaved cloud changes indicator
-- Save reminder after local workspace changes
-- Confirmation prompt before loading a cloud snapshot
-- Better Supabase error messages for grants, RLS, sessions, and network issues
-- Stronger prototype/privacy warning in Staff Mode
-- v9 SQL schema includes explicit `authenticated` table grants
-- Render-safe npm settings preserved
+New in v10:
+
+- Student Mode now has **Plan My Day**
+- Students can add approved visual activities to their own schedule
+- Students can reorder their schedule with simple Up/Down controls when enabled
+- Students can remove activities from their plan when enabled
+- Students can optionally add custom activities for staff to refine later
+- Staff Mode has profile-level independence settings
+- Staff can enable/disable student schedule building per profile
+- Staff can enable/disable student reordering, activity removal, custom activities, and schedule clearing
+- v9 Supabase sync safety improvements are preserved
+- v8.1 Render npm timeout fix is preserved
+
+Product rule for this version:
+
+```txt
+Student independence first. Staff documentation second.
+```
 
 ## Default behavior
 
@@ -28,7 +35,7 @@ Without Supabase environment variables, AccessFlow still works as a local static
 
 Create a project in Supabase.
 
-### 2. Run the v9 SQL schema
+### 2. Run the v10 SQL schema
 
 Open Supabase SQL Editor and run:
 
@@ -66,7 +73,7 @@ After signing in, staff can manually save and load cloud snapshots. Loading a sn
 
 ## Security warning
 
-v9 is a prototype. Use fake names and test records only.
+v10 is a prototype. Use fake names and test records only.
 
 Before using with real student/client data, add:
 
@@ -84,7 +91,13 @@ Before using with real student/client data, add:
 - React + Vite frontend
 - Mobile-first layout
 - Student / Staff mode toggle
-- Student Full Schedule / First-Then view toggle
+- Student Use Schedule / Plan My Day / First-Then view toggle
+- Student schedule builder for self-directed planning
+- Student activity library with large visual cards
+- Student-controlled schedule reordering when enabled
+- Student-controlled activity removal when enabled
+- Optional student custom activity entry
+- Staff-controlled independence settings per profile
 - Student/client profile selector
 - Add student/client profiles
 - Edit profile name and support notes
@@ -168,6 +181,6 @@ Reason: a lockfile generated in some hosted environments can contain internal re
 
 If your GitHub repo already has `package-lock.json`, delete it from the repo before deploying this version.
 
-## Recommended v10
+## Recommended v11
 
-The next version should probably start normalizing the Supabase schema beyond full JSON snapshots, beginning with organization/profile/activity tables and role-based access boundaries.
+The next version should probably add a staff-reviewed activity request queue and then start normalizing the Supabase schema beyond full JSON snapshots, beginning with organization/profile/activity tables and role-based access boundaries.

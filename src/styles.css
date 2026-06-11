@@ -1370,3 +1370,189 @@ select:focus-visible {
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* v10 Student Independence Builder */
+.student-view-toggle {
+  grid-template-columns: 1fr;
+  border-radius: var(--radius-lg);
+}
+
+.student-builder-panel {
+  padding: 1rem;
+}
+
+.student-builder-workspace .student-builder-panel {
+  min-width: 0;
+}
+
+.builder-intro,
+.builder-empty {
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-weight: 750;
+}
+
+.builder-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.library-panel,
+.student-plan-panel {
+  display: grid;
+  gap: 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  background: var(--surface-strong);
+}
+
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap: 0.75rem;
+}
+
+.library-card {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  min-height: 11.5rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.85rem;
+  background: white;
+  color: var(--text);
+  text-align: center;
+}
+
+.library-card:hover,
+.library-card:focus-visible {
+  border-color: var(--primary);
+}
+
+.library-visual {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1.35rem;
+  font-size: 2.7rem;
+}
+
+.library-label {
+  font-weight: 950;
+  line-height: 1.05;
+}
+
+.library-summary {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.student-custom-form {
+  display: grid;
+  gap: 0.45rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.student-plan-list {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.student-plan-row {
+  display: grid;
+  gap: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem;
+  background: white;
+}
+
+.student-plan-main {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: var(--tap-target);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--primary-soft);
+  color: var(--text);
+  text-align: left;
+  padding: 0.65rem;
+}
+
+.student-plan-label {
+  color: var(--primary-strong);
+  font-size: 1.05rem;
+  font-weight: 950;
+}
+
+.independence-settings {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  background: var(--surface-strong);
+}
+
+.independence-settings legend {
+  padding: 0 0.4rem;
+  color: var(--primary-strong);
+  font-size: 1.05rem;
+  font-weight: 950;
+}
+
+.checkbox-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  background: white;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 1.45rem;
+  min-height: 1.45rem;
+  margin-top: 0.1rem;
+  accent-color: var(--primary);
+}
+
+.checkbox-row span {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.checkbox-row strong {
+  color: var(--primary-strong);
+}
+
+.checkbox-row small {
+  color: var(--muted);
+  font-weight: 750;
+}
+
+@media (min-width: 680px) {
+  .student-view-toggle {
+    grid-template-columns: repeat(3, 1fr);
+    width: 660px;
+    border-radius: 999px;
+  }
+
+  .builder-grid {
+    grid-template-columns: minmax(0, 1.3fr) minmax(18rem, 0.8fr);
+    align-items: start;
+  }
+}
