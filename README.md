@@ -1,17 +1,18 @@
-# AccessFlow v3
+# AccessFlow v4
 
 AccessFlow is a mobile-first adaptive visual schedule web app for students/clients who benefit from visual structure, task analysis, and simplified daily routines.
 
-## Version 3 focus
+## Version 4 focus
 
-Version 3 makes the prototype more useful for real access needs while staying frontend-only:
+Version 4 adds the first real staff-side organization layer:
 
-- Student-facing **Full Schedule** view
-- Student-facing **First / Then** view
-- Staff-uploaded custom images for activities
-- Staff-uploaded custom images for steps
-- Optional speech-to-text task entry where supported by the browser
-- Existing v2 staff editing, reordering, local generation, and localStorage persistence
+- Student/client profiles
+- Profile-specific schedules
+- Reusable schedule templates
+- Apply templates to selected profiles
+- Save a selected profile's current schedule as a reusable template
+
+This keeps the app frontend-only while making it feel more like a real support tool.
 
 ## Included features
 
@@ -19,6 +20,15 @@ Version 3 makes the prototype more useful for real access needs while staying fr
 - Mobile-first layout
 - Student / Staff mode toggle
 - Student Full Schedule / First-Then view toggle
+- Student/client profile selector
+- Add student/client profiles
+- Edit profile name and support notes
+- Delete profiles
+- Profile-specific schedules
+- Reusable schedule templates
+- Save current profile schedule as template
+- Apply template to current profile
+- Delete templates
 - Emoji or uploaded-image visual supports
 - Local task generation for common activities
 - Speech-to-text task entry when available
@@ -39,25 +49,30 @@ Version 3 makes the prototype more useful for real access needs while staying fr
 - Move steps up/down
 - Move activities up/down
 - Delete activities
-- Reset demo
-- Clear schedule
+- Reset demo data
+- Clear selected profile schedule
 - localStorage persistence
 - Render-ready static site config
 
-## Important limitation
+## Important prototype limitations
 
-Uploaded images are stored in browser localStorage as data URLs. This is good for a local prototype, but not final production storage.
+This version stores everything in browser localStorage:
 
-For production, uploaded images should move to backend/object storage such as:
+- Profiles
+- Schedules
+- Templates
+- Uploaded images as data URLs
 
-- Supabase Storage
-- S3-compatible storage
-- Cloudinary
-- Firebase Storage
+That is acceptable for a prototype, but not production.
+
+For production, these should move to a backend database and object storage:
+
+- PostgreSQL/Supabase for profiles, schedules, templates, and completion logs
+- Supabase Storage, Cloudinary, S3-compatible storage, or Firebase Storage for images
 
 ## Why no real AI image API yet?
 
-Version 3 still avoids direct AI image generation from the browser.
+Version 4 still avoids direct AI image generation from the browser.
 
 Reason:
 
@@ -95,7 +110,7 @@ npm run preview
 
 ## Deploy to Render
 
-Create or use an existing Render Static Site connected to GitHub.
+Use an existing or new Render Static Site connected to GitHub.
 
 Use:
 
@@ -123,12 +138,12 @@ Try:
 
 Unknown prompts still create a simple schedule card with a best-guess emoji and generic steps.
 
-## Recommended v4
+## Recommended v5
 
-The next version should likely add one of these:
+The next version should probably add one of these:
 
-1. **Reusable schedule templates**
-2. **Student/client profiles**
-3. **Backend persistence**
-4. **Caregiver/staff login**
-5. **AI-generated step breakdowns through a backend**
+1. Completion history / documentation notes
+2. Export daily progress as a staff note
+3. Backend persistence
+4. Real authentication and staff/student permissions
+5. AI-generated task analysis through a backend

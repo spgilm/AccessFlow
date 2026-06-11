@@ -902,3 +902,154 @@ textarea {
     animation-iteration-count: 1 !important;
   }
 }
+
+
+select {
+  min-height: var(--tap-target);
+  width: 100%;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  background: white;
+  color: var(--text);
+  font: inherit;
+}
+
+select:focus-visible {
+  outline: 4px solid var(--warning-focus);
+  outline-offset: 3px;
+}
+
+.student-profile-banner {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.student-profile-banner p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.staff-management-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.profile-panel,
+.template-panel {
+  padding: 1rem;
+}
+
+.profile-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.compact-form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.inline-control-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.inline-control-row button,
+.template-save-form button {
+  min-height: var(--tap-target);
+  border: 0;
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1rem;
+  background: var(--primary);
+  color: white;
+  font-weight: 900;
+}
+
+.profile-editor {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.template-save-form {
+  display: grid;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.template-empty {
+  padding: 0.75rem 0;
+}
+
+.template-list {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.template-row {
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.85rem;
+  background: var(--surface-strong);
+}
+
+.template-row strong {
+  display: block;
+  color: var(--primary-strong);
+  font-size: 1.1rem;
+}
+
+.template-row p {
+  margin: 0.25rem 0;
+  color: var(--muted);
+}
+
+.template-row span {
+  color: var(--primary-strong);
+  font-weight: 850;
+}
+
+@media (min-width: 680px) {
+  .inline-control-row {
+    grid-template-columns: 1fr auto;
+  }
+
+  .template-save-form {
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+  }
+
+  .template-save-form button {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 980px) {
+  .staff-management-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}

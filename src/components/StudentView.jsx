@@ -6,6 +6,7 @@ import StudentActivityDetail from "./StudentActivityDetail.jsx";
 import StudentViewToggle from "./StudentViewToggle.jsx";
 
 export default function StudentView({
+  profile,
   activities,
   selectedActivity,
   selectedActivityId,
@@ -18,6 +19,14 @@ export default function StudentView({
 }) {
   return (
     <>
+      <section className="panel student-profile-banner" aria-label="Active student profile">
+        <div>
+          <p className="eyebrow">Current schedule for</p>
+          <h2>{profile?.name ?? "No profile selected"}</h2>
+        </div>
+        {profile?.notes ? <p>{profile.notes}</p> : null}
+      </section>
+
       <ProgressSummary activities={activities} />
 
       <StudentViewToggle

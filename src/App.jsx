@@ -2,41 +2,83 @@ import { useMemo, useState } from "react";
 import ModeToggle from "./components/ModeToggle.jsx";
 import StaffView from "./components/StaffView.jsx";
 import StudentView from "./components/StudentView.jsx";
-import { starterActivities } from "./data/starterActivities.js";
+import { starterProfiles, createBlankProfile } from "./data/starterProfiles.js";
+import { starterTemplates } from "./data/starterTemplates.js";
 import { useLocalStorage } from "./hooks/useLocalStorage.js";
 import { generateActivityFromTask } from "./services/taskGenerator.js";
 import { areAllStepsComplete, moveItemById, updateActivityById } from "./utils/activityHelpers.js";
+import { createId } from "./utils/formatters.js";
+import { cloneActivitiesForProfile, cloneActivitiesForTemplate } from "./utils/templateHelpers.js";
 
-const ACTIVITIES_STORAGE_KEY = "accessflow.activities.v3";
-const MODE_STORAGE_KEY = "accessflow.mode.v3";
-const STUDENT_VIEW_STORAGE_KEY = "accessflow.studentView.v3";
+const PROFILES_STORAGE_KEY = "accessflow.profiles.v4";
+const SELECTED_PROFILE_STORAGE_KEY = "accessflow.selectedProfile.v4";
+const TEMPLATES_STORAGE_KEY = "accessflow.templates.v4";
+const MODE_STORAGE_KEY = "accessflow.mode.v4";
+const STUDENT_VIEW_STORAGE_KEY = "accessflow.studentView.v4";
 
 export default function App() {
-  const [activities, setActivities] = useLocalStorage(
-    ACTIVITIES_STORAGE_KEY,
-    starterActivities
+  const [profiles, setProfiles] = useLocalStorage(PROFILES_STORAGE_KEY, starterProfiles);
+  const [selectedProfileId, setSelectedProfileId] = useLocalStorage(
+    SELECTED_PROFILE_STORAGE_KEY,
+    starterProfiles[0]?.id ?? null
   );
+  const [templates, setTemplates] = useLocalStorage(TEMPLATES_STORAGE_KEY, starterTemplates);
   const [mode, setMode] = useLocalStorage(MODE_STORAGE_KEY, "student");
   const [studentViewMode, setStudentViewMode] = useLocalStorage(
     STUDENT_VIEW_STORAGE_KEY,
     "schedule"
   );
   const [selectedActivityId, setSelectedActivityId] = useState(
-    starterActivities[0]?.id ?? null
+    starterProfiles[0]?.activities[0]?.id ?? null
   );
   const [announcement, setAnnouncement] = useState("");
+
+  const selectedProfile = useMemo(() => {
+    return profiles.find((profile) => profile.id === selectedProfileId) ?? profiles[0] ?? null;
+  }, [profiles, selectedProfileId]);
+
+  const activities = selectedProfile?.activities ?? [];
 
   const selectedActivity = useMemo(
     () => activities.find((activity) => activity.id === selectedActivityId) ?? null,
     [activities, selectedActivityId]
   );
 
+  function updateSelectedProfile(updater) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    setProfiles((currentProfiles) =>
+      currentProfiles.map((profile) =>
+        profile.id === selectedProfile.id ? updater(profile) : profile
+      )
+    );
+  }
+
+  function updateSelectedProfileActivities(updater) {
+    updateSelectedProfile((profile) => ({
+      ...profile,
+      activities: updater(profile.activities ?? []),
+    }));
+  }
+
+  function ensureSelectedActivityExists(nextActivities) {
+    if (!nextActivities.some((activity) => activity.id === selectedActivityId)) {
+      setSelectedActivityId(nextActivities[0]?.id ?? null);
+    }
+  }
+
   async function handleAddActivity(taskText) {
+    if (!selectedProfile) {
+      return;
+    }
+
     const activity = await generateActivityFromTask(taskText);
 
-    setActivities((currentActivities) => [...currentActivities, activity]);
+    updateSelectedProfileActivities((currentActivities) => [...currentActivities, activity]);
     setSelectedActivityId(activity.id);
-    setAnnouncement(`${activity.label} added to schedule.`);
+    setAnnouncement(`${activity.label} added to ${selectedProfile.name}'s schedule.`);
   }
 
   function handleModeChange(nextMode) {
@@ -49,12 +91,55 @@ export default function App() {
     setAnnouncement(`${nextViewMode === "firstThen" ? "First / Then" : "Full Schedule"} view selected.`);
   }
 
+  function handleSelectProfile(profileId) {
+    const nextProfile = profiles.find((profile) => profile.id === profileId);
+    setSelectedProfileId(profileId);
+    setSelectedActivityId(nextProfile?.activities?.[0]?.id ?? null);
+    setAnnouncement(`${nextProfile?.name ?? "Profile"} selected.`);
+  }
+
+  function handleAddProfile(name) {
+    const profile = createBlankProfile(name);
+
+    setProfiles((currentProfiles) => [...currentProfiles, profile]);
+    setSelectedProfileId(profile.id);
+    setSelectedActivityId(null);
+    setAnnouncement(`${profile.name} profile added.`);
+  }
+
+  function handleUpdateProfile(profileId, patch) {
+    setProfiles((currentProfiles) =>
+      currentProfiles.map((profile) =>
+        profile.id === profileId ? { ...profile, ...patch } : profile
+      )
+    );
+  }
+
+  function handleDeleteProfile(profileId) {
+    setProfiles((currentProfiles) => {
+      if (currentProfiles.length <= 1) {
+        return currentProfiles;
+      }
+
+      const nextProfiles = currentProfiles.filter((profile) => profile.id !== profileId);
+
+      if (selectedProfileId === profileId) {
+        setSelectedProfileId(nextProfiles[0]?.id ?? null);
+        setSelectedActivityId(nextProfiles[0]?.activities?.[0]?.id ?? null);
+      }
+
+      return nextProfiles;
+    });
+
+    setAnnouncement("Profile deleted.");
+  }
+
   function handleSelectActivity(activityId) {
     setSelectedActivityId(activityId);
   }
 
   function handleToggleActivityComplete(activityId) {
-    setActivities((currentActivities) =>
+    updateSelectedProfileActivities((currentActivities) =>
       currentActivities.map((activity) =>
         activity.id === activityId
           ? {
@@ -71,7 +156,7 @@ export default function App() {
   }
 
   function handleToggleStep(activityId, stepId) {
-    setActivities((currentActivities) =>
+    updateSelectedProfileActivities((currentActivities) =>
       updateActivityById(currentActivities, activityId, (activity) => {
         const updatedSteps = activity.steps.map((step) =>
           step.id === stepId ? { ...step, completed: !step.completed } : step
@@ -91,11 +176,13 @@ export default function App() {
   }
 
   function handleMoveActivity(activityId, direction) {
-    setActivities((currentActivities) => moveItemById(currentActivities, activityId, direction));
+    updateSelectedProfileActivities((currentActivities) =>
+      moveItemById(currentActivities, activityId, direction)
+    );
   }
 
   function handleUpdateActivity(activityId, patch) {
-    setActivities((currentActivities) =>
+    updateSelectedProfileActivities((currentActivities) =>
       updateActivityById(currentActivities, activityId, (activity) => ({
         ...activity,
         ...patch,
@@ -105,7 +192,7 @@ export default function App() {
   }
 
   function handleUpdateStep(activityId, stepId, patch) {
-    setActivities((currentActivities) =>
+    updateSelectedProfileActivities((currentActivities) =>
       updateActivityById(currentActivities, activityId, (activity) => ({
         ...activity,
         steps: activity.steps.map((step) =>
@@ -122,7 +209,7 @@ export default function App() {
   }
 
   function handleAddStep(activityId, step) {
-    setActivities((currentActivities) =>
+    updateSelectedProfileActivities((currentActivities) =>
       updateActivityById(currentActivities, activityId, (activity) => ({
         ...activity,
         completed: false,
@@ -132,7 +219,7 @@ export default function App() {
   }
 
   function handleDeleteStep(activityId, stepId) {
-    setActivities((currentActivities) =>
+    updateSelectedProfileActivities((currentActivities) =>
       updateActivityById(currentActivities, activityId, (activity) => {
         const updatedSteps = activity.steps.filter((step) => step.id !== stepId);
         const updatedActivity = {
@@ -149,7 +236,7 @@ export default function App() {
   }
 
   function handleMoveStep(activityId, stepId, direction) {
-    setActivities((currentActivities) =>
+    updateSelectedProfileActivities((currentActivities) =>
       updateActivityById(currentActivities, activityId, (activity) => ({
         ...activity,
         steps: moveItemById(activity.steps, stepId, direction),
@@ -158,29 +245,68 @@ export default function App() {
   }
 
   function handleDeleteActivity(activityId) {
-    setActivities((currentActivities) => {
+    updateSelectedProfileActivities((currentActivities) => {
       const updatedActivities = currentActivities.filter((activity) => activity.id !== activityId);
-
-      if (selectedActivityId === activityId) {
-        setSelectedActivityId(updatedActivities[0]?.id ?? null);
-      }
-
+      ensureSelectedActivityExists(updatedActivities);
       return updatedActivities;
     });
 
     setAnnouncement("Activity deleted.");
   }
 
+  function handleSaveCurrentScheduleAsTemplate(name, description) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    const template = {
+      id: createId("template"),
+      name,
+      description,
+      activities: cloneActivitiesForTemplate(selectedProfile.activities ?? []),
+    };
+
+    setTemplates((currentTemplates) => [...currentTemplates, template]);
+    setAnnouncement(`${name} template saved.`);
+  }
+
+  function handleApplyTemplateToProfile(templateId) {
+    const template = templates.find((item) => item.id === templateId);
+
+    if (!template || !selectedProfile) {
+      return;
+    }
+
+    const clonedActivities = cloneActivitiesForProfile(template.activities);
+
+    updateSelectedProfile((profile) => ({
+      ...profile,
+      activities: clonedActivities,
+    }));
+
+    setSelectedActivityId(clonedActivities[0]?.id ?? null);
+    setAnnouncement(`${template.name} applied to ${selectedProfile.name}.`);
+  }
+
+  function handleDeleteTemplate(templateId) {
+    setTemplates((currentTemplates) =>
+      currentTemplates.filter((template) => template.id !== templateId)
+    );
+    setAnnouncement("Template deleted.");
+  }
+
   function handleResetDemo() {
-    setActivities(starterActivities);
-    setSelectedActivityId(starterActivities[0]?.id ?? null);
-    setAnnouncement("Demo schedule reset.");
+    setProfiles(starterProfiles);
+    setTemplates(starterTemplates);
+    setSelectedProfileId(starterProfiles[0]?.id ?? null);
+    setSelectedActivityId(starterProfiles[0]?.activities[0]?.id ?? null);
+    setAnnouncement("Demo data reset.");
   }
 
   function handleClearSchedule() {
-    setActivities([]);
+    updateSelectedProfileActivities(() => []);
     setSelectedActivityId(null);
-    setAnnouncement("Schedule cleared.");
+    setAnnouncement("Selected profile schedule cleared.");
   }
 
   return (
@@ -190,7 +316,7 @@ export default function App() {
           <p className="app-kicker">Adaptive visual schedule</p>
           <h1>AccessFlow</h1>
           <p className="app-description">
-            Create, edit, and use simple visual schedules with step-by-step supports.
+            Create, edit, save, reuse, and use visual schedules with step-by-step supports.
           </p>
         </div>
 
@@ -203,6 +329,7 @@ export default function App() {
 
       {mode === "student" ? (
         <StudentView
+          profile={selectedProfile}
           activities={activities}
           selectedActivity={selectedActivity}
           selectedActivityId={selectedActivityId}
@@ -215,9 +342,20 @@ export default function App() {
         />
       ) : (
         <StaffView
+          profiles={profiles}
+          selectedProfile={selectedProfile}
+          selectedProfileId={selectedProfile?.id ?? selectedProfileId}
+          templates={templates}
           activities={activities}
           selectedActivity={selectedActivity}
           selectedActivityId={selectedActivityId}
+          onSelectProfile={handleSelectProfile}
+          onAddProfile={handleAddProfile}
+          onUpdateProfile={handleUpdateProfile}
+          onDeleteProfile={handleDeleteProfile}
+          onSaveCurrentScheduleAsTemplate={handleSaveCurrentScheduleAsTemplate}
+          onApplyTemplateToProfile={handleApplyTemplateToProfile}
+          onDeleteTemplate={handleDeleteTemplate}
           onAddActivity={handleAddActivity}
           onSelectActivity={handleSelectActivity}
           onMoveActivity={handleMoveActivity}
