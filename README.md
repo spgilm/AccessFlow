@@ -180,3 +180,23 @@ The next version should either:
 2. Add AI-generated task analysis through a backend API.
 
 For real-world deployment, normalized database tables should come before serious multi-user use.
+
+
+## Render npm timeout fix
+
+This v8.1 package intentionally excludes `package-lock.json` and includes:
+
+```txt
+.npmrc
+.node-version
+```
+
+Reason: a lockfile generated in some hosted environments can contain internal registry tarball URLs. Render cannot fetch those URLs and may fail with `ETIMEDOUT`.
+
+Use this Render build command:
+
+```txt
+npm install --registry=https://registry.npmjs.org/ && npm run build
+```
+
+If your GitHub repo already has `package-lock.json`, delete it from the repo before deploying this version.
