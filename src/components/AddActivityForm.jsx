@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const examplePrompts = [
   "brush teeth",
@@ -9,10 +9,16 @@ const examplePrompts = [
   "speech therapy",
 ];
 
+function getSpeechRecognitionConstructor() {
+  return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+}
+
 export default function AddActivityForm({ onAddActivity }) {
   const [taskText, setTaskText] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const [error, setError] = useState("");
+  const recognitionRef = useRef(null);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -41,6 +47,50 @@ export default function AddActivityForm({ onAddActivity }) {
     setError("");
   }
 
+  function handleDictate() {
+    const SpeechRecognition = getSpeechRecognitionConstructor();
+
+    if (!SpeechRecognition) {
+      setError("Speech input is not supported in this browser. Type the task instead.");
+      return;
+    }
+
+    if (recognitionRef.current && isListening) {
+      recognitionRef.current.stop();
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setError("");
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results?.[0]?.[0]?.transcript;
+      if (transcript) {
+        setTaskText(transcript);
+      }
+    };
+
+    recognition.onerror = () => {
+      setError("Speech input did not work. Type the task or try again.");
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      recognitionRef.current = null;
+    };
+
+    recognition.start();
+  }
+
   return (
     <section className="panel add-panel" aria-labelledby="add-activity-heading">
       <div className="section-heading-row">
@@ -62,12 +112,20 @@ export default function AddActivityForm({ onAddActivity }) {
             autoComplete="off"
             onChange={(event) => setTaskText(event.target.value)}
           />
+          <button
+            type="button"
+            className="dictate-button"
+            onClick={handleDictate}
+            aria-pressed={isListening}
+          >
+            {isListening ? "Stop" : "Dictate"}
+          </button>
           <button type="submit" disabled={isGenerating}>
             {isGenerating ? "Creating..." : "Add"}
           </button>
         </div>
         <p className="field-help">
-          Local templates create the activity label, emoji, and steps. Edit the result below.
+          Type or dictate a general task. Local templates create a starting label, visual, and steps.
         </p>
         {error ? (
           <p className="form-error" role="alert">

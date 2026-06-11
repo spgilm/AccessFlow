@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { createId } from "../utils/formatters.js";
+import VisualEditor from "./VisualEditor.jsx";
 
 export default function StaffActivityEditor({
   activity,
@@ -9,28 +11,19 @@ export default function StaffActivityEditor({
   onMoveStep,
   onDeleteActivity,
 }) {
+  const [visualError, setVisualError] = useState("");
+
   if (!activity) {
     return (
       <section className="panel staff-editor-panel" aria-labelledby="editor-empty-heading">
         <p className="eyebrow">Editor</p>
         <h2 id="editor-empty-heading">Select an activity</h2>
-        <p className="field-help">Choose an activity from the list to edit its label, emoji, summary, and steps.</p>
+        <p className="field-help">Choose an activity from the list to edit its label, visual, summary, and steps.</p>
       </section>
     );
   }
 
   function handleActivityFieldChange(field, value) {
-    if (field === "emoji") {
-      onUpdateActivity(activity.id, {
-        visual: {
-          ...activity.visual,
-          value: value || "⭐",
-          altText: `${activity.label} visual`,
-        },
-      });
-      return;
-    }
-
     onUpdateActivity(activity.id, { [field]: value });
   }
 
@@ -56,6 +49,12 @@ export default function StaffActivityEditor({
         </div>
       </div>
 
+      {visualError ? (
+        <p className="form-error" role="alert">
+          {visualError}
+        </p>
+      ) : null}
+
       <div className="editor-grid">
         <label>
           Activity label
@@ -66,15 +65,13 @@ export default function StaffActivityEditor({
           />
         </label>
 
-        <label>
-          Emoji
-          <input
-            type="text"
-            value={activity.visual.value}
-            maxLength={4}
-            onChange={(event) => handleActivityFieldChange("emoji", event.target.value)}
-          />
-        </label>
+        <VisualEditor
+          label="Activity visual"
+          visual={activity.visual}
+          fallbackLabel={activity.label}
+          onError={setVisualError}
+          onChange={(visual) => onUpdateActivity(activity.id, { visual })}
+        />
 
         <label className="full-width">
           Summary
@@ -85,6 +82,10 @@ export default function StaffActivityEditor({
           />
         </label>
       </div>
+
+      <p className="field-help editor-note">
+        Uploaded images are stored only in this browser for now. Use small images under 900 KB.
+      </p>
 
       <div className="editor-subheader">
         <div>
@@ -103,23 +104,13 @@ export default function StaffActivityEditor({
           {activity.steps.map((step, index) => (
             <li key={step.id} className="staff-step-editor-row">
               <div className="step-edit-grid">
-                <label>
-                  Step {index + 1} emoji
-                  <input
-                    type="text"
-                    value={step.visual.value}
-                    maxLength={4}
-                    onChange={(event) =>
-                      onUpdateStep(activity.id, step.id, {
-                        visual: {
-                          ...step.visual,
-                          value: event.target.value || "⭐",
-                          altText: `${step.label} visual`,
-                        },
-                      })
-                    }
-                  />
-                </label>
+                <VisualEditor
+                  label={`Step ${index + 1} visual`}
+                  visual={step.visual}
+                  fallbackLabel={step.label}
+                  onError={setVisualError}
+                  onChange={(visual) => onUpdateStep(activity.id, step.id, { visual })}
+                />
 
                 <label>
                   Step label

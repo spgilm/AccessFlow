@@ -1,4 +1,8 @@
 {
+  "name": "accessflow",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -10,5 +14,8 @@
     "react": "latest",
     "react-dom": "latest"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "engines": {
+    "node": ">=20"
+  }
 }

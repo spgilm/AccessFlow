@@ -7,8 +7,9 @@ import { useLocalStorage } from "./hooks/useLocalStorage.js";
 import { generateActivityFromTask } from "./services/taskGenerator.js";
 import { areAllStepsComplete, moveItemById, updateActivityById } from "./utils/activityHelpers.js";
 
-const ACTIVITIES_STORAGE_KEY = "accessflow.activities.v2";
-const MODE_STORAGE_KEY = "accessflow.mode.v2";
+const ACTIVITIES_STORAGE_KEY = "accessflow.activities.v3";
+const MODE_STORAGE_KEY = "accessflow.mode.v3";
+const STUDENT_VIEW_STORAGE_KEY = "accessflow.studentView.v3";
 
 export default function App() {
   const [activities, setActivities] = useLocalStorage(
@@ -16,6 +17,10 @@ export default function App() {
     starterActivities
   );
   const [mode, setMode] = useLocalStorage(MODE_STORAGE_KEY, "student");
+  const [studentViewMode, setStudentViewMode] = useLocalStorage(
+    STUDENT_VIEW_STORAGE_KEY,
+    "schedule"
+  );
   const [selectedActivityId, setSelectedActivityId] = useState(
     starterActivities[0]?.id ?? null
   );
@@ -37,6 +42,11 @@ export default function App() {
   function handleModeChange(nextMode) {
     setMode(nextMode);
     setAnnouncement(`${nextMode === "student" ? "Student" : "Staff"} Mode selected.`);
+  }
+
+  function handleStudentViewModeChange(nextViewMode) {
+    setStudentViewMode(nextViewMode);
+    setAnnouncement(`${nextViewMode === "firstThen" ? "First / Then" : "Full Schedule"} view selected.`);
   }
 
   function handleSelectActivity(activityId) {
@@ -196,6 +206,8 @@ export default function App() {
           activities={activities}
           selectedActivity={selectedActivity}
           selectedActivityId={selectedActivityId}
+          studentViewMode={studentViewMode}
+          onStudentViewModeChange={handleStudentViewModeChange}
           onSelectActivity={handleSelectActivity}
           onToggleActivityComplete={handleToggleActivityComplete}
           onToggleStep={handleToggleStep}

@@ -27,3 +27,21 @@ export function moveItemById(items, itemId, direction) {
 export function areAllStepsComplete(activity) {
   return activity.steps.length > 0 && activity.steps.every((step) => step.completed);
 }
+
+export function getFirstThenActivities(activities) {
+  const firstIndex = activities.findIndex((activity) => !activity.completed);
+
+  if (firstIndex === -1) {
+    return {
+      first: null,
+      then: null,
+      allDone: activities.length > 0,
+    };
+  }
+
+  return {
+    first: activities[firstIndex] ?? null,
+    then: activities[firstIndex + 1] ?? null,
+    allDone: false,
+  };
+}

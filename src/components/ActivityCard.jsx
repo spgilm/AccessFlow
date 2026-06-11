@@ -1,3 +1,5 @@
+import VisualSupport from "./VisualSupport.jsx";
+
 export default function ActivityCard({
   activity,
   isSelected,
@@ -19,9 +21,7 @@ export default function ActivityCard({
         aria-pressed={isSelected}
         aria-label={`Open ${activity.label}. Status: ${statusText}.`}
       >
-        <span className="activity-visual" aria-hidden="true">
-          {activity.visual.value}
-        </span>
+        <VisualSupport visual={activity.visual} className="activity-visual" />
         <span className="activity-text">
           <span className="activity-label">{activity.label}</span>
           <span className="activity-summary">{activity.summary}</span>

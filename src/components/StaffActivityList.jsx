@@ -1,3 +1,5 @@
+import VisualSupport from "./VisualSupport.jsx";
+
 export default function StaffActivityList({
   activities,
   selectedActivityId,
@@ -41,9 +43,7 @@ export default function StaffActivityList({
               aria-pressed={activity.id === selectedActivityId}
             >
               <span className="staff-row-number">{index + 1}</span>
-              <span className="staff-row-emoji" aria-hidden="true">
-                {activity.visual.value}
-              </span>
+              <VisualSupport visual={activity.visual} className="staff-row-visual" />
               <span className="staff-row-label">{activity.label}</span>
             </button>
 

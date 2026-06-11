@@ -1,3 +1,5 @@
+import VisualSupport from "./VisualSupport.jsx";
+
 export default function StudentActivityDetail({
   activity,
   onClose,
@@ -19,9 +21,7 @@ export default function StudentActivityDetail({
     <section className="panel detail-panel" aria-labelledby="detail-heading">
       <div className="detail-header">
         <div className="detail-title-group">
-          <span className="detail-visual" aria-hidden="true">
-            {activity.visual.value}
-          </span>
+          <VisualSupport visual={activity.visual} className="detail-visual" />
           <div>
             <p className="eyebrow">Task breakdown</p>
             <h2 id="detail-heading">{activity.label}</h2>
@@ -53,9 +53,7 @@ export default function StudentActivityDetail({
               }
             >
               <span className="step-number">{index + 1}</span>
-              <span className="step-visual" aria-hidden="true">
-                {step.visual.value}
-              </span>
+              <VisualSupport visual={step.visual} className="step-visual" />
               <span className="step-label">{step.label}</span>
               <span className="step-state">{step.completed ? "Done" : "Tap"}</span>
             </button>

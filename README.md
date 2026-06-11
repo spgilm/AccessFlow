@@ -1,53 +1,77 @@
-# AccessFlow v2
+# AccessFlow v3
 
 AccessFlow is a mobile-first adaptive visual schedule web app for students/clients who benefit from visual structure, task analysis, and simplified daily routines.
 
-## Version 2 focus
+## Version 3 focus
 
-This version separates the app into two modes:
+Version 3 makes the prototype more useful for real access needs while staying frontend-only:
 
-- **Student Mode**: clean, low-clutter visual schedule interaction.
-- **Staff Mode**: setup and editing tools for caregivers, teachers, specialists, or support staff.
+- Student-facing **Full Schedule** view
+- Student-facing **First / Then** view
+- Staff-uploaded custom images for activities
+- Staff-uploaded custom images for steps
+- Optional speech-to-text task entry where supported by the browser
+- Existing v2 staff editing, reordering, local generation, and localStorage persistence
 
 ## Included features
 
 - React + Vite frontend
 - Mobile-first layout
 - Student / Staff mode toggle
-- Emoji-based visual schedule cards
+- Student Full Schedule / First-Then view toggle
+- Emoji or uploaded-image visual supports
 - Local task generation for common activities
+- Speech-to-text task entry when available
 - Step-by-step task breakdowns
 - Completion tracking
 - Now / Next display
 - Progress bar
 - Add activity from a general task prompt
 - Edit activity label
-- Edit activity emoji
+- Edit activity emoji fallback
+- Upload activity image
 - Edit activity summary
-- Edit step labels and emojis
+- Edit step labels
+- Edit step emoji fallbacks
+- Upload step images
 - Add steps
 - Delete steps
-- Move activities up/down
 - Move steps up/down
+- Move activities up/down
 - Delete activities
-- Reset demo schedule
+- Reset demo
 - Clear schedule
 - localStorage persistence
 - Render-ready static site config
 
+## Important limitation
+
+Uploaded images are stored in browser localStorage as data URLs. This is good for a local prototype, but not final production storage.
+
+For production, uploaded images should move to backend/object storage such as:
+
+- Supabase Storage
+- S3-compatible storage
+- Cloudinary
+- Firebase Storage
+
 ## Why no real AI image API yet?
 
-Version 2 still uses local task generation and emoji visuals. This keeps the app safe, free, and deployable without API keys.
+Version 3 still avoids direct AI image generation from the browser.
 
-A real AI image service should be added later through a backend route, not directly in the browser. Browser-exposed API keys can be copied by users.
+Reason:
 
-The placeholder is in:
+- Frontend-only apps cannot safely store API keys.
+- Browser-exposed API keys can be copied.
+- Generated images should be moderated, cached, and stored through a backend.
+
+The placeholder remains in:
 
 ```txt
 src/services/imageProvider.js
 ```
 
-Later, that file can call a backend endpoint such as:
+Later, this can call a backend endpoint:
 
 ```txt
 POST /api/generate-image
@@ -71,7 +95,7 @@ npm run preview
 
 ## Deploy to Render
 
-Create a new Static Site on Render and connect the GitHub repository.
+Create or use an existing Render Static Site connected to GitHub.
 
 Use:
 
@@ -97,49 +121,14 @@ Try:
 - reading group
 - speech therapy
 
-Unknown prompts will still create a simple schedule card with a best-guess emoji and generic steps.
+Unknown prompts still create a simple schedule card with a best-guess emoji and generic steps.
 
-## Project structure
+## Recommended v4
 
-```txt
-accessflow-v2/
-  public/
-  src/
-    components/
-      ActivityCard.jsx
-      AddActivityForm.jsx
-      EmptyState.jsx
-      ModeToggle.jsx
-      ProgressSummary.jsx
-      StaffActivityEditor.jsx
-      StaffActivityList.jsx
-      StaffView.jsx
-      StudentActivityDetail.jsx
-      StudentView.jsx
-    data/
-      activityTemplates.js
-      starterActivities.js
-    hooks/
-      useLocalStorage.js
-    services/
-      imageProvider.js
-      taskGenerator.js
-    utils/
-      activityHelpers.js
-      formatters.js
-    App.jsx
-    main.jsx
-    styles.css
-  index.html
-  package.json
-  render.yaml
-  vite.config.js
-```
+The next version should likely add one of these:
 
-## Recommended v3
-
-The next version should add one of these:
-
-1. **Speech-to-text task entry** using the Web Speech API where supported.
-2. **Custom image upload** so staff can use real photos instead of emojis.
-3. **First / Then focused student view** for users who need a lower-cognitive-load interface.
+1. **Reusable schedule templates**
+2. **Student/client profiles**
+3. **Backend persistence**
+4. **Caregiver/staff login**
+5. **AI-generated step breakdowns through a backend**

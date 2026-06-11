@@ -1,23 +1,16 @@
 /**
- * Version 2 image provider.
+ * Version 3 image provider.
  *
- * This intentionally returns emoji visuals instead of calling an AI image API.
+ * Current supported visual types:
+ * - emoji
+ * - uploaded image data URL
  *
- * Reason:
- * - Frontend-only apps cannot safely store API keys.
- * - Free image generation APIs change frequently and often have rate limits.
- * - Emoji placeholders let the interaction model be tested immediately.
+ * AI-generated images should be added later through a backend route:
  *
- * Later:
- * Replace this with a call to your own backend endpoint:
+ *   POST /api/generate-image
  *
- *   const response = await fetch("/api/generate-image", {
- *     method: "POST",
- *     headers: { "Content-Type": "application/json" },
- *     body: JSON.stringify({ label, prompt }),
- *   });
- *
- * The backend should hold API keys in environment variables.
+ * The backend should hold API keys in environment variables and return a stored
+ * image URL plus alt text.
  */
 
 export function createEmojiVisual(emoji, altText) {
@@ -28,10 +21,18 @@ export function createEmojiVisual(emoji, altText) {
   };
 }
 
+export function createUploadedImageVisual(dataUrl, altText) {
+  return {
+    type: "image",
+    value: dataUrl,
+    altText: altText || "Uploaded visual support",
+  };
+}
+
 export function updateEmojiVisual(existingVisual, emoji, altText) {
   return {
     type: "emoji",
-    value: emoji || existingVisual?.value || "⭐",
+    value: emoji || "⭐",
     altText: altText || existingVisual?.altText || "Visual support",
   };
 }
