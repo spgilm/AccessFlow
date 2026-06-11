@@ -1556,3 +1556,72 @@ select:focus-visible {
     align-items: start;
   }
 }
+
+
+/* v10.1 schedule-first student workspace */
+.student-schedule-guidance {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--primary-soft);
+}
+
+.student-schedule-guidance p:last-child {
+  margin: 0;
+  color: var(--primary-strong);
+  font-weight: 800;
+}
+
+.student-schedule-workspace {
+  margin-bottom: 1rem;
+}
+
+.student-schedule-primary {
+  min-width: 0;
+}
+
+.student-schedule-item {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.student-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0 0.25rem;
+}
+
+.student-card-actions button,
+.small-danger-button {
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  background: white;
+  color: var(--primary-strong);
+  font-weight: 900;
+}
+
+.student-card-actions .small-danger-button,
+.small-danger-button {
+  border-color: #f0b8b8;
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.student-builder-panel {
+  margin-top: 1rem;
+}
+
+.student-builder-panel .library-panel {
+  background: var(--surface-strong);
+}
+
+@media (min-width: 680px) {
+  .student-view-toggle {
+    grid-template-columns: repeat(2, 1fr);
+    width: 480px;
+  }
+}

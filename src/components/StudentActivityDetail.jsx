@@ -21,7 +21,7 @@ export default function StudentActivityDetail({
     <section className="panel detail-panel" aria-labelledby="detail-heading">
       <div className="detail-header">
         <div className="detail-title-group">
-          <VisualSupport visual={activity.visual} className="detail-visual" />
+          <VisualSupport visual={activity.visual ?? activity.emoji} className="detail-visual" />
           <div>
             <p className="eyebrow">Task breakdown</p>
             <h2 id="detail-heading">{activity.label}</h2>
@@ -53,7 +53,7 @@ export default function StudentActivityDetail({
               }
             >
               <span className="step-number">{index + 1}</span>
-              <VisualSupport visual={step.visual} className="step-visual" />
+              <VisualSupport visual={step.visual ?? step.emoji} className="step-visual" />
               <span className="step-label">{step.label}</span>
               <span className="step-state">{step.completed ? "Done" : "Tap"}</span>
             </button>

@@ -116,6 +116,13 @@ export default function App() {
     [workspaceData]
   );
 
+  useEffect(() => {
+    if (studentViewMode === "builder") {
+      setStudentViewMode("schedule");
+    }
+  }, [studentViewMode, setStudentViewMode]);
+
+
   function buildCurrentWorkspacePayload() {
     return buildBackupPayload(workspaceData);
   }
@@ -323,7 +330,7 @@ export default function App() {
     updateSelectedProfileActivities(() => []);
     setSelectedActivityId(null);
     clearPortableStatuses();
-    setAnnouncement("Schedule cleared. Choose new activities from Plan My Day.");
+    setAnnouncement("Schedule cleared. Choose activities to add to the schedule.");
   }
 
   function handleModeChange(nextMode) {
@@ -334,12 +341,7 @@ export default function App() {
   function handleStudentViewModeChange(nextViewMode) {
     setStudentViewMode(nextViewMode);
 
-    const viewLabel =
-      nextViewMode === "firstThen"
-        ? "First / Then"
-        : nextViewMode === "builder"
-          ? "Plan My Day"
-          : "Use Schedule";
+    const viewLabel = nextViewMode === "firstThen" ? "First / Then" : "My Schedule";
 
     setAnnouncement(`${viewLabel} view selected.`);
   }

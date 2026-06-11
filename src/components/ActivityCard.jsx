@@ -21,7 +21,7 @@ export default function ActivityCard({
         aria-pressed={isSelected}
         aria-label={`Open ${activity.label}. Status: ${statusText}.`}
       >
-        <VisualSupport visual={activity.visual} className="activity-visual" />
+        <VisualSupport visual={activity.visual ?? activity.emoji} className="activity-visual" />
         <span className="activity-text">
           <span className="activity-label">{activity.label}</span>
           <span className="activity-summary">{activity.summary}</span>

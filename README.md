@@ -184,3 +184,14 @@ If your GitHub repo already has `package-lock.json`, delete it from the repo bef
 ## Recommended v11
 
 The next version should probably add a staff-reviewed activity request queue and then start normalizing the Supabase schema beyond full JSON snapshots, beginning with organization/profile/activity tables and role-based access boundaries.
+
+
+## AccessFlow v10.1 student schedule correction
+
+v10.1 corrects the Student Mode flow after v10:
+
+- The default student view is now **My Schedule**.
+- Schedule use and schedule planning are combined on the same page.
+- Students can see the schedule first, then add or adjust activities below it when staff independence settings allow.
+- Emoji visuals are rendered more defensively, including older/legacy activity data that may store an `emoji` field instead of a full `visual` object.
+- The separate "Use Schedule" and "Plan My Day" tabs are replaced with **My Schedule** and **First / Then**.
