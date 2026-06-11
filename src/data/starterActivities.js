@@ -1,5 +1,14 @@
 import { createId } from "../utils/formatters.js";
 
+function makeStep(label, emoji, altText = label) {
+  return {
+    id: createId("step"),
+    label,
+    visual: { type: "emoji", value: emoji, altText },
+    completed: false,
+  };
+}
+
 export const starterActivities = [
   {
     id: createId("activity"),
@@ -13,24 +22,11 @@ export const starterActivities = [
     },
     completed: false,
     steps: [
-      {
-        id: createId("step"),
-        label: "Sit at table",
-        visual: { type: "emoji", value: "🪑", altText: "Chair" },
-        completed: false,
-      },
-      {
-        id: createId("step"),
-        label: "Get food",
-        visual: { type: "emoji", value: "🥣", altText: "Bowl" },
-        completed: false,
-      },
-      {
-        id: createId("step"),
-        label: "Take bites",
-        visual: { type: "emoji", value: "😋", altText: "Eating face" },
-        completed: false,
-      },
+      makeStep("Sit at table", "🪑", "Chair"),
+      makeStep("Get food", "🥣", "Bowl"),
+      makeStep("Use spoon or fork", "🥄", "Spoon"),
+      makeStep("Take bites", "😋", "Eating face"),
+      makeStep("Clean up", "🧽", "Sponge"),
     ],
   },
   {
@@ -45,36 +41,11 @@ export const starterActivities = [
     },
     completed: false,
     steps: [
-      {
-        id: createId("step"),
-        label: "Get toothbrush",
-        visual: { type: "emoji", value: "🪥", altText: "Toothbrush" },
-        completed: false,
-      },
-      {
-        id: createId("step"),
-        label: "Add toothpaste",
-        visual: { type: "emoji", value: "🧴", altText: "Tube" },
-        completed: false,
-      },
-      {
-        id: createId("step"),
-        label: "Brush top teeth",
-        visual: { type: "emoji", value: "⬆️", altText: "Up arrow" },
-        completed: false,
-      },
-      {
-        id: createId("step"),
-        label: "Brush bottom teeth",
-        visual: { type: "emoji", value: "⬇️", altText: "Down arrow" },
-        completed: false,
-      },
-      {
-        id: createId("step"),
-        label: "Rinse",
-        visual: { type: "emoji", value: "🚰", altText: "Faucet" },
-        completed: false,
-      },
+      makeStep("Get toothbrush", "🪥", "Toothbrush"),
+      makeStep("Add toothpaste", "🧴", "Tube"),
+      makeStep("Brush top teeth", "⬆️", "Up arrow"),
+      makeStep("Brush bottom teeth", "⬇️", "Down arrow"),
+      makeStep("Rinse", "🚰", "Faucet"),
     ],
   },
 ];

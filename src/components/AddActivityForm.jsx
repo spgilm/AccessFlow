@@ -1,6 +1,13 @@
 import { useState } from "react";
 
-const examplePrompts = ["brush teeth", "wash hands", "get dressed", "pack backpack"];
+const examplePrompts = [
+  "brush teeth",
+  "wash hands",
+  "get dressed",
+  "pack backpack",
+  "reading group",
+  "speech therapy",
+];
 
 export default function AddActivityForm({ onAddActivity }) {
   const [taskText, setTaskText] = useState("");
@@ -38,13 +45,13 @@ export default function AddActivityForm({ onAddActivity }) {
     <section className="panel add-panel" aria-labelledby="add-activity-heading">
       <div className="section-heading-row">
         <div>
-          <p className="eyebrow">Staff / caregiver setup</p>
-          <h2 id="add-activity-heading">Create a visual activity</h2>
+          <p className="eyebrow">Create</p>
+          <h2 id="add-activity-heading">Add a visual activity</h2>
         </div>
       </div>
 
       <form className="add-form" onSubmit={handleSubmit}>
-        <label htmlFor="taskText">Type a general task</label>
+        <label htmlFor="taskText">General task</label>
         <div className="input-row">
           <input
             id="taskText"
@@ -60,8 +67,7 @@ export default function AddActivityForm({ onAddActivity }) {
           </button>
         </div>
         <p className="field-help">
-          Version 1 uses local templates and emoji visuals. Later this can connect
-          to speech input and backend AI image generation.
+          Local templates create the activity label, emoji, and steps. Edit the result below.
         </p>
         {error ? (
           <p className="form-error" role="alert">

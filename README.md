@@ -1,20 +1,43 @@
-# AccessFlow Starter
+# AccessFlow v2
 
 AccessFlow is a mobile-first adaptive visual schedule web app for students/clients who benefit from visual structure, task analysis, and simplified daily routines.
 
-This first iteration is intentionally frontend-only:
+## Version 2 focus
 
-- React + Vite
+This version separates the app into two modes:
+
+- **Student Mode**: clean, low-clutter visual schedule interaction.
+- **Staff Mode**: setup and editing tools for caregivers, teachers, specialists, or support staff.
+
+## Included features
+
+- React + Vite frontend
 - Mobile-first layout
+- Student / Staff mode toggle
 - Emoji-based visual schedule cards
 - Local task generation for common activities
 - Step-by-step task breakdowns
+- Completion tracking
+- Now / Next display
+- Progress bar
+- Add activity from a general task prompt
+- Edit activity label
+- Edit activity emoji
+- Edit activity summary
+- Edit step labels and emojis
+- Add steps
+- Delete steps
+- Move activities up/down
+- Move steps up/down
+- Delete activities
+- Reset demo schedule
+- Clear schedule
 - localStorage persistence
 - Render-ready static site config
 
 ## Why no real AI image API yet?
 
-Version 1 uses a local task generator and emoji visuals. This keeps the app safe, fast, free, and deployable without API keys.
+Version 2 still uses local task generation and emoji visuals. This keeps the app safe, free, and deployable without API keys.
 
 A real AI image service should be added later through a backend route, not directly in the browser. Browser-exposed API keys can be copied by users.
 
@@ -30,7 +53,7 @@ Later, that file can call a backend endpoint such as:
 POST /api/generate-image
 ```
 
-The backend would hold the API key in environment variables.
+The backend would hold API keys in environment variables.
 
 ## Install locally
 
@@ -59,30 +82,6 @@ Publish Directory: dist
 
 This repo also includes `render.yaml`.
 
-## Current MVP behavior
-
-Type a task such as:
-
-```txt
-brush teeth
-```
-
-The app generates:
-
-```txt
-🪥 TOOTH BRUSHING
-```
-
-Tapping the activity opens a step breakdown:
-
-1. Get toothbrush
-2. Add toothpaste
-3. Brush top teeth
-4. Brush bottom teeth
-5. Rinse
-
-Each step has an emoji visual and can be marked complete.
-
 ## Useful demo prompts
 
 Try:
@@ -95,22 +94,28 @@ Try:
 - take medication
 - clean table
 - go outside
+- reading group
+- speech therapy
 
 Unknown prompts will still create a simple schedule card with a best-guess emoji and generic steps.
 
 ## Project structure
 
 ```txt
-accessflow-starter-v1/
+accessflow-v2/
   public/
   src/
     components/
       ActivityCard.jsx
-      ActivityDetail.jsx
       AddActivityForm.jsx
       EmptyState.jsx
+      ModeToggle.jsx
       ProgressSummary.jsx
-      ScheduleList.jsx
+      StaffActivityEditor.jsx
+      StaffActivityList.jsx
+      StaffView.jsx
+      StudentActivityDetail.jsx
+      StudentView.jsx
     data/
       activityTemplates.js
       starterActivities.js
@@ -120,6 +125,7 @@ accessflow-starter-v1/
       imageProvider.js
       taskGenerator.js
     utils/
+      activityHelpers.js
       formatters.js
     App.jsx
     main.jsx
@@ -130,11 +136,10 @@ accessflow-starter-v1/
   vite.config.js
 ```
 
-## Next recommended milestones
+## Recommended v3
 
-1. Add staff/editor mode with reorder controls.
-2. Add image upload for staff-created images.
-3. Add speech-to-text task entry using the Web Speech API where supported.
-4. Add a backend for accounts and persistent schedules.
-5. Add safe AI generation through a backend-only API proxy.
-6. Add educator documentation/export features.
+The next version should add one of these:
+
+1. **Speech-to-text task entry** using the Web Speech API where supported.
+2. **Custom image upload** so staff can use real photos instead of emojis.
+3. **First / Then focused student view** for users who need a lower-cognitive-load interface.

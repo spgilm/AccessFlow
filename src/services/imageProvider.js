@@ -1,5 +1,5 @@
 /**
- * Version 1 image provider.
+ * Version 2 image provider.
  *
  * This intentionally returns emoji visuals instead of calling an AI image API.
  *
@@ -25,5 +25,13 @@ export function createEmojiVisual(emoji, altText) {
     type: "emoji",
     value: emoji,
     altText,
+  };
+}
+
+export function updateEmojiVisual(existingVisual, emoji, altText) {
+  return {
+    type: "emoji",
+    value: emoji || existingVisual?.value || "⭐",
+    altText: altText || existingVisual?.altText || "Visual support",
   };
 }

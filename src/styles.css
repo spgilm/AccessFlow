@@ -24,6 +24,7 @@
   --success-soft: #daf5e4;
   --danger: #8a1f1f;
   --danger-soft: #ffe1e1;
+  --warning-focus: #f6c453;
   --shadow: 0 20px 50px rgba(16, 32, 51, 0.14);
   --radius-xl: 28px;
   --radius-lg: 22px;
@@ -50,7 +51,8 @@ body {
 }
 
 button,
-input {
+input,
+textarea {
   font: inherit;
 }
 
@@ -60,12 +62,13 @@ button {
 
 button:disabled {
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
 button:focus-visible,
-input:focus-visible {
-  outline: 4px solid #f6c453;
+input:focus-visible,
+textarea:focus-visible {
+  outline: 4px solid var(--warning-focus);
   outline-offset: 3px;
 }
 
@@ -76,10 +79,8 @@ input:focus-visible {
 }
 
 .app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.5rem;
+  display: grid;
+  gap: 1rem;
   padding: 1.25rem 0 1rem;
 }
 
@@ -94,7 +95,8 @@ input:focus-visible {
 }
 
 h1,
-h2 {
+h2,
+h3 {
   margin: 0;
   letter-spacing: -0.04em;
   line-height: 1.05;
@@ -108,11 +110,42 @@ h2 {
   font-size: clamp(1.45rem, 6vw, 2.15rem);
 }
 
+h3 {
+  font-size: 1.35rem;
+}
+
 .app-description {
   max-width: 46rem;
   margin: 0.75rem 0 0;
   color: var(--muted);
   font-size: 1.05rem;
+}
+
+.mode-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.35rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--shadow);
+}
+
+.mode-toggle button {
+  min-height: var(--tap-target);
+  border: 0;
+  border-radius: 999px;
+  padding: 0.65rem;
+  background: transparent;
+  color: var(--primary-strong);
+  font-weight: 950;
+}
+
+.mode-toggle button.is-active {
+  background: var(--primary);
+  color: white;
 }
 
 .panel,
@@ -141,6 +174,11 @@ h2 {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--surface-strong);
+}
+
+.now-card {
+  border-color: var(--primary);
+  background: var(--primary-soft);
 }
 
 .now-next-label {
@@ -201,8 +239,11 @@ h2 {
   gap: 0.5rem;
 }
 
-.add-form label {
-  font-weight: 800;
+label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--primary-strong);
+  font-weight: 850;
 }
 
 .input-row {
@@ -211,15 +252,23 @@ h2 {
   gap: 0.75rem;
 }
 
-.input-row input {
-  min-height: var(--tap-target);
+input,
+textarea {
   width: 100%;
   border: 2px solid var(--border-strong);
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
   background: white;
   color: var(--text);
-  font-size: 1.1rem;
+  font-size: 1rem;
+}
+
+input {
+  min-height: var(--tap-target);
+}
+
+textarea {
+  resize: vertical;
 }
 
 .input-row button,
@@ -361,9 +410,8 @@ h2 {
   font-weight: 950;
 }
 
-.detail-panel {
-  position: sticky;
-  top: 1rem;
+.detail-panel,
+.staff-editor-panel {
   align-self: start;
   padding: 1rem;
 }
@@ -418,12 +466,18 @@ h2 {
   font-weight: 950;
 }
 
-.step-list {
+.step-list,
+.staff-activity-list,
+.staff-step-editor-list {
   display: grid;
   gap: 0.75rem;
   padding: 0;
-  margin: 0 0 1rem;
+  margin: 0;
   list-style: none;
+}
+
+.step-list {
+  margin-bottom: 1rem;
 }
 
 .step-button {
@@ -481,32 +535,110 @@ h2 {
   font-size: 0.8rem;
 }
 
-.controls-panel {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1rem;
+.staff-list-panel {
   padding: 1rem;
 }
 
-.secondary-button,
-.danger-button {
+.staff-activity-row,
+.staff-step-editor-row {
+  display: grid;
+  gap: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem;
+  background: var(--surface-strong);
+}
+
+.staff-activity-row.is-selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(23, 79, 120, 0.14);
+}
+
+.staff-select-button {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
   min-height: var(--tap-target);
+  width: 100%;
+  border: 0;
   border-radius: var(--radius-md);
-  padding: 0.75rem 1rem;
+  background: white;
+  color: var(--text);
+  text-align: left;
+  padding: 0.6rem;
+}
+
+.staff-row-number {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: white;
   font-weight: 950;
 }
 
+.staff-row-emoji {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background: var(--primary-soft);
+  font-size: 1.9rem;
+}
+
+.staff-row-label {
+  font-weight: 950;
+  font-size: 1rem;
+}
+
+.row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.row-actions button,
+.secondary-button,
+.danger-button,
+.small-danger-button,
+.danger-wide-button {
+  min-height: 44px;
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.85rem;
+  font-weight: 950;
+}
+
+.row-actions button,
 .secondary-button {
   border: 2px solid var(--border-strong);
   background: white;
   color: var(--primary-strong);
 }
 
-.danger-button {
+.small-danger-button,
+.danger-button,
+.danger-wide-button {
   border: 2px solid #d68080;
   background: var(--danger-soft);
   color: var(--danger);
+}
+
+.danger-wide-button {
+  width: 100%;
+  min-height: var(--tap-target);
+  margin-top: 1rem;
+}
+
+.controls-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 1rem;
 }
 
 .empty-state {
@@ -517,6 +649,38 @@ h2 {
 .empty-visual {
   margin-bottom: 1rem;
   font-size: 4rem;
+}
+
+.editor-grid,
+.step-edit-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
+}
+
+.editor-grid {
+  margin-bottom: 1.25rem;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.editor-subheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.staff-step-editor-list {
+  margin-bottom: 1rem;
+}
+
+.step-actions {
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
 }
 
 .sr-only {
@@ -533,6 +697,15 @@ h2 {
 @media (min-width: 680px) {
   .app-shell {
     padding: 1.5rem;
+  }
+
+  .app-header {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+
+  .mode-toggle {
+    width: 360px;
   }
 
   .now-next-grid {
@@ -555,12 +728,30 @@ h2 {
   .complete-button {
     min-width: 7rem;
   }
+
+  .editor-grid {
+    grid-template-columns: 1fr 8rem;
+  }
+
+  .step-edit-grid {
+    grid-template-columns: 8rem 1fr;
+  }
 }
 
 @media (min-width: 980px) {
   .workspace-grid {
     grid-template-columns: minmax(0, 1fr) 420px;
     align-items: start;
+  }
+
+  .staff-grid {
+    grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.05fr);
+  }
+
+  .detail-panel,
+  .staff-editor-panel {
+    position: sticky;
+    top: 1rem;
   }
 
   .empty-detail {

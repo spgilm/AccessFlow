@@ -1,12 +1,12 @@
 export function normalizeTaskText(value) {
-  return value
+  return String(value ?? "")
     .trim()
     .toLowerCase()
     .replace(/\s+/g, " ");
 }
 
 export function toDisplayLabel(value) {
-  return value
+  return String(value ?? "")
     .trim()
     .replace(/\s+/g, " ")
     .toUpperCase();

@@ -23,7 +23,7 @@ export default function ProgressSummary({ activities }) {
   return (
     <section className="progress-panel" aria-label="Schedule progress">
       <div className="now-next-grid">
-        <div className="now-next-card">
+        <div className="now-next-card now-card">
           <span className="now-next-label">Now</span>
           <strong>{now}</strong>
         </div>
@@ -40,7 +40,14 @@ export default function ProgressSummary({ activities }) {
         <span>{percent}%</span>
       </div>
 
-      <div className="progress-track" aria-hidden="true">
+      <div
+        className="progress-track"
+        role="progressbar"
+        aria-valuenow={percent}
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-label="Schedule completion"
+      >
         <div className="progress-fill" style={{ width: `${percent}%` }} />
       </div>
     </section>

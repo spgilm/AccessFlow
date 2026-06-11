@@ -98,18 +98,45 @@ export const activityTemplates = {
       { label: "Go outside", emoji: "🌳" },
     ],
   },
+  "reading group": {
+    label: "READING GROUP",
+    emoji: "📖",
+    summary: "Join reading group and participate with support.",
+    steps: [
+      { label: "Find reading area", emoji: "📍" },
+      { label: "Get book", emoji: "📖" },
+      { label: "Listen to reader", emoji: "👂" },
+      { label: "Answer or point if asked", emoji: "👉" },
+      { label: "Put book away", emoji: "✅" },
+    ],
+  },
+  "speech therapy": {
+    label: "SPEECH THERAPY",
+    emoji: "💬",
+    summary: "Work on communication goals with support.",
+    steps: [
+      { label: "Go to speech room", emoji: "🚪" },
+      { label: "Greet therapist", emoji: "👋" },
+      { label: "Use words, device, signs, or pictures", emoji: "💬" },
+      { label: "Practice activity", emoji: "🎯" },
+      { label: "Say goodbye", emoji: "👋" },
+    ],
+  },
 };
 
 export const fallbackEmojiRules = [
   { includes: ["tooth", "teeth", "brush"], emoji: "🪥" },
   { includes: ["wash", "soap", "hands"], emoji: "🧼" },
   { includes: ["eat", "breakfast", "lunch", "dinner", "snack"], emoji: "🍽️" },
-  { includes: ["read", "book"], emoji: "📖" },
+  { includes: ["read", "book", "reading"], emoji: "📖" },
+  { includes: ["speech", "talk", "communication"], emoji: "💬" },
   { includes: ["math", "number"], emoji: "🔢" },
   { includes: ["music", "song"], emoji: "🎵" },
   { includes: ["outside", "walk", "playground"], emoji: "🌳" },
   { includes: ["bathroom", "toilet"], emoji: "🚻" },
   { includes: ["medication", "medicine", "pill"], emoji: "💊" },
   { includes: ["clean", "wipe"], emoji: "🧽" },
-  { includes: ["sleep", "rest"], emoji: "😴" },
+  { includes: ["sleep", "rest", "break"], emoji: "😴" },
+  { includes: ["dress", "clothes", "shirt"], emoji: "👕" },
+  { includes: ["backpack", "bag", "pack"], emoji: "🎒" },
 ];
