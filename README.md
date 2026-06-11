@@ -195,3 +195,8 @@ v10.1 corrects the Student Mode flow after v10:
 - Students can see the schedule first, then add or adjust activities below it when staff independence settings allow.
 - Emoji visuals are rendered more defensively, including older/legacy activity data that may store an `emoji` field instead of a full `visual` object.
 - The separate "Use Schedule" and "Plan My Day" tabs are replaced with **My Schedule** and **First / Then**.
+
+
+## v10.2 patch
+
+Student Mode’s Now/Next progress cards now use the same visual support rendering as the main schedule cards. This restores emoji/image visuals in the top Now/Next section and keeps the student view schedule-first.
