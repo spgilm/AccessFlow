@@ -114,11 +114,13 @@ export default function AddActivityForm({ onAddActivity }) {
           />
           <button
             type="button"
-            className="dictate-button"
+            className="dictate-button mic-button"
             onClick={handleDictate}
+            aria-label={isListening ? "Stop dictation" : "Dictate task"}
+            title={isListening ? "Stop dictation" : "Dictate task"}
             aria-pressed={isListening}
           >
-            {isListening ? "Stop" : "Dictate"}
+            {isListening ? "■" : "🎙️"}
           </button>
           <button type="submit" disabled={isGenerating}>
             {isGenerating ? "Creating..." : "Add"}

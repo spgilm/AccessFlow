@@ -364,3 +364,25 @@ Dark mode now uses a blue background instead of black, with forced high-contrast
 - yellow labels, active controls, and key status text
 - no inherited deep-blue text in dark mode
 - root text color now uses `var(--text)` instead of a hardcoded light-mode color
+
+
+## v12.3 patch
+
+Dark mode now forces the visual scheme more directly:
+
+- full page background uses the deep blue
+- major page titles use yellow, including AccessFlow and My Schedule
+- body text stays white
+- active controls/buttons stay yellow with dark text
+
+
+## v12.4 patch
+
+Dictation controls are now available in the student-created activity flow:
+
+- microphone button for the student-made activity name
+- microphone button for each student-created smaller step
+- compact microphone button on the staff add-activity form
+- accessible labels are preserved with `aria-label` and `title`
+
+The visible button uses 🎙️ instead of the full word “Dictate” to reduce visual clutter.

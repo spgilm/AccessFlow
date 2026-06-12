@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import VisualSupport from "./VisualSupport.jsx";
+
+function getSpeechRecognitionConstructor() {
+  return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+}
 
 export default function StudentScheduleBuilder({
   profile,
@@ -9,6 +13,9 @@ export default function StudentScheduleBuilder({
 }) {
   const [customTask, setCustomTask] = useState("");
   const [customSteps, setCustomSteps] = useState(["", ""]);
+  const [dictationError, setDictationError] = useState("");
+  const [listeningTarget, setListeningTarget] = useState(null);
+  const recognitionRef = useRef(null);
 
   const canBuild = independenceSettings.studentCanBuildSchedule;
   const canAddCustom = independenceSettings.studentCanAddCustomActivities;
@@ -30,6 +37,71 @@ export default function StudentScheduleBuilder({
     );
   }
 
+  function applyTranscript(target, transcript) {
+    if (!transcript) {
+      return;
+    }
+
+    if (target === "task") {
+      setCustomTask(transcript);
+      return;
+    }
+
+    if (target.startsWith("step-")) {
+      const stepIndex = Number(target.replace("step-", ""));
+
+      if (Number.isFinite(stepIndex)) {
+        updateCustomStep(stepIndex, transcript);
+      }
+    }
+  }
+
+  function handleDictate(target) {
+    const SpeechRecognition = getSpeechRecognitionConstructor();
+
+    if (!SpeechRecognition) {
+      setDictationError("Speech input is not supported in this browser. Type the words instead.");
+      return;
+    }
+
+    if (recognitionRef.current && listeningTarget === target) {
+      recognitionRef.current.stop();
+      return;
+    }
+
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+
+    const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setDictationError("");
+      setListeningTarget(target);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results?.[0]?.[0]?.transcript;
+      applyTranscript(target, transcript);
+    };
+
+    recognition.onerror = () => {
+      setDictationError("Speech input did not work. Type the words or try again.");
+    };
+
+    recognition.onend = () => {
+      setListeningTarget(null);
+      recognitionRef.current = null;
+    };
+
+    recognition.start();
+  }
+
   function handleCustomSubmit(event) {
     event.preventDefault();
 
@@ -47,6 +119,7 @@ export default function StudentScheduleBuilder({
     });
     setCustomTask("");
     setCustomSteps(["", ""]);
+    setDictationError("");
   }
 
   if (!canBuild) {
@@ -106,12 +179,24 @@ export default function StudentScheduleBuilder({
 
           <label>
             Activity
-            <input
-              type="text"
-              value={customTask}
-              placeholder="Example: make a snack"
-              onChange={(event) => setCustomTask(event.target.value)}
-            />
+            <div className="speech-input-row">
+              <input
+                type="text"
+                value={customTask}
+                placeholder="Example: make a snack"
+                onChange={(event) => setCustomTask(event.target.value)}
+              />
+              <button
+                type="button"
+                className="dictate-button mic-button"
+                onClick={() => handleDictate("task")}
+                aria-label={listeningTarget === "task" ? "Stop dictating activity" : "Dictate activity"}
+                title={listeningTarget === "task" ? "Stop dictating activity" : "Dictate activity"}
+                aria-pressed={listeningTarget === "task"}
+              >
+                {listeningTarget === "task" ? "■" : "🎙️"}
+              </button>
+            </div>
           </label>
 
           <div className="student-made-steps" aria-label="Student-created smaller steps">
@@ -122,27 +207,47 @@ export default function StudentScheduleBuilder({
               </button>
             </div>
 
-            {customSteps.map((step, index) => (
-              <div key={`custom-step-${index}`} className="student-made-step-row">
-                <span className="step-number">{index + 1}</span>
-                <input
-                  type="text"
-                  value={step}
-                  placeholder={`Step ${index + 1}`}
-                  onChange={(event) => updateCustomStep(index, event.target.value)}
-                />
-                {customSteps.length > 1 ? (
+            {customSteps.map((step, index) => {
+              const target = `step-${index}`;
+
+              return (
+                <div key={`custom-step-${index}`} className="student-made-step-row">
+                  <span className="step-number">{index + 1}</span>
+                  <input
+                    type="text"
+                    value={step}
+                    placeholder={`Step ${index + 1}`}
+                    onChange={(event) => updateCustomStep(index, event.target.value)}
+                  />
                   <button
                     type="button"
-                    className="small-danger-button"
-                    onClick={() => removeCustomStep(index)}
+                    className="dictate-button mic-button"
+                    onClick={() => handleDictate(target)}
+                    aria-label={listeningTarget === target ? `Stop dictating step ${index + 1}` : `Dictate step ${index + 1}`}
+                    title={listeningTarget === target ? `Stop dictating step ${index + 1}` : `Dictate step ${index + 1}`}
+                    aria-pressed={listeningTarget === target}
                   >
-                    Remove
+                    {listeningTarget === target ? "■" : "🎙️"}
                   </button>
-                ) : null}
-              </div>
-            ))}
+                  {customSteps.length > 1 ? (
+                    <button
+                      type="button"
+                      className="small-danger-button"
+                      onClick={() => removeCustomStep(index)}
+                    >
+                      Remove
+                    </button>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
+
+          {dictationError ? (
+            <p className="form-error" role="alert">
+              {dictationError}
+            </p>
+          ) : null}
 
           <button type="submit" className="primary-wide-button">
             Add to my schedule

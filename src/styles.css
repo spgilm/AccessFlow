@@ -2951,3 +2951,119 @@ select:focus-visible {
 [data-theme="dark"] .staff-access-mini > span {
   color: #ffffff;
 }
+
+/* v12.3: blue page background with yellow dark-mode titles */
+[data-theme="dark"],
+[data-theme="dark"] body,
+[data-theme="dark"] html,
+[data-theme="dark"] #root,
+[data-theme="dark"] .app-shell {
+  background: #063b66;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .app-header,
+[data-theme="dark"] .student-flow,
+[data-theme="dark"] .staff-view {
+  background: transparent;
+}
+
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] .app-header h1,
+[data-theme="dark"] .section-heading-row h2,
+[data-theme="dark"] .simple-section-title h2,
+[data-theme="dark"] #schedule-heading,
+[data-theme="dark"] #student-builder-heading,
+[data-theme="dark"] #staff-bank-heading,
+[data-theme="dark"] #activity-editor-heading,
+[data-theme="dark"] #bank-editor-heading {
+  color: #ffe066;
+}
+
+[data-theme="dark"] .app-kicker,
+[data-theme="dark"] .eyebrow,
+[data-theme="dark"] .now-next-label {
+  color: #ffe066;
+}
+
+[data-theme="dark"] p,
+[data-theme="dark"] span,
+[data-theme="dark"] small,
+[data-theme="dark"] label,
+[data-theme="dark"] li,
+[data-theme="dark"] .activity-label,
+[data-theme="dark"] .step-label,
+[data-theme="dark"] .library-label,
+[data-theme="dark"] .staff-row-label {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .mode-toggle button.is-active,
+[data-theme="dark"] .student-view-toggle button.is-active,
+[data-theme="dark"] .input-row button,
+[data-theme="dark"] .primary-wide-button,
+[data-theme="dark"] .step-number,
+[data-theme="dark"] .staff-row-number,
+[data-theme="dark"] .bank-step-number,
+[data-theme="dark"] .section-number {
+  background: #ffe066;
+  color: #001a2e;
+  border-color: #ffe066;
+}
+
+
+/* v12.4: compact microphone dictation controls */
+.mic-button {
+  display: inline-grid;
+  place-items: center;
+  min-width: 56px;
+  width: 56px;
+  padding-inline: 0.5rem;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.mic-button[aria-pressed="true"] {
+  background: var(--danger-soft) !important;
+  color: var(--danger) !important;
+  border-color: var(--danger) !important;
+}
+
+.speech-input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.student-made-step-row {
+  grid-template-columns: auto 1fr auto auto;
+}
+
+.student-made-step-row .mic-button {
+  min-height: 56px;
+}
+
+@media (max-width: 440px) {
+  .student-made-step-row {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .student-made-step-row .small-danger-button {
+    grid-column: 2 / -1;
+  }
+}
+
+[data-theme="dark"] .mic-button {
+  background: #063b66;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .mic-button[aria-pressed="true"] {
+  background: #ffdddd !important;
+  color: #001a2e !important;
+  border-color: #ffdddd !important;
+}
