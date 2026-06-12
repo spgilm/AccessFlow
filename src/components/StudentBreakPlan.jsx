@@ -27,6 +27,8 @@ export default function StudentBreakPlan({ currentActivity, onSupportRequest }) 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedBreak, setSelectedBreak] = useState(breakTypes[0]);
   const [selectedMinutes, setSelectedMinutes] = useState(5);
+  const [timerStartSignal, setTimerStartSignal] = useState(0);
+  const [activeBreakMessage, setActiveBreakMessage] = useState("");
 
   function startBreak() {
     onSupportRequest({
@@ -35,6 +37,9 @@ export default function StudentBreakPlan({ currentActivity, onSupportRequest }) 
       activityId: currentActivity?.id ?? null,
       activityLabel: currentActivity?.label ?? null,
     });
+
+    setTimerStartSignal((current) => current + 1);
+    setActiveBreakMessage(`${selectedBreak.label} break started for ${selectedMinutes} minutes.`);
   }
 
   return (
@@ -87,7 +92,17 @@ export default function StudentBreakPlan({ currentActivity, onSupportRequest }) 
             Start break
           </button>
 
-          <TimerButton minutes={selectedMinutes} label={`${selectedBreak.label} break`} />
+          {activeBreakMessage ? (
+            <p className="copy-status" role="status">
+              {activeBreakMessage}
+            </p>
+          ) : null}
+
+          <TimerButton
+            minutes={selectedMinutes}
+            label={`${selectedBreak.label} break`}
+            startSignal={timerStartSignal}
+          />
 
           <p className="field-help">When the break is done, return to the schedule.</p>
         </div>

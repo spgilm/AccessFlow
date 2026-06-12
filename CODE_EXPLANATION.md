@@ -473,3 +473,54 @@ The `getReadableText` helper now:
 ```
 
 This prevents visual icons from being read aloud when the user taps an emoji card. The intended spoken output is the meaningful label, not the decorative visual.
+
+
+## v15.2 Break Plan timer clarification
+
+`StudentBreakPlan.jsx` now owns a `timerStartSignal` counter.
+
+When the student taps **Start break**:
+
+```txt
+1. the break event is logged for staff documentation
+2. timerStartSignal increments
+3. TimerButton receives the new startSignal
+4. TimerButton resets to the selected duration and starts running
+```
+
+`TimerButton.jsx` still works as a normal tappable timer for pause/resume, but it can now also be started from a parent component.
+
+
+## v15.3 Student tab layout clarification
+
+The student workflow tabs are styled in `src/styles.css`.
+
+The v15.3 patch forces `.student-flow .workflow-tabs` to use:
+
+```css
+grid-template-columns: repeat(2, minmax(0, 1fr));
+```
+
+on mobile so the four student tabs appear as a balanced 2×2 grid.
+
+## v15.4 Board clarification
+
+The Student Mode `Board` tab is a communication board, not a schedule builder.
+
+Files:
+
+| File | Purpose |
+|---|---|
+| `src/data/choiceBoardItems.js` | Default communication board buttons and helper functions. |
+| `src/components/StudentChoiceBoard.jsx` | Student-facing Board tab. Tapping a board button logs an event. |
+| `src/components/StaffChoiceBoardManager.jsx` | Staff-facing editor for Board buttons. |
+| `src/App.jsx` | Owns `choiceBoardItems` and handlers for add/update/delete/reset. |
+| `src/components/StudentView.jsx` | Renders the Board tab panel when `activeStudentTab === "board"`. |
+
+Conceptual difference:
+
+```txt
+Board button -> "I want/need this" event
+Choose activity -> adds activity to schedule
+Make activity -> creates new schedule activity for staff review
+```

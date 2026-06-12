@@ -53,6 +53,7 @@ export default function StudentView({
   scheduleDate,
   onScheduleDateChange,
   studentActivityLibrary,
+  choiceBoardItems,
   independenceSettings,
   displaySettings,
   supportEvents,
@@ -300,6 +301,16 @@ export default function StudentView({
           independenceSettings={independenceSettings}
           displaySettings={displaySettings}
           onAddActivity={onStudentAddActivity}
+        />
+      ) : null}
+
+      {activeStudentTab === "board" ? (
+        <StudentChoiceBoard
+          boardItems={choiceBoardItems}
+          libraryItems={studentActivityLibrary}
+          displaySettings={displaySettings}
+          onAddActivity={onStudentAddActivity}
+          onSupportRequest={onSupportRequest}
         />
       ) : null}
     </div>

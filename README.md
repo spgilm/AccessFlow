@@ -612,3 +612,54 @@ Changes:
 - ignores visual-support/emoji containers
 - strips emoji characters from spoken text
 - still allows buttons and controls to work normally
+
+
+## v15.2 patch
+
+Fixes Break Plan timer behavior.
+
+Previously, **Start break** logged the break event but did not start the countdown. The user had to tap the timer separately.
+
+Now:
+
+```txt
+Start break = log break event + start/restart timer
+```
+
+The timer can still be tapped afterward to pause/resume.
+
+
+## v15.3 patch
+
+Fixes Student Mode workflow tab alignment.
+
+On mobile, the Student tabs now display as a clean 2×2 grid:
+
+```txt
+Today   Choose
+Make    Board
+```
+
+On wider screens, they can still display in one row.
+
+## v15.4 patch
+
+Clarifies and fixes the Student Mode **Board** section.
+
+### What Board means
+
+```txt
+Board = communication / quick requests
+Choose = approved activities to add to the schedule
+Make = student-created activities
+Today = current schedule
+```
+
+### Changes
+
+- Student Mode → Board now actually renders a Board panel.
+- Board uses staff-managed communication buttons.
+- Board has default buttons such as Help, Break, Drink, Snack, Bathroom, Quiet, Music, and Walk.
+- Staff Mode → Choices now includes a **Communication Board** manager.
+- Staff can add, edit, remove, and reset Board buttons.
+- Tapping a Board button logs a support/choice event for documentation.

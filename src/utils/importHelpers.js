@@ -6,6 +6,7 @@
 import { getIndependenceSettings } from "../data/independenceSettings.js";
 import { getDisplaySettings } from "../data/displaySettings.js";
 import { normalizeSchedulesByDate } from "./scheduleDateHelpers.js";
+import { defaultChoiceBoardItems } from "../data/choiceBoardItems.js";
 
 export function normalizeImportedProfile(profile) {
   return {
@@ -14,6 +15,7 @@ export function normalizeImportedProfile(profile) {
     notes: profile.notes || "",
     activities: Array.isArray(profile.activities) ? profile.activities : [],
     activityBank: Array.isArray(profile.activityBank) ? profile.activityBank : [],
+    choiceBoardItems: Array.isArray(profile.choiceBoardItems) && profile.choiceBoardItems.length > 0 ? profile.choiceBoardItems : defaultChoiceBoardItems,
     supportEvents: Array.isArray(profile.supportEvents) ? profile.supportEvents : [],
     schedulesByDate: normalizeSchedulesByDate(profile),
     firstThenBoard:

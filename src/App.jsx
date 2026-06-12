@@ -10,6 +10,7 @@ import StudentView from "./components/StudentView.jsx";
 import { starterProfiles, createBlankProfile } from "./data/starterProfiles.js";
 import { getIndependenceSettings } from "./data/independenceSettings.js";
 import { getDisplaySettings } from "./data/displaySettings.js";
+import { createChoiceBoardItem, defaultChoiceBoardItems, getChoiceBoardItems } from "./data/choiceBoardItems.js";
 import { starterTemplates } from "./data/starterTemplates.js";
 import { useLocalStorage } from "./hooks/useLocalStorage.js";
 import { generateActivityFromTask } from "./services/taskGenerator.js";
@@ -107,6 +108,7 @@ export default function App() {
 
   const activities = getScheduleForDate(selectedProfile, scheduleDate);
   const activityBank = selectedProfile?.activityBank ?? [];
+  const choiceBoardItems = getChoiceBoardItems(selectedProfile);
   const supportEvents = selectedProfile?.supportEvents ?? [];
   const firstThenBoard = selectedProfile?.firstThenBoard ?? { firstChoiceId: "", thenChoiceId: "" };
   const displaySettings = getDisplaySettings(selectedProfile);
@@ -325,6 +327,56 @@ useEffect(() => {
   function updateSelectedProfileActivities(updater) {
     updateSelectedProfile((profile) => updateProfileScheduleForDate(profile, scheduleDate, updater));
   }
+
+
+function updateSelectedProfileChoiceBoard(updater) {
+  updateSelectedProfile((profile) => ({
+    ...profile,
+    choiceBoardItems: updater(getChoiceBoardItems(profile)),
+  }));
+}
+
+function handleAddBoardItem(item) {
+  updateSelectedProfileChoiceBoard((currentItems) => [
+    ...currentItems,
+    createChoiceBoardItem(item.label, item.emoji, item.category),
+  ]);
+
+  clearPortableStatuses();
+  setAnnouncement(`${item.label} added to the communication board.`);
+}
+
+function handleUpdateBoardItem(itemId, patch) {
+  updateSelectedProfileChoiceBoard((currentItems) =>
+    currentItems.map((item) =>
+      item.id === itemId
+        ? {
+            ...item,
+            ...patch,
+            visual: patch.visual ?? item.visual,
+          }
+        : item
+    )
+  );
+
+  clearPortableStatuses();
+}
+
+function handleDeleteBoardItem(itemId) {
+  updateSelectedProfileChoiceBoard((currentItems) =>
+    currentItems.filter((item) => item.id !== itemId)
+  );
+
+  clearPortableStatuses();
+  setAnnouncement("Communication board button removed.");
+}
+
+function handleResetBoardItems() {
+  updateSelectedProfileChoiceBoard(() => defaultChoiceBoardItems);
+
+  clearPortableStatuses();
+  setAnnouncement("Communication board reset to default buttons.");
+}
 
   function updateSelectedProfileActivityBank(updater) {
     updateSelectedProfile((profile) => ({
@@ -1243,6 +1295,7 @@ async function handleGoogleSignIn() {
           onScheduleDateChange={handleScheduleDateChange}
           studentViewMode={studentViewMode}
           studentActivityLibrary={activityBank}
+          choiceBoardItems={choiceBoardItems}
           independenceSettings={getIndependenceSettings(selectedProfile)}
           displaySettings={displaySettings}
           supportEvents={supportEvents}
@@ -1276,6 +1329,7 @@ async function handleGoogleSignIn() {
           templates={templates}
           activities={activities}
           activityBank={activityBank}
+          choiceBoardItems={choiceBoardItems}
           supportEvents={supportEvents}
           firstThenBoard={firstThenBoard}
           displaySettings={displaySettings}
@@ -1323,6 +1377,10 @@ async function handleGoogleSignIn() {
           onDeleteTemplate={handleDeleteTemplate}
           onAddActivity={handleAddActivity}
           onAddChoiceToBank={handleAddChoiceToBank}
+          onAddBoardItem={handleAddBoardItem}
+          onUpdateBoardItem={handleUpdateBoardItem}
+          onDeleteBoardItem={handleDeleteBoardItem}
+          onResetBoardItems={handleResetBoardItems}
           onUpdateBankChoice={handleUpdateBankChoice}
           onSaveActivityToBank={handleSaveActivityToBank}
           onAddBankChoiceToSchedule={handleAddBankChoiceToSchedule}

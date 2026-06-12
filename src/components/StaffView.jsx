@@ -18,6 +18,7 @@ import ProfileManager from "./ProfileManager.jsx";
 import StaffActivityEditor from "./StaffActivityEditor.jsx";
 import StaffActivityList from "./StaffActivityList.jsx";
 import StaffChoiceBankPanel from "./StaffChoiceBankPanel.jsx";
+import StaffChoiceBoardManager from "./StaffChoiceBoardManager.jsx";
 import SupabaseSyncPanel from "./SupabaseSyncPanel.jsx";
 import TemplateManager from "./TemplateManager.jsx";
 
@@ -55,6 +56,7 @@ export default function StaffView({
   templates,
   activities,
   activityBank,
+  choiceBoardItems,
   supportEvents,
   firstThenBoard,
   displaySettings,
@@ -102,6 +104,10 @@ export default function StaffView({
   onDeleteTemplate,
   onAddActivity,
   onAddChoiceToBank,
+  onAddBoardItem,
+  onUpdateBoardItem,
+  onDeleteBoardItem,
+  onResetBoardItems,
   onUpdateBankChoice,
   onSaveActivityToBank,
   onAddBankChoiceToSchedule,
@@ -187,9 +193,17 @@ export default function StaffView({
         <section className="staff-tab-screen" aria-labelledby="staff-choices-heading">
           <div className="focus-header compact-focus-header">
             <p className="eyebrow">Choices</p>
-            <h2 id="staff-choices-heading">Reusable activities</h2>
-            <p>Build the activities the student can choose from.</p>
+            <h2 id="staff-choices-heading">Board and choices</h2>
+            <p>Build communication buttons and approved schedule activities.</p>
           </div>
+
+          <StaffChoiceBoardManager
+            boardItems={choiceBoardItems}
+            onAddBoardItem={onAddBoardItem}
+            onUpdateBoardItem={onUpdateBoardItem}
+            onDeleteBoardItem={onDeleteBoardItem}
+            onResetBoardItems={onResetBoardItems}
+          />
 
           <StaffChoiceBankPanel
             selectedProfile={selectedProfile}

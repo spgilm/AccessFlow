@@ -4257,3 +4257,95 @@ select:focus-visible {
   color: #001a2e;
   border-color: #ffe066;
 }
+
+
+/* v15.3: student workflow tabs use a clean 2x2 layout when four tabs are visible */
+.student-flow .workflow-tabs {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-radius: var(--radius-lg);
+}
+
+.student-flow .workflow-tabs button {
+  border-radius: var(--radius-md);
+}
+
+@media (min-width: 760px) {
+  .student-flow .workflow-tabs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-radius: 999px;
+  }
+
+  .student-flow .workflow-tabs button {
+    border-radius: 999px;
+  }
+}
+
+/* v15.4: explicit communication board manager */
+.board-manager-panel {
+  padding: 1rem;
+}
+
+.board-add-form {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.board-manager-actions {
+  margin-bottom: 0.75rem;
+}
+
+.board-manager-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.board-manager-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: end;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem;
+  background: var(--surface-strong);
+}
+
+.board-manager-fields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+@media (min-width: 720px) {
+  .board-add-form {
+    grid-template-columns: 1fr 7rem 10rem;
+    align-items: end;
+  }
+
+  .board-add-form .primary-wide-button {
+    grid-column: 1 / -1;
+  }
+
+  .board-manager-fields {
+    grid-template-columns: 1fr 10rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .board-manager-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .board-manager-card .small-danger-button {
+    grid-column: 1 / -1;
+  }
+}
+
+[data-theme="dark"] .board-manager-panel,
+[data-theme="dark"] .board-manager-card {
+  background: #052f52;
+  color: #ffffff;
+  border-color: #ffffff;
+}
