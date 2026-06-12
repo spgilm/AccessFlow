@@ -257,15 +257,6 @@ export default function App() {
     });
   }
 
-  function ensureActivityInBank(activity) {
-    updateSelectedProfileActivityBank((currentBank) => {
-      if (isDuplicateBankChoice(currentBank, activity)) {
-        return currentBank;
-      }
-
-      return [...currentBank, cloneActivityForChoiceBank(activity)];
-    });
-  }
 
   function ensureSelectedActivityExists(nextActivities) {
     if (!nextActivities.some((activity) => activity.id === selectedActivityId)) {
@@ -346,10 +337,9 @@ export default function App() {
     const activity = await generateActivityFromTask(taskText);
 
     updateSelectedProfileActivities((currentActivities) => [...currentActivities, activity]);
-    ensureActivityInBank(activity);
     setSelectedActivityId(activity.id);
     clearPortableStatuses();
-    setAnnouncement(`${activity.label} added to ${selectedProfile.name}'s schedule and saved to the choice bank.`);
+    setAnnouncement(`${activity.label} added to today’s schedule.`);
   }
 
   async function handleStudentAddActivity(request) {
@@ -874,36 +864,34 @@ export default function App() {
 
     const activity = await generateActivityFromTask(taskText);
 
-    updateSelectedProfileActivityBank((currentBank) => {
-      if (isDuplicateBankChoice(currentBank, activity)) {
-        return currentBank;
-      }
-
-      return [...currentBank, cloneActivityForChoiceBank(activity)];
-    });
-
-    clearPortableStatuses();
-    setAnnouncement(`${activity.label} added to ${selectedProfile.name}'s choice bank.`);
-  }
-
-  function handleSaveActivityToBank(activityId) {
-    const activity = activities.find((item) => item.id === activityId);
-
-    if (!activity) {
-      setAnnouncement("Choose an activity to save to the bank.");
+    if (isDuplicateBankChoice(activityBank, activity)) {
+      setAnnouncement(`${activity.label} is already in this student's choices.`);
       return;
     }
 
-    updateSelectedProfileActivityBank((currentBank) => {
-      if (isDuplicateBankChoice(currentBank, activity)) {
-        return currentBank;
-      }
-
-      return [...currentBank, cloneActivityForChoiceBank(activity)];
-    });
+    updateSelectedProfileActivityBank((currentBank) => [
+      ...currentBank,
+      cloneActivityForChoiceBank(activity),
+    ]);
 
     clearPortableStatuses();
-    setAnnouncement(`${activity.label} saved to the choice bank.`);
+    setAnnouncement(`${activity.label} added to ${selectedProfile.name}'s choices.`);
+  }
+
+  function handleUpdateBankChoice(choiceId, patch) {
+    updateSelectedProfileActivityBank((currentBank) =>
+      currentBank.map((choice) =>
+        choice.id === choiceId
+          ? {
+              ...choice,
+              ...patch,
+              visual: patch.visual ?? choice.visual,
+            }
+          : choice
+      )
+    );
+
+    clearPortableStatuses();
   }
 
   function handleAddBankChoiceToSchedule(choiceId) {
@@ -1086,7 +1074,7 @@ export default function App() {
           onDeleteTemplate={handleDeleteTemplate}
           onAddActivity={handleAddActivity}
           onAddChoiceToBank={handleAddChoiceToBank}
-          onSaveActivityToBank={handleSaveActivityToBank}
+          onUpdateBankChoice={handleUpdateBankChoice}
           onAddBankChoiceToSchedule={handleAddBankChoiceToSchedule}
           onDeleteBankChoice={handleDeleteBankChoice}
           onSelectActivity={handleSelectActivity}

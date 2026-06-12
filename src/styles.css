@@ -39,27 +39,27 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #020617;
-  --surface: #08111f;
-  --surface-strong: #111d31;
-  --text: #f8fbff;
-  --muted: #d7e8f7;
-  --border: #6ea8dc;
-  --border-strong: #b9dcff;
-  --primary: #9bdcff;
-  --primary-strong: #f2fbff;
-  --primary-soft: #073653;
-  --on-primary: #03111f;
-  --success: #9ef0b8;
-  --success-soft: #09331c;
-  --danger: #ffb4b4;
-  --danger-soft: #4a1118;
-  --warning-focus: #ffe08a;
-  --shadow: 0 18px 46px rgba(0, 0, 0, 0.72);
-  --panel-bg: #08111f;
-  --control-bg: #0d1726;
-  --control-bg-strong: #16243a;
-  --body-glow: rgba(155, 220, 255, 0.16);
+  --bg: #000000;
+  --surface: #050505;
+  --surface-strong: #111111;
+  --text: #ffffff;
+  --muted: #f5f5f5;
+  --border: #ffffff;
+  --border-strong: #ffffff;
+  --primary: #ffd60a;
+  --primary-strong: #ffffff;
+  --primary-soft: #1f1f1f;
+  --on-primary: #000000;
+  --success: #7dff9a;
+  --success-soft: #062b10;
+  --danger: #ffb3b3;
+  --danger-soft: #3a0505;
+  --warning-focus: #ffea00;
+  --shadow: none;
+  --panel-bg: #050505;
+  --control-bg: #000000;
+  --control-bg-strong: #111111;
+  --body-glow: transparent;
 }
 
 * {
@@ -2118,4 +2118,416 @@ select:focus-visible {
 
 [data-theme="dark"] .copy-status {
   color: var(--primary-strong);
+}
+
+
+/* v11: simplified IDD-oriented visual redesign */
+.app-shell {
+  max-width: 980px;
+}
+
+.app-header {
+  gap: 0.75rem;
+}
+
+.app-description {
+  font-size: 1rem;
+  max-width: 42rem;
+}
+
+.mode-toggle,
+.student-view-toggle {
+  box-shadow: none;
+  border-width: 2px;
+}
+
+.panel,
+.progress-panel,
+.activity-card,
+.first-then-card {
+  box-shadow: none;
+}
+
+.student-profile-banner {
+  padding: 0.85rem 1rem;
+}
+
+.staff-access-panel {
+  padding: 0.75rem;
+  border-radius: var(--radius-lg);
+}
+
+.staff-access-panel h2 {
+  font-size: 1.2rem;
+}
+
+.progress-panel {
+  border-width: 2px;
+}
+
+.now-next-grid {
+  gap: 0.9rem;
+}
+
+.now-next-card {
+  border-width: 2px;
+  padding: 1rem;
+}
+
+.now-card {
+  border-width: 3px;
+}
+
+.now-next-label {
+  color: var(--primary-strong);
+  font-size: 0.95rem;
+}
+
+.now-next-card strong {
+  font-size: clamp(1.6rem, 8vw, 2.5rem);
+  letter-spacing: -0.04em;
+}
+
+.now-next-visual {
+  width: clamp(4.5rem, 18vw, 6.5rem);
+  height: clamp(4.5rem, 18vw, 6.5rem);
+  border-radius: 1.3rem;
+  font-size: clamp(2.8rem, 11vw, 4.3rem);
+}
+
+.student-view-toggle {
+  margin-bottom: 0.85rem;
+}
+
+.student-schedule-guidance {
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.simple-student-panel {
+  border-width: 2px;
+}
+
+.simple-student-panel p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+  font-weight: 850;
+}
+
+.simple-section-title {
+  display: grid;
+  gap: 0.2rem;
+  margin-bottom: 1rem;
+}
+
+.schedule-section {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.schedule-section > .section-heading-row {
+  margin-bottom: 0;
+}
+
+.schedule-list {
+  gap: 1rem;
+}
+
+.activity-card {
+  border-width: 2px;
+  padding: 0.55rem;
+}
+
+.activity-card.is-selected {
+  border-width: 3px;
+  box-shadow: none;
+}
+
+.activity-main-button {
+  min-height: 6.5rem;
+  padding: 0.55rem;
+}
+
+.activity-visual {
+  width: clamp(4.5rem, 18vw, 6rem);
+  height: clamp(4.5rem, 18vw, 6rem);
+  border-radius: 1.3rem;
+  font-size: clamp(2.8rem, 11vw, 4rem);
+}
+
+.activity-label {
+  font-size: clamp(1.55rem, 7vw, 2.4rem);
+}
+
+.activity-status {
+  font-size: 0.95rem;
+  border: 1px solid var(--border);
+}
+
+.complete-button,
+.secondary-button,
+.danger-button,
+.small-danger-button,
+.danger-wide-button,
+.input-row button,
+.primary-wide-button {
+  min-height: 56px;
+  font-size: 1.02rem;
+  border-width: 2px;
+}
+
+.inline-steps-panel {
+  box-shadow: none;
+  border-width: 3px;
+}
+
+.inline-steps-header h3 {
+  font-size: clamp(1.45rem, 6vw, 2rem);
+}
+
+.step-button {
+  min-height: 72px;
+  border-width: 2px;
+}
+
+.step-label {
+  font-size: clamp(1.12rem, 5vw, 1.45rem);
+}
+
+.step-visual {
+  width: 3.4rem;
+  height: 3.4rem;
+  font-size: 2.1rem;
+}
+
+.student-builder-panel {
+  padding: 1rem;
+}
+
+.simplified-choice-grid {
+  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+  gap: 1rem;
+}
+
+.simplified-choice-card {
+  min-height: 11.5rem;
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  background: var(--control-bg);
+  color: var(--text);
+  text-align: center;
+}
+
+.simplified-choice-card:hover,
+.simplified-choice-card:focus-visible {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.simplified-choice-visual {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 1.4rem;
+  font-size: 3.4rem;
+}
+
+.simplified-choice-card .library-label {
+  font-size: 1.25rem;
+  font-weight: 950;
+  line-height: 1.05;
+}
+
+.simplified-choice-card .library-step-count {
+  margin-top: 0;
+  font-size: 0.95rem;
+}
+
+.simplified-custom-form {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--border);
+}
+
+.staff-bank-panel {
+  border-width: 2px;
+}
+
+.bank-setup-grid {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.bank-create-card {
+  display: grid;
+  gap: 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  background: var(--surface-strong);
+}
+
+.bank-step-number {
+  display: grid;
+  place-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 950;
+}
+
+.simplified-bank-list {
+  gap: 1rem;
+}
+
+.simplified-bank-card {
+  border-width: 2px;
+}
+
+.bank-choice-main h3 {
+  font-size: 1.45rem;
+}
+
+.bank-choice-main p {
+  display: none;
+}
+
+.library-summary,
+.now-next-summary,
+.activity-summary,
+.activity-hint {
+  display: none;
+}
+
+/* v11: very high contrast dark mode */
+[data-theme="dark"] body {
+  background: #000000;
+}
+
+[data-theme="dark"] .app-kicker,
+[data-theme="dark"] .eyebrow,
+[data-theme="dark"] .now-next-label,
+[data-theme="dark"] label,
+[data-theme="dark"] .progress-row {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .panel,
+[data-theme="dark"] .progress-panel,
+[data-theme="dark"] .activity-card,
+[data-theme="dark"] .first-then-card,
+[data-theme="dark"] .now-next-card,
+[data-theme="dark"] .staff-select-button,
+[data-theme="dark"] .staff-activity-row,
+[data-theme="dark"] .staff-step-editor-row,
+[data-theme="dark"] .bank-choice-card,
+[data-theme="dark"] .bank-create-card,
+[data-theme="dark"] .empty-bank-message,
+[data-theme="dark"] .inline-steps-panel,
+[data-theme="dark"] .step-button,
+[data-theme="dark"] .simplified-choice-card {
+  background: #050505;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .now-card,
+[data-theme="dark"] .activity-card.is-selected,
+[data-theme="dark"] .first-then-card.first,
+[data-theme="dark"] .inline-steps-panel {
+  background: #111111;
+  border-color: #ffd60a;
+}
+
+[data-theme="dark"] .visual-support,
+[data-theme="dark"] .activity-status,
+[data-theme="dark"] .step-state,
+[data-theme="dark"] .library-step-count,
+[data-theme="dark"] .bank-choice-main span {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #ffffff;
+  opacity: 0.85;
+}
+
+[data-theme="dark"] .mode-toggle,
+[data-theme="dark"] .student-view-toggle {
+  background: #000000;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .mode-toggle button,
+[data-theme="dark"] .student-view-toggle button {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .mode-toggle button.is-active,
+[data-theme="dark"] .student-view-toggle button.is-active,
+[data-theme="dark"] .input-row button,
+[data-theme="dark"] .primary-wide-button,
+[data-theme="dark"] .step-number,
+[data-theme="dark"] .staff-row-number,
+[data-theme="dark"] .bank-step-number {
+  background: #ffd60a;
+  color: #000000;
+}
+
+[data-theme="dark"] .secondary-button,
+[data-theme="dark"] .complete-button,
+[data-theme="dark"] .student-card-actions button,
+[data-theme="dark"] .chip {
+  background: #000000;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .small-danger-button,
+[data-theme="dark"] .danger-button,
+[data-theme="dark"] .danger-wide-button {
+  background: #000000;
+  color: #ffb3b3;
+  border-color: #ffb3b3;
+}
+
+[data-theme="dark"] .field-help,
+[data-theme="dark"] .detail-summary,
+[data-theme="dark"] .empty-state p,
+[data-theme="dark"] .first-then-complete p,
+[data-theme="dark"] .editor-note,
+[data-theme="dark"] .staff-access-summary,
+[data-theme="dark"] .bank-choice-main p,
+[data-theme="dark"] .inline-steps-summary,
+[data-theme="dark"] .inline-steps-help,
+[data-theme="dark"] .simple-student-panel p,
+[data-theme="dark"] .empty-bank-message p {
+  color: #ffffff;
+}
+
+@media (min-width: 720px) {
+  .now-next-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .bank-setup-grid {
+    grid-template-columns: 1.4fr 1fr;
+  }
 }

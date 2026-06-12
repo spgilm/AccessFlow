@@ -96,12 +96,9 @@ export default function StudentView({
         </div>
       ) : (
         <>
-          <section className="panel student-schedule-guidance" aria-labelledby="student-schedule-guidance-heading">
-            <p className="eyebrow">Student independence</p>
-            <h2 id="student-schedule-guidance-heading">My schedule stays on this page.</h2>
-            <p>
-              Tap an activity to open the smaller steps inside the schedule. Finish every step and the activity folds back up automatically.
-            </p>
+          <section className="panel student-schedule-guidance simple-student-panel" aria-labelledby="student-schedule-guidance-heading">
+            <p className="eyebrow">My schedule</p>
+            <h2 id="student-schedule-guidance-heading">Tap a card. Do the steps.</h2>
           </section>
 
           <section className="schedule-section student-schedule-primary" aria-labelledby="schedule-heading">

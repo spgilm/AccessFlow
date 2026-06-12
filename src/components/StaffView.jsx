@@ -52,7 +52,7 @@ export default function StaffView({
   onDeleteTemplate,
   onAddActivity,
   onAddChoiceToBank,
-  onSaveActivityToBank,
+  onUpdateBankChoice,
   onAddBankChoiceToSchedule,
   onDeleteBankChoice,
   onSelectActivity,
@@ -132,10 +132,9 @@ export default function StaffView({
 
       <StaffChoiceBankPanel
         selectedProfile={selectedProfile}
-        activities={activities}
         activityBank={activityBank}
         onAddChoiceToBank={onAddChoiceToBank}
-        onSaveActivityToBank={onSaveActivityToBank}
+        onUpdateBankChoice={onUpdateBankChoice}
         onAddBankChoiceToSchedule={onAddBankChoiceToSchedule}
         onDeleteBankChoice={onDeleteBankChoice}
       />

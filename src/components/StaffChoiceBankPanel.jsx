@@ -1,17 +1,23 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import VisualSupport from "./VisualSupport.jsx";
+import { createId } from "../utils/formatters.js";
+import { moveItemById } from "../utils/activityHelpers.js";
 
 export default function StaffChoiceBankPanel({
   selectedProfile,
-  activities,
   activityBank,
   onAddChoiceToBank,
-  onSaveActivityToBank,
+  onUpdateBankChoice,
   onAddBankChoiceToSchedule,
   onDeleteBankChoice,
 }) {
   const [taskText, setTaskText] = useState("");
-  const [selectedActivityId, setSelectedActivityId] = useState("");
+  const [selectedChoiceId, setSelectedChoiceId] = useState(null);
+  const hasChoices = activityBank.length > 0;
+  const selectedChoice = useMemo(
+    () => activityBank.find((choice) => choice.id === selectedChoiceId) ?? null,
+    [activityBank, selectedChoiceId]
+  );
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -25,87 +31,111 @@ export default function StaffChoiceBankPanel({
     setTaskText("");
   }
 
-  function handleSaveExisting(event) {
-    event.preventDefault();
+  function updateStep(choice, stepId, patch) {
+    onUpdateBankChoice(choice.id, {
+      steps: choice.steps.map((step) =>
+        step.id === stepId
+          ? {
+              ...step,
+              ...patch,
+            }
+          : step
+      ),
+    });
+  }
 
-    if (!selectedActivityId) {
-      return;
-    }
+  function addStep(choice) {
+    onUpdateBankChoice(choice.id, {
+      completed: false,
+      steps: [
+        ...choice.steps,
+        {
+          id: createId("bank-step"),
+          label: "New step",
+          visual: {
+            type: "emoji",
+            value: "⭐",
+            altText: "New step visual",
+          },
+          completed: false,
+        },
+      ],
+    });
+  }
 
-    onSaveActivityToBank(selectedActivityId);
-    setSelectedActivityId("");
+  function deleteStep(choice, stepId) {
+    onUpdateBankChoice(choice.id, {
+      completed: false,
+      steps: choice.steps.filter((step) => step.id !== stepId),
+    });
+  }
+
+  function moveStep(choice, stepId, direction) {
+    onUpdateBankChoice(choice.id, {
+      steps: moveItemById(choice.steps, stepId, direction),
+    });
   }
 
   return (
-    <section className="panel staff-bank-panel" aria-labelledby="staff-bank-heading">
+    <section className="panel staff-bank-panel simple-bank-panel" aria-labelledby="staff-bank-heading">
       <div className="section-heading-row">
         <div>
-          <p className="eyebrow">Student choice bank</p>
-          <h2 id="staff-bank-heading">Activity choices for {selectedProfile?.name ?? "this profile"}</h2>
+          <p className="eyebrow">Student choices</p>
+          <h2 id="staff-bank-heading">Choices for {selectedProfile?.name ?? "this student"}</h2>
         </div>
       </div>
 
-      <p className="field-help">
-        The student-facing choice bank starts blank. Add approved activities here first, then the student can choose from this bank to build their schedule.
-      </p>
-
-      <form className="bank-add-form" onSubmit={handleSubmit}>
-        <label>
-          Add a new bank choice
-          <div className="inline-control-row">
-            <input
-              type="text"
-              value={taskText}
-              placeholder="Example: eat an orange"
-              onChange={(event) => setTaskText(event.target.value)}
-            />
-            <button type="submit">Add to bank</button>
+      <div className="bank-setup-grid">
+        <form className="bank-create-card" onSubmit={handleSubmit}>
+          <div className="bank-step-number" aria-hidden="true">1</div>
+          <div>
+            <h3>Make a choice card</h3>
+            <p>Create an approved activity the student can choose.</p>
           </div>
-        </label>
-      </form>
 
-      {activities.length > 0 ? (
-        <form className="bank-add-form" onSubmit={handleSaveExisting}>
           <label>
-            Save an existing scheduled activity to the bank
+            Activity name
             <div className="inline-control-row">
-              <select
-                value={selectedActivityId}
-                onChange={(event) => setSelectedActivityId(event.target.value)}
-              >
-                <option value="">Choose activity...</option>
-                {activities.map((activity) => (
-                  <option key={activity.id} value={activity.id}>
-                    {activity.label}
-                  </option>
-                ))}
-              </select>
-              <button type="submit" disabled={!selectedActivityId}>
-                Save choice
-              </button>
+              <input
+                type="text"
+                value={taskText}
+                placeholder="Example: eat an orange"
+                onChange={(event) => setTaskText(event.target.value)}
+              />
+              <button type="submit">Save choice</button>
             </div>
           </label>
         </form>
-      ) : null}
 
-      {activityBank.length === 0 ? (
+        <div className="bank-create-card">
+          <div className="bank-step-number" aria-hidden="true">2</div>
+          <div>
+            <h3>Edit the steps</h3>
+            <p>Choose a card below. Adjust the smaller steps before the student uses it.</p>
+          </div>
+        </div>
+      </div>
+
+      {!hasChoices ? (
         <div className="empty-bank-message">
-          <div className="empty-visual" aria-hidden="true">🏦</div>
-          <p>No bank choices yet.</p>
-          <p className="field-help">
-            Add choices such as “Brush Teeth,” “Eat an Orange,” or “Take a Break.”
-          </p>
+          <div className="empty-visual" aria-hidden="true">➕</div>
+          <p>No student choices yet.</p>
+          <p className="field-help">Add one choice above. Then it will appear in Student Mode.</p>
         </div>
       ) : (
-        <div className="bank-choice-list">
+        <div className="bank-choice-list simplified-bank-list" aria-label="Saved student choices">
           {activityBank.map((choice) => (
-            <article key={choice.id} className="bank-choice-card">
+            <article
+              key={choice.id}
+              className={`bank-choice-card simplified-bank-card ${
+                selectedChoiceId === choice.id ? "is-selected" : ""
+              }`}
+            >
               <div className="bank-choice-main">
                 <VisualSupport visual={choice.visual ?? choice.emoji} className="bank-choice-visual" />
                 <div>
                   <h3>{choice.label}</h3>
-                  <p>{choice.summary}</p>
-                  <span>{choice.steps.length} saved steps</span>
+                  <span>{choice.steps.length} steps saved</span>
                 </div>
               </div>
 
@@ -113,22 +143,154 @@ export default function StaffChoiceBankPanel({
                 <button
                   type="button"
                   className="secondary-button"
+                  onClick={() => setSelectedChoiceId(choice.id)}
+                >
+                  Edit steps
+                </button>
+                <button
+                  type="button"
+                  className="secondary-button"
                   onClick={() => onAddBankChoiceToSchedule(choice.id)}
                 >
-                  Add to schedule
+                  Add to today’s schedule
                 </button>
                 <button
                   type="button"
                   className="small-danger-button"
-                  onClick={() => onDeleteBankChoice(choice.id)}
+                  onClick={() => {
+                    if (selectedChoiceId === choice.id) {
+                      setSelectedChoiceId(null);
+                    }
+
+                    onDeleteBankChoice(choice.id);
+                  }}
                 >
-                  Remove from bank
+                  Remove choice
                 </button>
               </div>
             </article>
           ))}
         </div>
       )}
+
+      {selectedChoice ? (
+        <div className="bank-editor-card" aria-labelledby="bank-editor-heading">
+          <div className="section-heading-row">
+            <div>
+              <p className="eyebrow">Choice editor</p>
+              <h3 id="bank-editor-heading">Edit {selectedChoice.label}</h3>
+            </div>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => setSelectedChoiceId(null)}
+            >
+              Close editor
+            </button>
+          </div>
+
+          <div className="editor-grid">
+            <label>
+              Choice name
+              <input
+                type="text"
+                value={selectedChoice.label}
+                onChange={(event) =>
+                  onUpdateBankChoice(selectedChoice.id, {
+                    label: event.target.value,
+                    sourceText: event.target.value,
+                    visual: {
+                      ...selectedChoice.visual,
+                      altText: `${event.target.value} visual`,
+                    },
+                  })
+                }
+              />
+            </label>
+
+            <label className="full-width">
+              Staff note
+              <textarea
+                rows="2"
+                value={selectedChoice.summary}
+                onChange={(event) =>
+                  onUpdateBankChoice(selectedChoice.id, {
+                    summary: event.target.value,
+                  })
+                }
+              />
+            </label>
+          </div>
+
+          <div className="editor-subheader">
+            <div>
+              <p className="eyebrow">Smaller steps</p>
+              <h3>Steps the student will see</h3>
+            </div>
+            <button
+              type="button"
+              className="secondary-button"
+              onClick={() => addStep(selectedChoice)}
+            >
+              Add step
+            </button>
+          </div>
+
+          {selectedChoice.steps.length === 0 ? (
+            <p className="field-help">Add at least one step before the student uses this choice.</p>
+          ) : (
+            <ol className="staff-step-editor-list">
+              {selectedChoice.steps.map((step, index) => (
+                <li key={step.id} className="staff-step-editor-row">
+                  <div className="step-edit-grid bank-step-edit-grid">
+                    <VisualSupport visual={step.visual ?? step.emoji} className="staff-row-visual" />
+                    <label>
+                      Step {index + 1}
+                      <input
+                        type="text"
+                        value={step.label}
+                        onChange={(event) =>
+                          updateStep(selectedChoice, step.id, {
+                            label: event.target.value,
+                            visual: {
+                              ...step.visual,
+                              altText: `${event.target.value} visual`,
+                            },
+                          })
+                        }
+                      />
+                    </label>
+                  </div>
+
+                  <div className="row-actions step-actions" aria-label={`Actions for step ${index + 1}`}>
+                    <button
+                      type="button"
+                      onClick={() => moveStep(selectedChoice, step.id, "up")}
+                      disabled={index === 0}
+                    >
+                      Up
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => moveStep(selectedChoice, step.id, "down")}
+                      disabled={index === selectedChoice.steps.length - 1}
+                    >
+                      Down
+                    </button>
+                    <button
+                      type="button"
+                      className="small-danger-button"
+                      onClick={() => deleteStep(selectedChoice, step.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      ) : null}
     </section>
   );
 }

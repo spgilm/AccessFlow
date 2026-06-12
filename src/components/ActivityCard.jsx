@@ -25,11 +25,7 @@ export default function ActivityCard({
         <VisualSupport visual={activity.visual ?? activity.emoji} className="activity-visual" />
         <span className="activity-text">
           <span className="activity-label">{activity.label}</span>
-          <span className="activity-summary">{activity.summary}</span>
-          <span className="activity-status">{statusText}</span>
-          <span className="activity-hint">
-            {isSelected ? "Tap card to close steps" : "Tap card for steps"}
-          </span>
+          <span className="activity-status">{isSelected ? "Steps open" : statusText}</span>
         </span>
       </button>
 

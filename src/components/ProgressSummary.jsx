@@ -54,7 +54,6 @@ function getActivityVisual(activity, fallback) {
 
 function NowNextCard({ label, activity, fallbackVisual, className = "" }) {
   const title = activity?.label ?? "No activity";
-  const summary = activity?.summary ?? "";
   const visual = getActivityVisual(activity, fallbackVisual);
 
   return (
@@ -68,7 +67,6 @@ function NowNextCard({ label, activity, fallbackVisual, className = "" }) {
         />
         <span className="now-next-copy">
           <strong>{title}</strong>
-          {summary ? <span className="now-next-summary">{summary}</span> : null}
         </span>
       </div>
     </div>

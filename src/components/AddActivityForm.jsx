@@ -96,7 +96,7 @@ export default function AddActivityForm({ onAddActivity }) {
       <div className="section-heading-row">
         <div>
           <p className="eyebrow">Create</p>
-          <h2 id="add-activity-heading">Add activity to schedule and bank</h2>
+          <h2 id="add-activity-heading">Add one-time schedule item</h2>
         </div>
       </div>
 
@@ -125,7 +125,7 @@ export default function AddActivityForm({ onAddActivity }) {
           </button>
         </div>
         <p className="field-help">
-          Type or dictate a general task. This adds it to the selected schedule and saves it to this student's choice bank.
+          Type or dictate a general task. This adds an activity to today’s schedule only. Use Student Choices above to make reusable choice cards.
         </p>
         {error ? (
           <p className="form-error" role="alert">

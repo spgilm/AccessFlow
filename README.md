@@ -277,3 +277,38 @@ Dark mode now uses a higher-contrast palette:
 - brighter body and helper text
 - explicit `--on-primary` text color for selected/primary buttons
 - improved input, card, chip, status-pill, and step contrast in dark mode
+
+
+## v11 redesign
+
+This version reassesses the choice-bank workflow and simplifies the student-facing visual design.
+
+### Student-facing simplification
+
+- larger Now / Next cards
+- fewer explanatory paragraphs
+- simpler schedule cards
+- activity cards open smaller steps inline
+- choice cards show a large visual, a label, and a clear Add action
+- extra summaries and helper chips are hidden from the student-facing cards
+
+### Choice-bank redesign
+
+The bank now has one clear meaning: **student choices**.
+
+- Staff Mode has a dedicated Student Choices panel.
+- Staff creates reusable choice cards there.
+- Staff can edit the saved smaller steps directly inside the choice bank.
+- Student Mode shows only the saved choices for the selected profile.
+- Adding a one-time schedule item no longer silently saves it to the bank.
+- Bank choices can be added to today's schedule by staff or selected by the student.
+
+### Dark mode redesign
+
+Dark mode now uses a stark high-contrast palette:
+
+- black page background
+- white text
+- white borders
+- yellow selected/primary actions
+- no subtle blue-on-blue panels
