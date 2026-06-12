@@ -213,6 +213,44 @@ export default function StaffChoiceBankPanel({
               />
             </label>
 
+            <label>
+              Category
+              <select
+                value={selectedChoice.category ?? "General"}
+                onChange={(event) =>
+                  onUpdateBankChoice(selectedChoice.id, {
+                    category: event.target.value,
+                  })
+                }
+              >
+                <option value="General">General</option>
+                <option value="Morning">Morning</option>
+                <option value="Hygiene">Hygiene</option>
+                <option value="Food">Food</option>
+                <option value="School">School</option>
+                <option value="Work">Work</option>
+                <option value="Leisure">Leisure</option>
+                <option value="Breaks">Breaks</option>
+                <option value="Chores">Chores</option>
+                <option value="Community">Community</option>
+              </select>
+            </label>
+
+            <label>
+              Timer minutes
+              <input
+                type="number"
+                min="0"
+                value={selectedChoice.timerMinutes ?? ""}
+                placeholder="Optional"
+                onChange={(event) =>
+                  onUpdateBankChoice(selectedChoice.id, {
+                    timerMinutes: event.target.value ? Number(event.target.value) : "",
+                  })
+                }
+              />
+            </label>
+
             <label className="full-width">
               Staff note
               <textarea

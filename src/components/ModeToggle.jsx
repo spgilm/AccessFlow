@@ -1,4 +1,12 @@
-export default function ModeToggle({ mode, onModeChange, theme, onThemeChange }) {
+export default function ModeToggle({
+  mode,
+  onModeChange,
+  theme,
+  onThemeChange,
+  textToSpeechEnabled,
+  onTextToSpeechChange,
+  textToSpeechAvailable = true,
+}) {
   const isDark = theme === "dark";
   const nextTheme = isDark ? "light" : "dark";
 
@@ -29,6 +37,17 @@ export default function ModeToggle({ mode, onModeChange, theme, onThemeChange })
       >
         <span aria-hidden="true">{isDark ? "🌙" : "☀️"}</span>
         <span>{isDark ? "Dark" : "Light"}</span>
+      </button>
+      <button
+        type="button"
+        className="tts-segment-button"
+        onClick={() => onTextToSpeechChange(!textToSpeechEnabled)}
+        aria-label={textToSpeechEnabled ? "Turn read aloud off" : "Turn read aloud on"}
+        aria-pressed={textToSpeechEnabled}
+        disabled={!textToSpeechAvailable}
+        title={textToSpeechAvailable ? "Read text aloud" : "Read aloud is not supported in this browser"}
+      >
+        <span aria-hidden="true">{textToSpeechEnabled ? "🔊" : "🔇"}</span>
       </button>
     </div>
   );

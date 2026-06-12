@@ -1,6 +1,25 @@
 import EmojiPickerButton from "./EmojiPickerButton.jsx";
+import TimerButton from "./TimerButton.jsx";
 
-export default function StudentInlineSteps({ activity, onToggleStep, onUpdateStepVisual }) {
+const promptOptions = [
+  "Independent",
+  "Verbal prompt",
+  "Gesture prompt",
+  "Model prompt",
+  "Physical assistance",
+  "Refused",
+  "Skipped",
+];
+
+export default function StudentInlineSteps({
+  activity,
+  onToggleStep,
+  onUpdateStepVisual,
+  onUpdateStepPrompt,
+  showPromptControls = true,
+  showStepNumbers = true,
+  showTimers = true,
+}) {
   if (!activity) {
     return null;
   }
@@ -27,7 +46,7 @@ export default function StudentInlineSteps({ activity, onToggleStep, onUpdateSte
         {activity.steps.map((step, index) => (
           <li key={step.id} className={`step-item ${step.completed ? "is-complete" : ""}`}>
             <div className="inline-step-row">
-              <span className="step-number">{index + 1}</span>
+              {showStepNumbers ? <span className="step-number">{index + 1}</span> : null}
               <EmojiPickerButton
                 visual={step.visual ?? step.emoji}
                 displayVisual={step.completed ? "✅" : undefined}
@@ -49,6 +68,27 @@ export default function StudentInlineSteps({ activity, onToggleStep, onUpdateSte
                 <span className="step-state">{step.completed ? "Done" : "Tap"}</span>
               </button>
             </div>
+
+            {showTimers && step.timerMinutes ? (
+              <TimerButton minutes={step.timerMinutes} label={step.label} />
+            ) : null}
+
+            {showPromptControls ? (
+              <label className="prompt-select-label">
+                Support used
+                <select
+                  value={step.promptLevel ?? ""}
+                  onChange={(event) => onUpdateStepPrompt?.(activity.id, step.id, event.target.value)}
+                >
+                  <option value="">Not recorded</option>
+                  {promptOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : null}
           </li>
         ))}
       </ol>

@@ -76,6 +76,22 @@ export default function StaffActivityEditor({
           />
         </label>
 
+        <label>
+          Timer minutes
+          <input
+            type="number"
+            min="0"
+            value={activity.timerMinutes ?? ""}
+            placeholder="Optional"
+            onChange={(event) =>
+              handleActivityFieldChange(
+                "timerMinutes",
+                event.target.value ? Number(event.target.value) : ""
+              )
+            }
+          />
+        </label>
+
         <VisualEditor
           label="Activity visual"
           visual={activity.visual}
@@ -135,6 +151,21 @@ export default function StaffActivityEditor({
                           ...step.visual,
                           altText: `${event.target.value} visual`,
                         },
+                      })
+                    }
+                  />
+                </label>
+
+                <label>
+                  Step timer minutes
+                  <input
+                    type="number"
+                    min="0"
+                    value={step.timerMinutes ?? ""}
+                    placeholder="Optional"
+                    onChange={(event) =>
+                      onUpdateStep(activity.id, step.id, {
+                        timerMinutes: event.target.value ? Number(event.target.value) : "",
                       })
                     }
                   />

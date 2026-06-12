@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { getIndependenceSettings } from "../data/independenceSettings.js";
+import { getDisplaySettings } from "../data/displaySettings.js";
 
 export default function ProfileManager({
   profiles,
@@ -12,6 +13,7 @@ export default function ProfileManager({
 }) {
   const [newProfileName, setNewProfileName] = useState("");
   const independenceSettings = getIndependenceSettings(selectedProfile);
+  const displaySettings = getDisplaySettings(selectedProfile);
 
   function handleAddProfile(event) {
     event.preventDefault();
@@ -33,6 +35,19 @@ export default function ProfileManager({
     onUpdateProfile(selectedProfile.id, {
       independenceSettings: {
         ...independenceSettings,
+        [settingName]: value,
+      },
+    });
+  }
+
+  function updateDisplaySetting(settingName, value) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    onUpdateProfile(selectedProfile.id, {
+      displaySettings: {
+        ...displaySettings,
         [settingName]: value,
       },
     });
@@ -178,6 +193,48 @@ export default function ProfileManager({
                 <small>Allows clearing the current schedule from Student Mode.</small>
               </span>
             </label>
+          </fieldset>
+
+          <fieldset className="independence-settings display-settings">
+            <legend>Student display settings</legend>
+            <p className="field-help">
+              These options control how much visual complexity the student/client sees.
+            </p>
+
+            <label>
+              Default student screen
+              <select
+                value={displaySettings.defaultStudentView}
+                onChange={(event) => updateDisplaySetting("defaultStudentView", event.target.value)}
+              >
+                <option value="today">Today</option>
+                <option value="choose">Choose</option>
+                <option value="make">Make</option>
+                <option value="board">Choice Board</option>
+              </select>
+            </label>
+
+            {[
+              ["showChooseTab", "Show Choose tab"],
+              ["showMakeTab", "Show Make tab"],
+              ["showChoiceBoardTab", "Show Choice Board tab"],
+              ["showWords", "Show words with visuals"],
+              ["showProgress", "Show progress bar"],
+              ["showStepNumbers", "Show step numbers"],
+              ["showPromptControls", "Show support-level controls"],
+              ["showTimers", "Show timers"],
+            ].map(([settingName, label]) => (
+              <label key={settingName} className="checkbox-row">
+                <input
+                  type="checkbox"
+                  checked={displaySettings[settingName]}
+                  onChange={(event) => updateDisplaySetting(settingName, event.target.checked)}
+                />
+                <span>
+                  <strong>{label}</strong>
+                </span>
+              </label>
+            ))}
           </fieldset>
 
           <div className="profile-meta">

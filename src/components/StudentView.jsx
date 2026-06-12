@@ -5,15 +5,20 @@ import FirstThenView from "./FirstThenView.jsx";
 import ProgressSummary from "./ProgressSummary.jsx";
 import StudentActivityDetail from "./StudentActivityDetail.jsx";
 import StudentChoiceBank from "./StudentChoiceBank.jsx";
+import StudentChoiceBoard from "./StudentChoiceBoard.jsx";
+import StudentSupportPanel from "./StudentSupportPanel.jsx";
 import StudentInlineSteps from "./StudentInlineSteps.jsx";
 import StudentMakeActivity from "./StudentMakeActivity.jsx";
 import StaffAccessPanel from "./StaffAccessPanel.jsx";
 
-const studentTabs = [
-  { id: "today", label: "Today" },
-  { id: "choose", label: "Choose" },
-  { id: "make", label: "Make" },
-];
+function getStudentTabs(displaySettings) {
+  return [
+    { id: "today", label: "Today" },
+    displaySettings?.showChooseTab !== false ? { id: "choose", label: "Choose" } : null,
+    displaySettings?.showMakeTab !== false ? { id: "make", label: "Make" } : null,
+    displaySettings?.showChoiceBoardTab !== false ? { id: "board", label: "Board" } : null,
+  ].filter(Boolean);
+}
 
 function WorkflowTabs({ tabs, activeTab, onChange, label }) {
   return (
@@ -40,12 +45,16 @@ export default function StudentView({
   selectedActivityId,
   studentActivityLibrary,
   independenceSettings,
+  displaySettings,
+  supportEvents,
   onSelectActivity,
   onToggleActivityComplete,
   onToggleStep,
   onUpdateActivityVisual,
   onUpdateStepVisual,
+  onUpdateStepPrompt,
   onStudentAddActivity,
+  onSupportRequest,
   onMoveActivity,
   onRemoveActivity,
   onStudentClearSchedule,
@@ -58,8 +67,10 @@ export default function StudentView({
   onSignOut,
   onOpenStaffMode,
 }) {
-  const [activeStudentTab, setActiveStudentTab] = useState("today");
+  const [activeStudentTab, setActiveStudentTab] = useState(displaySettings?.defaultStudentView ?? "today");
   const [todayView, setTodayView] = useState("schedule");
+  const studentTabs = getStudentTabs(displaySettings);
+  const currentActivity = activities.find((activity) => !activity.completed) ?? activities[0] ?? null;
   const [isEditingSchedule, setIsEditingSchedule] = useState(false);
 
   const canReorder = independenceSettings.studentCanReorderSchedule;
@@ -107,7 +118,14 @@ export default function StudentView({
             <h2 id="student-today-heading">What am I doing?</h2>
           </div>
 
-          <ProgressSummary activities={activities} />
+          {displaySettings?.showProgress !== false ? (
+            <ProgressSummary activities={activities} />
+          ) : null}
+
+          <StudentSupportPanel
+            currentActivity={currentActivity}
+            onSupportRequest={onSupportRequest}
+          />
 
           <div className="view-mini-toggle" role="group" aria-label="Today view">
             <button
@@ -190,6 +208,10 @@ export default function StudentView({
                             activity={activity}
                             onToggleStep={onToggleStep}
                             onUpdateStepVisual={onUpdateStepVisual}
+                            onUpdateStepPrompt={onUpdateStepPrompt}
+                            showPromptControls={displaySettings?.showPromptControls !== false}
+                            showStepNumbers={displaySettings?.showStepNumbers !== false}
+                            showTimers={displaySettings?.showTimers !== false}
                           />
                         ) : null}
 
@@ -246,6 +268,7 @@ export default function StudentView({
           profile={profile}
           libraryItems={studentActivityLibrary}
           independenceSettings={independenceSettings}
+          displaySettings={displaySettings}
           onAddActivity={onStudentAddActivity}
         />
       ) : null}
@@ -253,6 +276,7 @@ export default function StudentView({
       {activeStudentTab === "make" ? (
         <StudentMakeActivity
           independenceSettings={independenceSettings}
+          displaySettings={displaySettings}
           onAddActivity={onStudentAddActivity}
         />
       ) : null}

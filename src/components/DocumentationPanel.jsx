@@ -31,6 +31,7 @@ export default function DocumentationPanel({
   activities,
   documentationDate,
   dailyNote,
+  supportEvents = [],
   copyStatus,
   onDocumentationDateChange,
   onUpdateDailyNote,
@@ -39,7 +40,7 @@ export default function DocumentationPanel({
   onDownloadActivityCsv,
 }) {
   const stats = getCompletionStats(activities);
-  const progressNote = buildDailyProgressNote(profile, activities, dailyNote);
+  const progressNote = buildDailyProgressNote(profile, activities, dailyNote, supportEvents);
 
   function updateField(field, value) {
     onUpdateDailyNote({
@@ -88,6 +89,17 @@ export default function DocumentationPanel({
       <details className="activity-breakdown-details">
         <summary>Activity completion breakdown</summary>
         <pre>{buildActivityBreakdown(activities)}</pre>
+      </details>
+
+      <details className="activity-breakdown-details">
+        <summary>Support events today</summary>
+        <pre>
+          {supportEvents.length === 0
+            ? "No support or choice events recorded."
+            : supportEvents
+                .map((event) => `- ${new Date(event.createdAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}: ${event.label}${event.activityLabel ? ` during ${event.activityLabel}` : ""}`)
+                .join("\n")}
+        </pre>
       </details>
 
       <div className="documentation-form-grid">

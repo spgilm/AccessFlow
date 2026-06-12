@@ -4,6 +4,7 @@ import StaffView from "./components/StaffView.jsx";
 import StudentView from "./components/StudentView.jsx";
 import { starterProfiles, createBlankProfile } from "./data/starterProfiles.js";
 import { getIndependenceSettings } from "./data/independenceSettings.js";
+import { getDisplaySettings } from "./data/displaySettings.js";
 import { starterTemplates } from "./data/starterTemplates.js";
 import { useLocalStorage } from "./hooks/useLocalStorage.js";
 import { generateActivityFromTask } from "./services/taskGenerator.js";
@@ -43,6 +44,7 @@ const STUDENT_VIEW_STORAGE_KEY = "accessflow.studentView.v5";
 const DOCUMENTATION_DATE_STORAGE_KEY = "accessflow.documentationDate.v5";
 const SYNC_METADATA_STORAGE_KEY = "accessflow.syncMetadata.v9";
 const THEME_STORAGE_KEY = "accessflow.theme.v10";
+const TEXT_TO_SPEECH_STORAGE_KEY = "accessflow.textToSpeech.v14";
 
 export default function App() {
   const [profiles, setProfiles] = useLocalStorage(PROFILES_STORAGE_KEY, starterProfiles);
@@ -53,6 +55,7 @@ export default function App() {
   const [templates, setTemplates] = useLocalStorage(TEMPLATES_STORAGE_KEY, starterTemplates);
   const [mode, setMode] = useLocalStorage(MODE_STORAGE_KEY, "student");
   const [theme, setTheme] = useLocalStorage(THEME_STORAGE_KEY, "light");
+  const [textToSpeechEnabled, setTextToSpeechEnabled] = useLocalStorage(TEXT_TO_SPEECH_STORAGE_KEY, false);
   const [studentViewMode, setStudentViewMode] = useLocalStorage(
     STUDENT_VIEW_STORAGE_KEY,
     "schedule"
@@ -91,6 +94,9 @@ export default function App() {
 
   const activities = selectedProfile?.activities ?? [];
   const activityBank = selectedProfile?.activityBank ?? [];
+  const supportEvents = selectedProfile?.supportEvents ?? [];
+  const firstThenBoard = selectedProfile?.firstThenBoard ?? { firstChoiceId: "", thenChoiceId: "" };
+  const displaySettings = getDisplaySettings(selectedProfile);
 
   const selectedActivity = useMemo(
     () => activities.find((activity) => activity.id === selectedActivityId) ?? null,
@@ -159,6 +165,48 @@ export default function App() {
     document.documentElement.dataset.theme = safeTheme;
     document.documentElement.style.colorScheme = safeTheme;
   }, [theme]);
+
+  useEffect(() => {
+    if (!textToSpeechEnabled || typeof window === "undefined" || !window.speechSynthesis) {
+      return undefined;
+    }
+
+    function getReadableText(target) {
+      const readable = target.closest?.(
+        "button, h1, h2, h3, p, label, summary, strong, span, small, li, legend"
+      );
+
+      if (!readable) {
+        return "";
+      }
+
+      const ariaLabel = readable.getAttribute?.("aria-label");
+      const text = ariaLabel || readable.innerText || readable.textContent || "";
+
+      return text.replace(/\s+/g, " ").trim().slice(0, 220);
+    }
+
+    function handleReadClick(event) {
+      const text = getReadableText(event.target);
+
+      if (!text) {
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    document.addEventListener("click", handleReadClick, true);
+
+    return () => {
+      document.removeEventListener("click", handleReadClick, true);
+      window.speechSynthesis.cancel();
+    };
+  }, [textToSpeechEnabled]);
+
 
   useEffect(() => {
     if (!hasInitializedDirtyTrackingRef.current) {
@@ -342,6 +390,73 @@ export default function App() {
     setAnnouncement(`${activity.label} added to today’s schedule.`);
   }
 
+
+  function recordSupportEvent(event) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    const nextEvent = {
+      id: createId("support-event"),
+      type: event.type,
+      label: event.label,
+      activityId: event.activityId ?? null,
+      activityLabel: event.activityLabel ?? null,
+      createdAt: new Date().toISOString(),
+      date: getTodayDateKey(),
+    };
+
+    updateSelectedProfile((profile) => ({
+      ...profile,
+      supportEvents: [...(profile.supportEvents ?? []), nextEvent],
+    }));
+
+    clearPortableStatuses();
+    setAnnouncement(`${event.label} recorded.`);
+  }
+
+  function handleUpdateStepPrompt(activityId, stepId, promptLevel) {
+    handleUpdateStep(activityId, stepId, { promptLevel });
+    setAnnouncement("Support level recorded.");
+  }
+
+  function handleDismissReview(activityId) {
+    handleUpdateActivity(activityId, { pendingReview: false });
+    setAnnouncement("Review dismissed.");
+  }
+
+  function handleUpdateFirstThenBoard(nextBoard) {
+    updateSelectedProfile((profile) => ({
+      ...profile,
+      firstThenBoard: {
+        firstChoiceId: nextBoard.firstChoiceId ?? "",
+        thenChoiceId: nextBoard.thenChoiceId ?? "",
+      },
+    }));
+
+    clearPortableStatuses();
+  }
+
+  function handleAddFirstThenToSchedule() {
+    const choiceIds = [firstThenBoard.firstChoiceId, firstThenBoard.thenChoiceId].filter(Boolean);
+    const selectedChoices = choiceIds
+      .map((choiceId) => activityBank.find((choice) => choice.id === choiceId))
+      .filter(Boolean);
+
+    if (selectedChoices.length === 0) {
+      setAnnouncement("Choose a first or then activity before adding to the schedule.");
+      return;
+    }
+
+    const activitiesToAdd = selectedChoices.map(cloneBankChoiceForSchedule);
+
+    updateSelectedProfileActivities((currentActivities) => [...currentActivities, ...activitiesToAdd]);
+    setSelectedActivityId(activitiesToAdd[0]?.id ?? selectedActivityId);
+    clearPortableStatuses();
+    setAnnouncement("First / Then activities added to the schedule.");
+  }
+
+
   async function handleStudentAddActivity(request) {
     if (!selectedProfile) {
       return;
@@ -371,6 +486,7 @@ export default function App() {
       activity = await generateActivityFromTask(request.taskText, {
         customSteps: request.stepLabels,
       });
+      activity.pendingReview = true;
     }
 
     if (!activity) {
@@ -455,7 +571,7 @@ export default function App() {
   }
 
   async function handleCopyDailyNote() {
-    const text = buildDailyProgressNote(selectedProfile, activities, dailyNote);
+    const text = buildDailyProgressNote(selectedProfile, activities, dailyNote, supportEvents);
 
     try {
       if (!navigator.clipboard) {
@@ -471,7 +587,7 @@ export default function App() {
 
   function handleDownloadDailyNote() {
     const filename = `${documentationDate}-${buildSafeFilename(selectedProfile?.name)}-accessflow-note.txt`;
-    const content = buildDailyProgressNote(selectedProfile, activities, dailyNote);
+    const content = buildDailyProgressNote(selectedProfile, activities, dailyNote, supportEvents);
 
     downloadTextFile(filename, content, "text/plain");
     setCopyStatus("Daily note downloaded.");
@@ -914,6 +1030,7 @@ export default function App() {
       cloneActivityForChoiceBank(activity),
     ]);
 
+    handleUpdateActivity(activityId, { pendingReview: false });
     clearPortableStatuses();
     setAnnouncement(`${activity.label} saved to Student Choices.`);
   }
@@ -1020,6 +1137,12 @@ export default function App() {
           onModeChange={handleModeChange}
           theme={theme}
           onThemeChange={handleThemeChange}
+          textToSpeechEnabled={textToSpeechEnabled}
+          onTextToSpeechChange={(enabled) => {
+            setTextToSpeechEnabled(enabled);
+            setAnnouncement(enabled ? "Read aloud on." : "Read aloud off.");
+          }}
+          textToSpeechAvailable={typeof window !== "undefined" && Boolean(window.speechSynthesis)}
         />
       </header>
 
@@ -1031,19 +1154,22 @@ export default function App() {
         <StudentView
           profile={selectedProfile}
           activities={activities}
-          activityBank={activityBank}
           selectedActivity={selectedActivity}
           selectedActivityId={selectedActivityId}
           studentViewMode={studentViewMode}
           studentActivityLibrary={activityBank}
           independenceSettings={getIndependenceSettings(selectedProfile)}
+          displaySettings={displaySettings}
+          supportEvents={supportEvents}
           onStudentViewModeChange={handleStudentViewModeChange}
           onSelectActivity={handleSelectActivity}
           onToggleActivityComplete={handleToggleActivityComplete}
           onToggleStep={handleToggleStep}
           onUpdateActivityVisual={(activityId, visual) => handleUpdateActivity(activityId, { visual })}
           onUpdateStepVisual={(activityId, stepId, visual) => handleUpdateStep(activityId, stepId, { visual })}
+          onUpdateStepPrompt={handleUpdateStepPrompt}
           onStudentAddActivity={handleStudentAddActivity}
+          onSupportRequest={recordSupportEvent}
           onMoveActivity={handleStudentMoveActivity}
           onRemoveActivity={handleStudentRemoveActivity}
           onStudentClearSchedule={handleStudentClearSchedule}
@@ -1064,6 +1190,9 @@ export default function App() {
           templates={templates}
           activities={activities}
           activityBank={activityBank}
+          supportEvents={supportEvents}
+          firstThenBoard={firstThenBoard}
+          displaySettings={displaySettings}
           selectedActivity={selectedActivity}
           selectedActivityId={selectedActivityId}
           documentationDate={documentationDate}
@@ -1095,6 +1224,9 @@ export default function App() {
           onAddProfile={handleAddProfile}
           onUpdateProfile={handleUpdateProfile}
           onDeleteProfile={handleDeleteProfile}
+          onDismissReview={handleDismissReview}
+          onUpdateFirstThenBoard={handleUpdateFirstThenBoard}
+          onAddFirstThenToSchedule={handleAddFirstThenToSchedule}
           onSaveCurrentScheduleAsTemplate={handleSaveCurrentScheduleAsTemplate}
           onApplyTemplateToProfile={handleApplyTemplateToProfile}
           onDeleteTemplate={handleDeleteTemplate}

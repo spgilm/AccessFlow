@@ -52,8 +52,8 @@ export default function VisualEditor({
       </label>
 
       <label className="file-input-label">
-        Upload image
-        <input type="file" accept="image/*" onChange={handleImageUpload} />
+        Upload image or take photo
+        <input type="file" accept="image/*" capture="environment" onChange={handleImageUpload} />
       </label>
 
       {visual?.type === "image" ? (

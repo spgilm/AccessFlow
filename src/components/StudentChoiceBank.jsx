@@ -1,13 +1,24 @@
+import { useMemo, useState } from "react";
 import VisualSupport from "./VisualSupport.jsx";
 
 export default function StudentChoiceBank({
   profile,
   libraryItems,
   independenceSettings,
+  displaySettings,
   onAddActivity,
 }) {
+  const [category, setCategory] = useState("All");
   const canBuild = independenceSettings.studentCanBuildSchedule;
   const hasChoices = libraryItems.length > 0;
+  const categories = useMemo(
+    () => ["All", ...Array.from(new Set(libraryItems.map((item) => item.category || "General")))],
+    [libraryItems]
+  );
+  const filteredItems =
+    category === "All"
+      ? libraryItems
+      : libraryItems.filter((item) => (item.category || "General") === category);
 
   if (!canBuild) {
     return (
@@ -24,8 +35,26 @@ export default function StudentChoiceBank({
       <div className="focus-header">
         <p className="eyebrow">Choose</p>
         <h2 id="student-choice-heading">Pick an activity</h2>
-        <p>Choose one card to add it to {profile?.name ? `${profile.name}'s` : "your"} schedule.</p>
+        {displaySettings?.showWords ? (
+          <p>Choose one card to add it to {profile?.name ? `${profile.name}'s` : "your"} schedule.</p>
+        ) : null}
       </div>
+
+      {categories.length > 2 ? (
+        <div className="category-filter" role="group" aria-label="Activity categories">
+          {categories.map((item) => (
+            <button
+              key={item}
+              type="button"
+              className={category === item ? "is-active" : ""}
+              onClick={() => setCategory(item)}
+              aria-pressed={category === item}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       {!hasChoices ? (
         <div className="small-empty-state">
@@ -35,7 +64,7 @@ export default function StudentChoiceBank({
         </div>
       ) : (
         <div className="choice-card-grid">
-          {libraryItems.map((item) => (
+          {filteredItems.map((item) => (
             <button
               key={item.id}
               type="button"
@@ -47,7 +76,9 @@ export default function StudentChoiceBank({
                 visual={item.visual ?? item.emoji}
                 className="choice-card-visual"
               />
-              <span className="choice-card-label">{item.label}</span>
+              {displaySettings?.showWords !== false ? (
+                <span className="choice-card-label">{item.label}</span>
+              ) : null}
               <span className="choice-card-action">Add</span>
             </button>
           ))}

@@ -1,4 +1,5 @@
 import { getIndependenceSettings } from "../data/independenceSettings.js";
+import { getDisplaySettings } from "../data/displaySettings.js";
 
 export function normalizeImportedProfile(profile) {
   return {
@@ -7,6 +8,12 @@ export function normalizeImportedProfile(profile) {
     notes: profile.notes || "",
     activities: Array.isArray(profile.activities) ? profile.activities : [],
     activityBank: Array.isArray(profile.activityBank) ? profile.activityBank : [],
+    supportEvents: Array.isArray(profile.supportEvents) ? profile.supportEvents : [],
+    firstThenBoard:
+      profile.firstThenBoard && typeof profile.firstThenBoard === "object"
+        ? profile.firstThenBoard
+        : { firstChoiceId: "", thenChoiceId: "" },
+    displaySettings: getDisplaySettings(profile),
     independenceSettings: getIndependenceSettings(profile),
     documentationByDate:
       profile.documentationByDate && typeof profile.documentationByDate === "object"

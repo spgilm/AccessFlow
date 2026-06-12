@@ -1,4 +1,5 @@
 import EmojiPickerButton from "./EmojiPickerButton.jsx";
+import TimerButton from "./TimerButton.jsx";
 
 export default function ActivityCard({
   activity,
@@ -38,6 +39,8 @@ export default function ActivityCard({
           </span>
         </button>
       </div>
+
+      <TimerButton minutes={activity.timerMinutes} label={activity.label} />
 
       <button
         className="complete-button"

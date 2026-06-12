@@ -60,12 +60,18 @@ export function buildActivityBreakdown(activities) {
       const totalSteps = activity.steps.length;
       const status = activity.completed ? "complete" : "in progress/not complete";
 
-      return `- ${activity.label}: ${status}; ${completeSteps}/${totalSteps} steps complete.`;
+      const promptSummary = activity.steps
+        .filter((step) => step.promptLevel)
+        .map((step) => `${step.label}: ${step.promptLevel}`)
+        .join("; ");
+      const timerSummary = activity.timerMinutes ? ` Timer: ${activity.timerMinutes} min.` : "";
+
+      return `- ${activity.label}: ${status}; ${completeSteps}/${totalSteps} steps complete.${timerSummary}${promptSummary ? ` Support: ${promptSummary}.` : ""}`;
     })
     .join("\n");
 }
 
-export function buildDailyProgressNote(profile, activities, dailyNote) {
+export function buildDailyProgressNote(profile, activities, dailyNote, supportEvents = []) {
   const stats = getCompletionStats(activities);
   const profileName = profile?.name ?? "Selected profile";
 
@@ -83,6 +89,13 @@ export function buildDailyProgressNote(profile, activities, dailyNote) {
     ``,
     `Prompt Level Used: ${dailyNote.promptLevel || "Not recorded"}`,
     `Engagement/Participation: ${dailyNote.engagement || "Not recorded"}`,
+    ``,
+    `Student Support / Choice Events:`,
+    supportEvents.length === 0
+      ? "No support or choice events recorded."
+      : supportEvents
+          .map((event) => `- ${new Date(event.createdAt).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}: ${event.label}${event.activityLabel ? ` during ${event.activityLabel}` : ""}`)
+          .join("\n"),
     ``,
     `Staff Observation:`,
     dailyNote.observation?.trim() || "No observation recorded.",

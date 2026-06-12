@@ -3,6 +3,9 @@ import AddActivityForm from "./AddActivityForm.jsx";
 import AuthPanel from "./AuthPanel.jsx";
 import DataManagementPanel from "./DataManagementPanel.jsx";
 import DocumentationPanel from "./DocumentationPanel.jsx";
+import EventLogPanel from "./EventLogPanel.jsx";
+import FirstThenBoardManager from "./FirstThenBoardManager.jsx";
+import ReviewQueuePanel from "./ReviewQueuePanel.jsx";
 import ProfileManager from "./ProfileManager.jsx";
 import StaffActivityEditor from "./StaffActivityEditor.jsx";
 import StaffActivityList from "./StaffActivityList.jsx";
@@ -43,6 +46,9 @@ export default function StaffView({
   templates,
   activities,
   activityBank,
+  supportEvents,
+  firstThenBoard,
+  displaySettings,
   selectedActivity,
   selectedActivityId,
   documentationDate,
@@ -74,6 +80,9 @@ export default function StaffView({
   onAddProfile,
   onUpdateProfile,
   onDeleteProfile,
+  onDismissReview,
+  onUpdateFirstThenBoard,
+  onAddFirstThenToSchedule,
   onSaveCurrentScheduleAsTemplate,
   onApplyTemplateToProfile,
   onDeleteTemplate,
@@ -126,6 +135,7 @@ export default function StaffView({
               onAddProfile={onAddProfile}
               onUpdateProfile={onUpdateProfile}
               onDeleteProfile={onDeleteProfile}
+              displaySettings={displaySettings}
             />
 
             <TemplateManager
@@ -155,6 +165,13 @@ export default function StaffView({
             onAddBankChoiceToSchedule={onAddBankChoiceToSchedule}
             onDeleteBankChoice={onDeleteBankChoice}
           />
+
+          <FirstThenBoardManager
+            activityBank={activityBank}
+            firstThenBoard={firstThenBoard}
+            onUpdateFirstThenBoard={onUpdateFirstThenBoard}
+            onAddFirstThenToSchedule={onAddFirstThenToSchedule}
+          />
         </section>
       ) : null}
 
@@ -165,6 +182,13 @@ export default function StaffView({
             <h2 id="staff-schedule-heading">Today’s schedule</h2>
             <p>Add one-time activities or edit today’s assigned activities.</p>
           </div>
+
+          <ReviewQueuePanel
+            activities={activities}
+            onSelectActivity={onSelectActivity}
+            onSaveActivityToBank={onSaveActivityToBank}
+            onDismissReview={onDismissReview}
+          />
 
           <AddActivityForm onAddActivity={onAddActivity} />
 
@@ -203,6 +227,7 @@ export default function StaffView({
             activities={activities}
             documentationDate={documentationDate}
             dailyNote={dailyNote}
+            supportEvents={supportEvents}
             copyStatus={copyStatus}
             onDocumentationDateChange={onDocumentationDateChange}
             onUpdateDailyNote={onUpdateDailyNote}
@@ -210,6 +235,8 @@ export default function StaffView({
             onDownloadDailyNote={onDownloadDailyNote}
             onDownloadActivityCsv={onDownloadActivityCsv}
           />
+
+          <EventLogPanel events={supportEvents} />
         </section>
       ) : null}
 

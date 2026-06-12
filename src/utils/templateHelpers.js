@@ -5,6 +5,7 @@ export function cloneActivitiesForProfile(activities) {
     ...activity,
     id: createId("activity"),
     completed: false,
+    pendingReview: false,
     steps: activity.steps.map((step) => ({
       ...step,
       id: createId("step"),
@@ -31,6 +32,7 @@ export function cloneActivityForChoiceBank(activity) {
     ...activity,
     id: createId("bank-activity"),
     completed: false,
+    pendingReview: false,
     steps: activity.steps.map((step) => ({
       ...step,
       id: createId("bank-step"),
@@ -44,6 +46,7 @@ export function cloneBankChoiceForSchedule(choice) {
     ...choice,
     id: createId("activity"),
     completed: false,
+    pendingReview: false,
     steps: choice.steps.map((step) => ({
       ...step,
       id: createId("step"),

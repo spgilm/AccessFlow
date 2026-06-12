@@ -439,3 +439,43 @@ This replaces the long stacked staff dashboard with one job per screen.
 - fixed activity card alignment after moving icons outside the main button
 - fixed step-row grid alignment to reduce overlapping controls
 - added mobile wrapping rules for step-builder remove buttons
+
+
+## v14 feature expansion prototype
+
+This version adds first-pass implementations of the larger AccessFlow roadmap.
+
+### Student-facing additions
+
+- **Support buttons** on Today: Help, Break, Confused, Too hard, Too loud, Upset.
+- **Choice Board** tab for quick communication choices.
+- Student-created tasks are marked for staff review.
+- Optional read-aloud mode in the top control bar:
+  - 🔇 means read aloud is off
+  - 🔊 means read aloud is on
+  - when enabled, tapping readable text attempts to speak it aloud using the browser Speech Synthesis API
+
+### Staff-facing additions
+
+- **Review Queue** for student-created activities.
+- **Student display settings**:
+  - show/hide Choose tab
+  - show/hide Make tab
+  - show/hide Choice Board tab
+  - show/hide words with visuals
+  - show/hide progress
+  - show/hide step numbers
+  - show/hide support-level controls
+  - show/hide timers
+  - default student screen
+- **First / Then builder** from the student choice bank.
+- **Support event log** in Notes.
+- Documentation summaries now include support/choice events and step-level prompt data.
+
+### Activity/step additions
+
+- Activity categories for choice-bank filtering.
+- Optional activity timers.
+- Optional step timers.
+- Step-level support/prompt tracking.
+- Visual upload inputs now support taking a photo on compatible mobile browsers.
