@@ -598,3 +598,17 @@ CODE_EXPLANATION.md
 ```
 
 for a feature/function map of the codebase.
+
+
+## v15.1 patch
+
+Improves read-aloud behavior.
+
+When the 🔊 read-aloud toggle is enabled, AccessFlow now tries to read the meaningful label text instead of reading emoji visuals aloud.
+
+Changes:
+
+- removes `[aria-hidden="true"]` visual nodes before speaking
+- ignores visual-support/emoji containers
+- strips emoji characters from spoken text
+- still allows buttons and controls to work normally

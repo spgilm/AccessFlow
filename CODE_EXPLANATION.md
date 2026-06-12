@@ -456,3 +456,20 @@ documentation and data separated from student schedule use
 - Date-based schedules are implemented at the profile data level, but recurring schedules are not fully automated yet.
 - Reports are still basic text/CSV outputs, not charts.
 - The app is not yet a full PWA/offline installable app.
+
+
+## v15.1 read-aloud clarification
+
+The global read-aloud feature lives in `src/App.jsx`.
+
+The `getReadableText` helper now:
+
+```txt
+1. Finds the nearest useful interactive/text element.
+2. Clones that element.
+3. Removes visual-only nodes such as emoji/icon containers.
+4. Strips remaining emoji characters.
+5. Speaks the resulting label text.
+```
+
+This prevents visual icons from being read aloud when the user taps an emoji card. The intended spoken output is the meaningful label, not the decorative visual.

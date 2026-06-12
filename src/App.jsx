@@ -180,46 +180,72 @@ export default function App() {
     document.documentElement.style.colorScheme = safeTheme;
   }, [theme]);
 
-  useEffect(() => {
-    if (!textToSpeechEnabled || typeof window === "undefined" || !window.speechSynthesis) {
-      return undefined;
+
+useEffect(() => {
+  if (!textToSpeechEnabled || typeof window === "undefined" || !window.speechSynthesis) {
+    return undefined;
+  }
+
+  function stripEmojiAndVisualNoise(text) {
+    return String(text ?? "")
+      .replace(/\p{Extended_Pictographic}/gu, "")
+      .replace(/[\uFE0E\uFE0F\u200D]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function getTextWithoutVisuals(element) {
+    const clone = element.cloneNode(true);
+
+    clone
+      .querySelectorAll(
+        '[aria-hidden="true"], .visual-support, .visual-emoji, .emoji-picker-visual, .emoji-picker-shell, .choice-card-visual, .choice-board-visual'
+      )
+      .forEach((node) => node.remove());
+
+    return stripEmojiAndVisualNoise(clone.innerText || clone.textContent || "");
+  }
+
+  function getReadableText(target) {
+    const interactive = target.closest?.("button, a, summary, label");
+    const readable =
+      interactive ??
+      target.closest?.("h1, h2, h3, p, strong, small, li, legend, span");
+
+    if (!readable) {
+      return "";
     }
 
-    function getReadableText(target) {
-      const readable = target.closest?.(
-        "button, h1, h2, h3, p, label, summary, strong, span, small, li, legend"
-      );
+    const visibleText = getTextWithoutVisuals(readable);
 
-      if (!readable) {
-        return "";
-      }
-
-      const ariaLabel = readable.getAttribute?.("aria-label");
-      const text = ariaLabel || readable.innerText || readable.textContent || "";
-
-      return text.replace(/\s+/g, " ").trim().slice(0, 220);
+    if (visibleText) {
+      return visibleText.slice(0, 220);
     }
 
-    function handleReadClick(event) {
-      const text = getReadableText(event.target);
+    const ariaLabel = readable.getAttribute?.("aria-label");
+    return stripEmojiAndVisualNoise(ariaLabel).slice(0, 220);
+  }
 
-      if (!text) {
-        return;
-      }
+  function handleReadClick(event) {
+    const text = getReadableText(event.target);
 
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-      window.speechSynthesis.speak(utterance);
+    if (!text) {
+      return;
     }
 
-    document.addEventListener("click", handleReadClick, true);
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9;
+    window.speechSynthesis.speak(utterance);
+  }
 
-    return () => {
-      document.removeEventListener("click", handleReadClick, true);
-      window.speechSynthesis.cancel();
-    };
-  }, [textToSpeechEnabled]);
+  document.addEventListener("click", handleReadClick, true);
+
+  return () => {
+    document.removeEventListener("click", handleReadClick, true);
+    window.speechSynthesis.cancel();
+  };
+}, [textToSpeechEnabled]);
 
 
   useEffect(() => {
