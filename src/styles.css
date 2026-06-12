@@ -3285,3 +3285,392 @@ select:focus-visible {
   background: #064b25;
   border-color: #a6ffbf;
 }
+
+
+/* v13: focused workflow tabs and mobile alignment cleanup */
+.app-shell {
+  width: min(100%, 980px);
+  padding: 0.75rem;
+}
+
+.app-header {
+  gap: 0.55rem;
+  padding: 0.55rem 0 0.75rem;
+}
+
+.app-header h1 {
+  font-size: clamp(2rem, 12vw, 3.2rem);
+}
+
+.app-description {
+  max-width: 36rem;
+  margin-top: 0.35rem;
+}
+
+.combined-toggle {
+  grid-template-columns: 1fr 1fr auto;
+}
+
+.combined-toggle .theme-segment-button {
+  min-width: 4.25rem;
+}
+
+@media (max-width: 520px) {
+  .app-description {
+    display: none;
+  }
+
+  .combined-toggle {
+    grid-template-columns: 1fr 1fr auto !important;
+  }
+
+  .combined-toggle .theme-segment-button {
+    grid-column: auto !important;
+    min-width: 3.7rem;
+    padding-inline: 0.55rem;
+  }
+
+  .combined-toggle .theme-segment-button span:last-child {
+    display: none;
+  }
+}
+
+.v13-student-flow,
+.v13-staff-flow,
+.student-tab-screen,
+.staff-tab-screen {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.workflow-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.45rem;
+  width: 100%;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  padding: 0.3rem;
+  background: var(--surface-strong);
+}
+
+.workflow-tabs button {
+  min-height: 52px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.55rem 0.75rem;
+  background: transparent;
+  color: var(--primary-strong);
+  font-weight: 950;
+}
+
+.workflow-tabs button.is-active {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.staff-workflow-tabs {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  padding: 0.3rem;
+  scroll-snap-type: x proximity;
+}
+
+.staff-workflow-tabs button {
+  flex: 0 0 auto;
+  min-width: 6.1rem;
+  scroll-snap-align: start;
+}
+
+.focused-panel,
+.student-tab-screen,
+.staff-tab-screen {
+  min-width: 0;
+}
+
+.focus-header {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.focus-header p {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.compact-focus-header {
+  margin-bottom: 0;
+}
+
+.student-profile-strip,
+.staff-profile-strip {
+  max-width: 100%;
+}
+
+.student-profile-strip strong,
+.student-profile-strip span {
+  min-width: 0;
+}
+
+.view-mini-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.35rem;
+  background: var(--surface-strong);
+}
+
+.view-mini-toggle button {
+  min-height: 48px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--primary-strong);
+  font-weight: 950;
+}
+
+.view-mini-toggle button.is-active {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.choice-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.75rem, 1fr));
+  gap: 0.85rem;
+}
+
+.choice-card-button {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.55rem;
+  min-height: 11rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.9rem;
+  background: var(--control-bg);
+  color: var(--text);
+  text-align: center;
+}
+
+.choice-card-visual {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1.25rem;
+  font-size: 3.2rem;
+}
+
+.choice-card-label {
+  width: 100%;
+  color: var(--text);
+  font-size: 1.1rem;
+  font-weight: 950;
+  line-height: 1.05;
+  overflow-wrap: anywhere;
+}
+
+.choice-card-action {
+  border-radius: 999px;
+  padding: 0.25rem 0.8rem;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 950;
+}
+
+.small-empty-state {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  background: var(--surface-strong);
+  text-align: center;
+}
+
+.small-empty-state h3,
+.small-empty-state p {
+  margin: 0;
+}
+
+.staff-tab-screen > .panel,
+.staff-tab-screen .panel,
+.student-tab-screen > .panel {
+  box-shadow: none;
+}
+
+.staff-tab-screen .staff-bank-panel > .section-heading-row {
+  display: none;
+}
+
+.staff-tab-screen .staff-bank-panel {
+  margin-bottom: 0;
+}
+
+.activity-card {
+  overflow: visible;
+  gap: 0.6rem;
+}
+
+.activity-card-main-row {
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.85rem;
+  align-items: center;
+}
+
+.activity-card-main-row .activity-main-button {
+  min-width: 0;
+  min-height: 5.25rem;
+  padding: 0.55rem;
+}
+
+.activity-text,
+.activity-label,
+.activity-status {
+  min-width: 0;
+}
+
+.activity-label {
+  overflow-wrap: anywhere;
+}
+
+.complete-button {
+  width: 100%;
+}
+
+.student-card-actions.editing-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.student-card-actions.editing-actions button {
+  min-width: 0;
+}
+
+.inline-step-row {
+  grid-template-columns: auto auto minmax(0, 1fr);
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.inline-step-row .step-button {
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.55rem;
+}
+
+.step-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.step-state {
+  white-space: nowrap;
+}
+
+.student-made-step-row {
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+}
+
+.student-made-step-row input {
+  min-width: 0;
+}
+
+.student-made-step-row .small-danger-button {
+  min-width: 0;
+}
+
+.emoji-picker-shell {
+  position: relative;
+  overflow: visible;
+}
+
+.emoji-picker-popover {
+  max-height: min(26rem, 72vh);
+  overflow: auto;
+}
+
+@media (max-width: 560px) {
+  .student-made-step-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .student-made-step-row .small-danger-button {
+    grid-column: 2 / -1;
+    width: 100%;
+  }
+
+  .student-card-actions.editing-actions {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .student-card-actions.editing-actions .small-danger-button {
+    grid-column: 1 / -1;
+  }
+
+  .emoji-picker-popover {
+    position: fixed;
+    inset-inline: 0.75rem;
+    top: 5.25rem;
+    left: 0.75rem;
+    width: auto;
+    max-height: calc(100vh - 6.5rem);
+    transform: none;
+  }
+
+  .emoji-picker-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 380px) {
+  .choice-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .activity-card-main-row {
+    gap: 0.6rem;
+  }
+}
+
+/* v13 dark-mode support for focused workflow */
+[data-theme="dark"] .workflow-tabs,
+[data-theme="dark"] .view-mini-toggle,
+[data-theme="dark"] .choice-card-button,
+[data-theme="dark"] .small-empty-state {
+  background: #052f52;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .workflow-tabs button,
+[data-theme="dark"] .view-mini-toggle button {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .workflow-tabs button.is-active,
+[data-theme="dark"] .view-mini-toggle button.is-active,
+[data-theme="dark"] .choice-card-action {
+  background: #ffe066;
+  color: #001a2e;
+}
+
+[data-theme="dark"] .choice-card-label {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .choice-card-button:focus-visible,
+[data-theme="dark"] .choice-card-button:hover {
+  border-color: #ffe066;
+}
+
+/* v13 corrective alignment: activity text button has one content column */
+.activity-card-main-row .activity-main-button {
+  grid-template-columns: 1fr;
+}

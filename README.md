@@ -400,3 +400,42 @@ This version improves activity/step visuals:
 - completed steps temporarily show ✅ instead of the chosen emoji
 - undoing completion restores the chosen emoji
 - emoji boxes use stronger centering rules to prevent vertical/horizontal drift
+
+
+## v13 workflow redesign
+
+This version restructures the app to reduce visual clutter.
+
+### Student Mode
+
+Student Mode is split into three focused tabs:
+
+- **Today**: Now/Next, schedule, and task steps.
+- **Choose**: approved student choice bank only.
+- **Make**: student-created activity and step builder only.
+
+The default Student screen no longer shows schedule use, choice bank, and task creation all on one long page.
+
+Schedule editing controls are hidden by default. Students see a **Change** button first; Up/Down/Remove only appear after entering edit mode.
+
+### Staff Mode
+
+Staff Mode is split into five focused tabs:
+
+- **Students**
+- **Choices**
+- **Schedule**
+- **Notes**
+- **Save**
+
+This replaces the long stacked staff dashboard with one job per screen.
+
+### Alignment and visual cleanup
+
+- smaller mobile header
+- app description hidden on small screens
+- theme toggle stays in the same row on mobile
+- safer emoji picker positioning on small screens
+- fixed activity card alignment after moving icons outside the main button
+- fixed step-row grid alignment to reduce overlapping controls
+- added mobile wrapping rules for step-builder remove buttons
