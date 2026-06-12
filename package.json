@@ -1,6 +1,6 @@
 {
   "name": "accessflow",
-  "version": "0.10.4",
+  "version": "0.10.6",
   "private": true,
   "type": "module",
   "scripts": {

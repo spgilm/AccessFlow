@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import ModeToggle from "./components/ModeToggle.jsx";
-import ThemeToggle from "./components/ThemeToggle.jsx";
 import StaffView from "./components/StaffView.jsx";
 import StudentView from "./components/StudentView.jsx";
 import { starterProfiles, createBlankProfile } from "./data/starterProfiles.js";
@@ -650,19 +649,32 @@ export default function App() {
 
   function handleToggleActivityComplete(activityId) {
     updateSelectedProfileActivities((currentActivities) =>
-      currentActivities.map((activity) =>
-        activity.id === activityId
-          ? {
-              ...activity,
-              completed: !activity.completed,
-              steps: activity.steps.map((step) => ({
-                ...step,
-                completed: !activity.completed ? true : step.completed,
-              })),
-            }
-          : activity
-      )
+      currentActivities.map((activity) => {
+        if (activity.id !== activityId) {
+          return activity;
+        }
+
+        const nextCompleted = !activity.completed;
+
+        return {
+          ...activity,
+          completed: nextCompleted,
+          steps: activity.steps.map((step) => ({
+            ...step,
+            completed: nextCompleted,
+          })),
+        };
+      })
     );
+
+    if (selectedActivityId === activityId) {
+      const currentActivity = activities.find((activity) => activity.id === activityId);
+
+      if (!currentActivity?.completed) {
+        setSelectedActivityId(null);
+      }
+    }
+
     clearPortableStatuses();
   }
 
@@ -880,10 +892,12 @@ export default function App() {
           </p>
         </div>
 
-        <div className="header-controls">
-          <ModeToggle mode={mode} onModeChange={handleModeChange} />
-          <ThemeToggle theme={theme} onThemeChange={handleThemeChange} />
-        </div>
+        <ModeToggle
+          mode={mode}
+          onModeChange={handleModeChange}
+          theme={theme}
+          onThemeChange={handleThemeChange}
+        />
       </header>
 
       <div className="sr-only" aria-live="polite">

@@ -228,3 +228,24 @@ The app also now includes a persistent light/dark display toggle in the header:
 - ☀️ light mode
 - 🌙 dark mode
 - selected theme is saved in local browser storage
+
+
+## v10.5 patch
+
+Completion state is now synchronized between full activities and their smaller steps:
+
+- tapping an activity's **Done** button marks all smaller steps done
+- tapping **Undo** on a completed activity marks all smaller steps not done
+- completing every individual step still marks the full activity complete
+- undoing any individual step still marks the full activity not complete
+
+
+## v10.6 patch
+
+The light/dark theme toggle is now inside the same rounded control bar as the Student Mode / Staff Mode switch:
+
+- Student Mode
+- Staff Mode
+- ☀️ Light / 🌙 Dark
+
+This makes the theme control visible in the primary header controls instead of appearing as a separate secondary widget.

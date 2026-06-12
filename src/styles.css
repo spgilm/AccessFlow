@@ -1893,3 +1893,41 @@ select:focus-visible {
     align-items: center;
   }
 }
+
+/* v10.6: theme control sits in the same bar as Student/Staff mode */
+.combined-toggle {
+  grid-template-columns: 1fr 1fr auto;
+  align-items: center;
+}
+
+.mode-toggle .theme-segment-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-width: 5.25rem;
+  padding-inline: 0.8rem;
+  border: 1px solid var(--border);
+  background: var(--surface-strong);
+  color: var(--primary-strong);
+}
+
+.mode-toggle .theme-segment-button[aria-pressed="true"] {
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+}
+
+.mode-toggle .theme-segment-button span:first-child {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+@media (max-width: 420px) {
+  .combined-toggle {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .combined-toggle .theme-segment-button {
+    grid-column: 1 / -1;
+  }
+}
