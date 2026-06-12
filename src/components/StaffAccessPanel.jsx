@@ -17,60 +17,35 @@ export default function StaffAccessPanel({
 
   if (signedInEmail) {
     return (
-      <section className="panel staff-access-panel is-signed-in" aria-labelledby="staff-access-heading">
-        <div>
-          <p className="eyebrow">Staff access</p>
-          <h2 id="staff-access-heading">Staff signed in</h2>
-          <p className="staff-access-summary">
-            {signedInEmail}
-          </p>
-        </div>
-
-        <div className="staff-access-actions">
-          <button type="button" className="secondary-button" onClick={onOpenStaffMode}>
-            Open Staff Mode
-          </button>
-          <button
-            type="button"
-            className="secondary-button"
-            onClick={onSignOut}
-            disabled={isAuthWorking}
-          >
-            Sign out
-          </button>
-        </div>
-
-        {authStatus ? (
-          <p className="copy-status" role="status">
-            {authStatus}
-          </p>
-        ) : null}
+      <section className="staff-access-mini signed-in-mini" aria-label="Staff access">
+        <span>Staff signed in</span>
+        <button type="button" className="secondary-button" onClick={onOpenStaffMode}>
+          Open Staff
+        </button>
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={onSignOut}
+          disabled={isAuthWorking}
+        >
+          Sign out
+        </button>
       </section>
     );
   }
 
   return (
-    <section className="panel staff-access-panel" aria-labelledby="staff-access-heading">
-      <div className="staff-access-collapsed">
-        <div>
-          <p className="eyebrow">Staff access</p>
-          <h2 id="staff-access-heading">Staff login / create account</h2>
-          <p className="staff-access-summary">
-            Use this only for staff setup, documentation, and cloud sync. Student Mode stays visible by default.
-          </p>
-        </div>
+    <section className="staff-access-mini" aria-label="Staff access">
+      <button
+        type="button"
+        className="staff-login-link"
+        onClick={() => setIsOpen((current) => !current)}
+        aria-expanded={isOpen}
+      >
+        Staff login / create account
+      </button>
 
-        <button
-          type="button"
-          className="secondary-button"
-          onClick={() => setIsOpen((current) => !current)}
-          aria-expanded={isOpen}
-        >
-          {isOpen ? "Hide staff login" : "Staff login"}
-        </button>
-      </div>
-
-      {!supabaseStatus.configured ? (
+      {!supabaseStatus.configured && isOpen ? (
         <p className="field-help staff-access-warning">
           Supabase is not configured yet. Staff login requires the Render environment variables.
         </p>
@@ -88,6 +63,12 @@ export default function StaffAccessPanel({
             variant="compact"
           />
         </div>
+      ) : null}
+
+      {authStatus && !isOpen ? (
+        <p className="copy-status" role="status">
+          {authStatus}
+        </p>
       ) : null}
     </section>
   );

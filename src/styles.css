@@ -2531,3 +2531,237 @@ select:focus-visible {
     grid-template-columns: 1.4fr 1fr;
   }
 }
+
+
+/* v12: progressive disclosure workflow cleanup */
+.app-header {
+  padding-top: 0.75rem;
+  gap: 0.65rem;
+}
+
+.app-header h1 {
+  font-size: clamp(1.9rem, 10vw, 3.5rem);
+}
+
+.app-description {
+  max-width: 38rem;
+  margin-top: 0.45rem;
+}
+
+.student-flow {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.staff-access-mini {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.4rem 0;
+}
+
+.staff-access-mini.signed-in-mini {
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+}
+
+.staff-access-mini > span {
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.staff-login-link {
+  width: fit-content;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  background: var(--control-bg);
+  color: var(--primary-strong);
+  font-weight: 900;
+}
+
+.staff-access-mini .staff-access-auth {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.85rem;
+  background: var(--surface-strong);
+}
+
+.student-profile-strip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  background: var(--surface-strong);
+  color: var(--text);
+}
+
+.student-profile-strip span {
+  color: var(--muted);
+  font-weight: 850;
+}
+
+.student-profile-strip strong {
+  font-weight: 950;
+}
+
+.simplified-heading-row {
+  align-items: center;
+}
+
+.staff-view.simplified-staff-view {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.staff-work-section {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--panel-bg);
+  overflow: hidden;
+}
+
+.staff-work-section > summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 64px;
+  padding: 0.85rem 1rem;
+  cursor: pointer;
+  color: var(--text);
+  list-style: none;
+}
+
+.staff-work-section > summary::-webkit-details-marker {
+  display: none;
+}
+
+.staff-work-section > summary::after {
+  content: "Open";
+  justify-self: end;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  color: var(--primary-strong);
+  font-size: 0.8rem;
+  font-weight: 950;
+}
+
+.staff-work-section[open] > summary::after {
+  content: "Close";
+}
+
+.staff-work-section > summary strong {
+  display: block;
+  font-size: 1.15rem;
+  line-height: 1.1;
+}
+
+.staff-work-section > summary small {
+  display: block;
+  margin-top: 0.12rem;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.section-number {
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 999px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 950;
+}
+
+.staff-work-section-body {
+  display: grid;
+  gap: 1rem;
+  padding: 0 1rem 1rem;
+}
+
+.staff-work-section .panel,
+.staff-work-section .progress-panel {
+  box-shadow: none;
+}
+
+.staff-work-section .staff-bank-panel,
+.staff-work-section .add-panel,
+.staff-work-section .controls-panel {
+  margin-bottom: 0;
+}
+
+.staff-work-section .staff-bank-panel {
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.staff-work-section .add-panel {
+  padding: 1rem;
+}
+
+.bank-editor-card {
+  display: grid;
+  gap: 1rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  background: var(--surface-strong);
+}
+
+.simplified-bank-card.is-selected {
+  border-color: var(--primary);
+  border-width: 3px;
+}
+
+.bank-step-edit-grid {
+  grid-template-columns: auto 1fr;
+}
+
+@media (max-width: 560px) {
+  .staff-access-mini.signed-in-mini {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-work-section > summary {
+    grid-template-columns: auto 1fr;
+  }
+
+  .staff-work-section > summary::after {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+/* v12 dark-mode overrides for new workflow pieces */
+[data-theme="dark"] .staff-login-link,
+[data-theme="dark"] .student-profile-strip,
+[data-theme="dark"] .staff-work-section,
+[data-theme="dark"] .staff-access-mini .staff-access-auth,
+[data-theme="dark"] .bank-editor-card {
+  background: #050505;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .staff-work-section > summary small,
+[data-theme="dark"] .student-profile-strip span,
+[data-theme="dark"] .staff-access-mini > span {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .staff-work-section > summary::after {
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .section-number {
+  background: #ffd60a;
+  color: #000000;
+}

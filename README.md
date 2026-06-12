@@ -312,3 +312,29 @@ Dark mode now uses a stark high-contrast palette:
 - white borders
 - yellow selected/primary actions
 - no subtle blue-on-blue panels
+
+
+## v12 visual workflow redesign
+
+This version focuses on reducing visual clutter and making the workflow easier to understand.
+
+### Student Mode
+
+- removes the large staff login panel from the main student flow
+- keeps staff login as a small collapsed control
+- removes the extra guidance panel
+- keeps the student page focused on: profile, Now/Next, My Schedule, and Choices
+- shortens schedule movement labels to Up / Down
+- keeps large activity cards and inline step expansion
+
+### Staff Mode
+
+Staff Mode now uses progressive disclosure with grouped sections:
+
+1. Student
+2. Student choices
+3. Today’s schedule
+4. Notes and reports
+5. Save and account
+
+This makes the staff side less like one giant dashboard and more like a guided setup/support flow.

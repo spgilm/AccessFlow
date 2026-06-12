@@ -53,15 +53,7 @@ export default function StudentView({
   }
 
   return (
-    <>
-      <section className="panel student-profile-banner" aria-label="Active student profile">
-        <div>
-          <p className="eyebrow">Current schedule for</p>
-          <h2>{profile?.name ?? "No profile selected"}</h2>
-        </div>
-        {profile?.notes ? <p>{profile.notes}</p> : null}
-      </section>
-
+    <div className="student-flow">
       <StaffAccessPanel
         session={session}
         authStatus={authStatus}
@@ -72,6 +64,11 @@ export default function StudentView({
         onOpenStaffMode={onOpenStaffMode}
       />
 
+      <section className="student-profile-strip" aria-label="Active student profile">
+        <span>Schedule for</span>
+        <strong>{profile?.name ?? "No profile selected"}</strong>
+      </section>
+
       <ProgressSummary activities={activities} />
 
       <StudentViewToggle
@@ -80,7 +77,7 @@ export default function StudentView({
       />
 
       {isFirstThenView ? (
-        <div className="workspace-grid">
+        <div className="workspace-grid first-then-workspace">
           <FirstThenView
             activities={activities}
             onSelectActivity={onSelectActivity}
@@ -96,15 +93,10 @@ export default function StudentView({
         </div>
       ) : (
         <>
-          <section className="panel student-schedule-guidance simple-student-panel" aria-labelledby="student-schedule-guidance-heading">
-            <p className="eyebrow">My schedule</p>
-            <h2 id="student-schedule-guidance-heading">Tap a card. Do the steps.</h2>
-          </section>
-
           <section className="schedule-section student-schedule-primary" aria-labelledby="schedule-heading">
-            <div className="section-heading-row">
+            <div className="section-heading-row simplified-heading-row">
               <div>
-                <p className="eyebrow">Student / client view</p>
+                <p className="eyebrow">Do this</p>
                 <h2 id="schedule-heading">My schedule</h2>
               </div>
 
@@ -150,14 +142,14 @@ export default function StudentView({
                                 onClick={() => onMoveActivity(activity.id, "up")}
                                 disabled={index === 0}
                               >
-                                Move up
+                                Up
                               </button>
                               <button
                                 type="button"
                                 onClick={() => onMoveActivity(activity.id, "down")}
                                 disabled={index === activities.length - 1}
                               >
-                                Move down
+                                Down
                               </button>
                             </>
                           ) : null}
@@ -190,6 +182,6 @@ export default function StudentView({
           ) : null}
         </>
       )}
-    </>
+    </div>
   );
 }
