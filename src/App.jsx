@@ -1041,6 +1041,8 @@ export default function App() {
           onSelectActivity={handleSelectActivity}
           onToggleActivityComplete={handleToggleActivityComplete}
           onToggleStep={handleToggleStep}
+          onUpdateActivityVisual={(activityId, visual) => handleUpdateActivity(activityId, { visual })}
+          onUpdateStepVisual={(activityId, stepId, visual) => handleUpdateStep(activityId, stepId, { visual })}
           onStudentAddActivity={handleStudentAddActivity}
           onMoveActivity={handleStudentMoveActivity}
           onRemoveActivity={handleStudentRemoveActivity}

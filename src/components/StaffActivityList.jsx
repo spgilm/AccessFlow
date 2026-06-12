@@ -43,7 +43,10 @@ export default function StaffActivityList({
               aria-pressed={activity.id === selectedActivityId}
             >
               <span className="staff-row-number">{index + 1}</span>
-              <VisualSupport visual={activity.visual} className="staff-row-visual" />
+              <VisualSupport
+                visual={activity.completed ? "✅" : activity.visual}
+                className="staff-row-visual"
+              />
               <span className="staff-row-label">{activity.label}</span>
             </button>
 

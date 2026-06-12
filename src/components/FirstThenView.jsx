@@ -21,7 +21,10 @@ function FirstThenCard({ label, activity, variant, onSelectActivity, onToggleAct
         onClick={() => onSelectActivity(activity.id)}
         aria-label={`Open ${label}: ${activity.label}`}
       >
-        <VisualSupport visual={activity.visual} className="first-then-visual" />
+        <VisualSupport
+          visual={activity.completed ? "✅" : activity.visual}
+          className="first-then-visual"
+        />
         <span className="first-then-title">{activity.label}</span>
         <span className="first-then-summary">{activity.summary}</span>
       </button>

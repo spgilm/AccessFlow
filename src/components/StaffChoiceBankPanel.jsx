@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import VisualSupport from "./VisualSupport.jsx";
+import EmojiPickerButton from "./EmojiPickerButton.jsx";
 import { createId } from "../utils/formatters.js";
 import { moveItemById } from "../utils/activityHelpers.js";
 
@@ -132,7 +132,12 @@ export default function StaffChoiceBankPanel({
               }`}
             >
               <div className="bank-choice-main">
-                <VisualSupport visual={choice.visual ?? choice.emoji} className="bank-choice-visual" />
+                <EmojiPickerButton
+                  visual={choice.visual ?? choice.emoji}
+                  label={choice.label}
+                  className="bank-choice-visual-picker"
+                  onChange={(visual) => onUpdateBankChoice(choice.id, { visual })}
+                />
                 <div>
                   <h3>{choice.label}</h3>
                   <span>{choice.steps.length} steps saved</span>
@@ -243,7 +248,12 @@ export default function StaffChoiceBankPanel({
               {selectedChoice.steps.map((step, index) => (
                 <li key={step.id} className="staff-step-editor-row">
                   <div className="step-edit-grid bank-step-edit-grid">
-                    <VisualSupport visual={step.visual ?? step.emoji} className="staff-row-visual" />
+                    <EmojiPickerButton
+                      visual={step.visual ?? step.emoji}
+                      label={step.label}
+                      className="staff-row-visual-picker"
+                      onChange={(visual) => updateStep(selectedChoice, step.id, { visual })}
+                    />
                     <label>
                       Step {index + 1}
                       <input

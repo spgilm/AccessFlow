@@ -3067,3 +3067,221 @@ select:focus-visible {
   color: #001a2e !important;
   border-color: #ffdddd !important;
 }
+
+
+/* v12.5: tappable emoji picker and better emoji centering */
+.visual-support,
+.visual-emoji,
+.emoji-picker-visual {
+  display: grid;
+  place-items: center;
+  align-items: center;
+  justify-items: center;
+  text-align: center;
+  line-height: 1;
+}
+
+.visual-emoji {
+  font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", system-ui, sans-serif;
+}
+
+.emoji-picker-shell {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: fit-content;
+}
+
+.emoji-picker-trigger {
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: inherit;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+}
+
+.emoji-picker-trigger:focus-visible {
+  outline: 4px solid var(--warning-focus);
+  outline-offset: 4px;
+}
+
+.emoji-picker-trigger .visual-support {
+  pointer-events: none;
+}
+
+.activity-visual-picker .emoji-picker-visual,
+.activity-visual-picker {
+  width: clamp(4.5rem, 18vw, 6rem);
+  height: clamp(4.5rem, 18vw, 6rem);
+  border-radius: 1.3rem;
+  font-size: clamp(2.8rem, 11vw, 4rem);
+}
+
+.detail-visual-picker .emoji-picker-visual,
+.detail-visual-picker {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1.4rem;
+  font-size: 2.7rem;
+}
+
+.step-visual-picker .emoji-picker-visual,
+.step-visual-picker {
+  width: 3.4rem;
+  height: 3.4rem;
+  border-radius: 1rem;
+  font-size: 2.15rem;
+}
+
+.bank-choice-visual-picker .emoji-picker-visual,
+.bank-choice-visual-picker {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1.25rem;
+  font-size: 2.4rem;
+}
+
+.staff-row-visual-picker .emoji-picker-visual,
+.staff-row-visual-picker {
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 1rem;
+  font-size: 2rem;
+}
+
+.visual-editor-picker .emoji-picker-visual,
+.visual-editor-picker {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1.25rem;
+  font-size: 3rem;
+}
+
+.emoji-picker-popover {
+  position: absolute;
+  z-index: 50;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  display: grid;
+  gap: 0.65rem;
+  width: min(18rem, calc(100vw - 2rem));
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem;
+  background: var(--panel-bg);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.emoji-picker-title {
+  font-weight: 950;
+  color: var(--primary-strong);
+}
+
+.emoji-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.emoji-picker-grid button {
+  display: grid;
+  place-items: center;
+  min-height: 2.2rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background: var(--control-bg);
+  color: var(--text);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.emoji-picker-grid button.is-selected {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.emoji-custom-label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.emoji-custom-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.45rem;
+}
+
+.emoji-custom-row input {
+  min-height: 44px;
+  padding: 0.45rem 0.65rem;
+  text-align: center;
+  font-size: 1.35rem;
+}
+
+.emoji-custom-row button,
+.emoji-picker-close {
+  min-height: 44px;
+}
+
+.activity-card-main-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.activity-card-main-row .activity-main-button {
+  min-height: 5.5rem;
+  grid-template-columns: 1fr;
+}
+
+.inline-step-row {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.inline-step-row .step-button {
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+}
+
+.visual-editor-preview-row {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.step-item.is-complete .emoji-picker-visual,
+.activity-card.is-complete .emoji-picker-visual {
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+
+[data-theme="dark"] .emoji-picker-popover,
+[data-theme="dark"] .emoji-picker-grid button,
+[data-theme="dark"] .emoji-custom-row input {
+  background: #052f52;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .emoji-picker-title {
+  color: #ffe066;
+}
+
+[data-theme="dark"] .emoji-picker-grid button.is-selected {
+  background: #074a7f;
+  border-color: #ffe066;
+}
+
+[data-theme="dark"] .step-item.is-complete .emoji-picker-visual,
+[data-theme="dark"] .activity-card.is-complete .emoji-picker-visual {
+  background: #064b25;
+  border-color: #a6ffbf;
+}

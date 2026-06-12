@@ -386,3 +386,17 @@ Dictation controls are now available in the student-created activity flow:
 - accessible labels are preserved with `aria-label` and `title`
 
 The visible button uses 🎙️ instead of the full word “Dictate” to reduce visual clutter.
+
+
+## v12.5 patch
+
+This version improves activity/step visuals:
+
+- activity icons can be tapped to open an emoji picker
+- smaller-step icons can be tapped to open an emoji picker
+- staff activity editor visual previews can be tapped to change emoji
+- staff Student Choices bank icons can be tapped to change emoji
+- completed activities temporarily show ✅ instead of the chosen emoji
+- completed steps temporarily show ✅ instead of the chosen emoji
+- undoing completion restores the chosen emoji
+- emoji boxes use stronger centering rules to prevent vertical/horizontal drift

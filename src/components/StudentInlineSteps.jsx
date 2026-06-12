@@ -1,6 +1,6 @@
-import VisualSupport from "./VisualSupport.jsx";
+import EmojiPickerButton from "./EmojiPickerButton.jsx";
 
-export default function StudentInlineSteps({ activity, onToggleStep }) {
+export default function StudentInlineSteps({ activity, onToggleStep, onUpdateStepVisual }) {
   if (!activity) {
     return null;
   }
@@ -23,34 +23,38 @@ export default function StudentInlineSteps({ activity, onToggleStep }) {
         </span>
       </div>
 
-      {activity.summary ? (
-        <p className="inline-steps-summary">{activity.summary}</p>
-      ) : null}
-
       <ol className="step-list inline-step-list">
         {activity.steps.map((step, index) => (
           <li key={step.id} className={`step-item ${step.completed ? "is-complete" : ""}`}>
-            <button
-              type="button"
-              className="step-button"
-              onClick={() => onToggleStep(activity.id, step.id)}
-              aria-label={
-                step.completed
-                  ? `Mark step ${index + 1}, ${step.label}, as not complete`
-                  : `Mark step ${index + 1}, ${step.label}, as complete`
-              }
-            >
+            <div className="inline-step-row">
               <span className="step-number">{index + 1}</span>
-              <VisualSupport visual={step.visual ?? step.emoji} className="step-visual" />
-              <span className="step-label">{step.label}</span>
-              <span className="step-state">{step.completed ? "Done" : "Tap"}</span>
-            </button>
+              <EmojiPickerButton
+                visual={step.visual ?? step.emoji}
+                displayVisual={step.completed ? "✅" : undefined}
+                label={step.label}
+                className="step-visual-picker"
+                onChange={(visual) => onUpdateStepVisual?.(activity.id, step.id, visual)}
+              />
+              <button
+                type="button"
+                className="step-button"
+                onClick={() => onToggleStep(activity.id, step.id)}
+                aria-label={
+                  step.completed
+                    ? `Mark step ${index + 1}, ${step.label}, as not complete`
+                    : `Mark step ${index + 1}, ${step.label}, as complete`
+                }
+              >
+                <span className="step-label">{step.label}</span>
+                <span className="step-state">{step.completed ? "Done" : "Tap"}</span>
+              </button>
+            </div>
           </li>
         ))}
       </ol>
 
       <p className="inline-steps-help">
-        When all steps are done, this activity folds back into the schedule.
+        Finish all steps to close this card.
       </p>
     </div>
   );

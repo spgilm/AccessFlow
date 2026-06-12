@@ -20,6 +20,8 @@ export default function StudentView({
   onSelectActivity,
   onToggleActivityComplete,
   onToggleStep,
+  onUpdateActivityVisual,
+  onUpdateStepVisual,
   onStudentAddActivity,
   onMoveActivity,
   onRemoveActivity,
@@ -89,6 +91,8 @@ export default function StudentView({
             onClose={onCloseDetail}
             onToggleStep={onToggleStep}
             onToggleActivityComplete={onToggleActivityComplete}
+            onUpdateActivityVisual={onUpdateActivityVisual}
+            onUpdateStepVisual={onUpdateStepVisual}
           />
         </div>
       ) : (
@@ -130,6 +134,7 @@ export default function StudentView({
                         <StudentInlineSteps
                           activity={activity}
                           onToggleStep={onToggleStep}
+                          onUpdateStepVisual={onUpdateStepVisual}
                         />
                       ) : null}
 

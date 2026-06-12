@@ -49,7 +49,7 @@ function getActivityVisual(activity, fallback) {
     return fallback;
   }
 
-  return activity.visual ?? activity.emoji ?? fallback;
+  return activity.completed ? "✅" : activity.visual ?? activity.emoji ?? fallback;
 }
 
 function NowNextCard({ label, activity, fallbackVisual, className = "" }) {

@@ -1,6 +1,6 @@
 import { createUploadedImageVisual, updateEmojiVisual } from "../services/imageProvider.js";
 import { readFileAsDataUrl } from "../utils/fileHelpers.js";
-import VisualSupport from "./VisualSupport.jsx";
+import EmojiPickerButton from "./EmojiPickerButton.jsx";
 
 export default function VisualEditor({
   label,
@@ -29,9 +29,15 @@ export default function VisualEditor({
 
   return (
     <div className="visual-editor">
-      <div>
+      <div className="visual-editor-preview-row">
         <span className="visual-editor-label">{label}</span>
-        <VisualSupport visual={visual} className="visual-editor-preview" />
+        <EmojiPickerButton
+          visual={visual}
+          label={fallbackLabel}
+          className="visual-editor-picker"
+          onChange={onChange}
+        />
+        <span className="field-help">Tap icon to change emoji.</span>
       </div>
 
       <label>
