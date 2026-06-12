@@ -1,3 +1,8 @@
+/**
+ * Documentation summary helpers for completion stats, step data, support events, and daily notes.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 export function getTodayDateKey() {
   const now = new Date();
   const year = now.getFullYear();

@@ -1,3 +1,8 @@
+/**
+ * Source file for AccessFlow. Provides part of the app's student, staff, data, service, or utility layer.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { useState } from "react";
 import AuthPanel from "./AuthPanel.jsx";
 import { getSupabaseStatus } from "../services/supabaseWorkspace.js";
@@ -8,6 +13,7 @@ export default function StaffAccessPanel({
   isAuthWorking,
   onSignIn,
   onSignUp,
+  onGoogleSignIn,
   onSignOut,
   onOpenStaffMode,
 }) {
@@ -59,6 +65,7 @@ export default function StaffAccessPanel({
             isAuthWorking={isAuthWorking}
             onSignIn={onSignIn}
             onSignUp={onSignUp}
+            onGoogleSignIn={onGoogleSignIn}
             onSignOut={onSignOut}
             variant="compact"
           />

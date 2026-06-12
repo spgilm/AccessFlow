@@ -1,3 +1,8 @@
+/**
+ * Student-facing support request buttons. Logs help/break/confusion/sensory events for staff review.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 const supportButtons = [
   { type: "help", label: "Help", phrase: "I need help", emoji: "🙋" },
   { type: "break", label: "Break", phrase: "I need a break", emoji: "🧘" },

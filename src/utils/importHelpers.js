@@ -1,5 +1,11 @@
+/**
+ * Backup import normalization helpers that preserve profile data while filling missing defaults.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { getIndependenceSettings } from "../data/independenceSettings.js";
 import { getDisplaySettings } from "../data/displaySettings.js";
+import { normalizeSchedulesByDate } from "./scheduleDateHelpers.js";
 
 export function normalizeImportedProfile(profile) {
   return {
@@ -9,6 +15,7 @@ export function normalizeImportedProfile(profile) {
     activities: Array.isArray(profile.activities) ? profile.activities : [],
     activityBank: Array.isArray(profile.activityBank) ? profile.activityBank : [],
     supportEvents: Array.isArray(profile.supportEvents) ? profile.supportEvents : [],
+    schedulesByDate: normalizeSchedulesByDate(profile),
     firstThenBoard:
       profile.firstThenBoard && typeof profile.firstThenBoard === "object"
         ? profile.firstThenBoard
@@ -39,6 +46,7 @@ export function normalizeImportedBackupData(data) {
     templates: data.templates.map(normalizeImportedTemplate),
     selectedProfileId: data.selectedProfileId || data.profiles[0]?.id || null,
     documentationDate: data.documentationDate || "",
+    scheduleDate: data.scheduleDate || data.documentationDate || "",
     mode: data.mode === "staff" ? "staff" : "student",
     studentViewMode: validStudentModes.includes(data.studentViewMode)
       ? data.studentViewMode

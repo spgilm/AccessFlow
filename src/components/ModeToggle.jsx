@@ -1,3 +1,8 @@
+/**
+ * Top-level mode/display control. Switches Student/Staff mode, light/dark theme, and read-aloud mode.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 export default function ModeToggle({
   mode,
   onModeChange,

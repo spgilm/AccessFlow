@@ -1,3 +1,8 @@
+/**
+ * Student-facing custom activity builder with speech input and student-created smaller steps.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { useRef, useState } from "react";
 
 function getSpeechRecognitionConstructor() {

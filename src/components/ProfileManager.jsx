@@ -1,3 +1,8 @@
+/**
+ * Staff-facing student/client profile manager, independence settings, and display settings editor.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { useState } from "react";
 import { getIndependenceSettings } from "../data/independenceSettings.js";
 import { getDisplaySettings } from "../data/displaySettings.js";

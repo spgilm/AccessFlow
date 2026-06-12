@@ -1,3 +1,8 @@
+/**
+ * Student-facing schedule activity card with icon editing, done/undo state, and optional timer.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import EmojiPickerButton from "./EmojiPickerButton.jsx";
 import TimerButton from "./TimerButton.jsx";
 

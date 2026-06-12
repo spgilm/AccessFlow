@@ -1,3 +1,8 @@
+/**
+ * Staff-facing log of student support requests and choice-board events.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 function formatEventTime(isoString) {
   if (!isoString) {
     return "";

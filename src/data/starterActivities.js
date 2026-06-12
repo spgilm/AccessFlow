@@ -1,3 +1,8 @@
+/**
+ * Source file for AccessFlow. Provides part of the app's student, staff, data, service, or utility layer.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { createId } from "../utils/formatters.js";
 
 function makeStep(label, emoji, altText = label) {

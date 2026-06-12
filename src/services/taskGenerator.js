@@ -1,3 +1,8 @@
+/**
+ * Task-analysis generator. Converts typed/dictated task names into activities and smaller steps.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { activityTemplates, fallbackEmojiRules } from "../data/activityTemplates.js";
 import { createEmojiVisual } from "./imageProvider.js";
 import { createId, normalizeTaskText, toDisplayLabel } from "../utils/formatters.js";

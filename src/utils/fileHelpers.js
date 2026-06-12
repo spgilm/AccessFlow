@@ -1,3 +1,8 @@
+/**
+ * Source file for AccessFlow. Provides part of the app's student, staff, data, service, or utility layer.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 const MAX_IMAGE_BYTES = 900_000;
 
 export function validateImageFile(file) {

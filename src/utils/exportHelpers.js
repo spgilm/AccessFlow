@@ -1,3 +1,8 @@
+/**
+ * Backup/export/download helpers for JSON, CSV, and text outputs.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import {
   buildActivityBreakdown,
   buildDailyProgressNote,

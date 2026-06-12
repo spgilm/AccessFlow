@@ -1,3 +1,8 @@
+/**
+ * Staff-facing review queue for student-created tasks that need approval/editing.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 export default function ReviewQueuePanel({
   activities,
   onSelectActivity,

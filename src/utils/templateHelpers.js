@@ -1,3 +1,8 @@
+/**
+ * Clone helpers that safely copy activities between profile schedules, templates, and choice banks.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { createId } from "./formatters.js";
 
 export function cloneActivitiesForProfile(activities) {

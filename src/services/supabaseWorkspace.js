@@ -1,3 +1,8 @@
+/**
+ * Supabase service wrapper for auth, OAuth, and cloud workspace snapshots.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -84,6 +89,28 @@ export async function signInWithEmail(email, password) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+}
+
+
+export async function signInWithGoogle() {
+  const supabase = getSupabaseClient();
+  const redirectTo =
+    typeof window !== "undefined"
+      ? `${window.location.origin}${window.location.pathname}`
+      : undefined;
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo,
+    },
   });
 
   if (error) {

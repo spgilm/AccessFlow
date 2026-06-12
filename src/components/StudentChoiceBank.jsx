@@ -1,3 +1,8 @@
+/**
+ * Student-facing approved activity chooser with category filtering.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { useMemo, useState } from "react";
 import VisualSupport from "./VisualSupport.jsx";
 

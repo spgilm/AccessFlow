@@ -1,3 +1,8 @@
+/**
+ * Reusable local countdown timer button for activities, steps, and break plans.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { useEffect, useMemo, useState } from "react";
 
 function formatSeconds(seconds) {

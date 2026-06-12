@@ -1,3 +1,8 @@
+/**
+ * Source file for AccessFlow. Provides part of the app's student, staff, data, service, or utility layer.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { useState } from "react";
 import { getSupabaseStatus } from "../services/supabaseWorkspace.js";
 
@@ -7,6 +12,7 @@ export default function AuthPanel({
   isAuthWorking,
   onSignIn,
   onSignUp,
+  onGoogleSignIn,
   onSignOut,
   variant = "full",
 }) {
@@ -63,6 +69,24 @@ export default function AuthPanel({
         </div>
       ) : (
         <form className="auth-form" onSubmit={(event) => handleSubmit(event, "signin")}>
+          {onGoogleSignIn ? (
+            <>
+              <button
+                type="button"
+                className="google-signin-button"
+                onClick={onGoogleSignIn}
+                disabled={isAuthWorking}
+              >
+                <span aria-hidden="true">G</span>
+                Continue with Google
+              </button>
+
+              <div className="auth-divider" role="separator">
+                <span>or use email</span>
+              </div>
+            </>
+          ) : null}
+
           <label>
             Email
             <input
@@ -106,8 +130,8 @@ export default function AuthPanel({
       ) : null}
 
       <p className="field-help auth-help">
-        AccessFlow uses Supabase email/password auth when configured. Some projects require
-        email confirmation before first sign-in.
+        AccessFlow uses Supabase Auth when configured. Staff can sign in with email/password
+        or Google if the Google provider is enabled in Supabase.
       </p>
     </section>
   );

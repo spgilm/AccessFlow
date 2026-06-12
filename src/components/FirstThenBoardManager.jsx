@@ -1,3 +1,8 @@
+/**
+ * Staff-facing builder for adding a simple First/Then sequence from the student's choice bank.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 export default function FirstThenBoardManager({
   activityBank,
   firstThenBoard,

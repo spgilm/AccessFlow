@@ -1,7 +1,15 @@
+/**
+ * Staff-facing workflow screen. Groups staff tools into Setup, Students, Choices, Schedule, Notes, and Save tabs.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { useState } from "react";
 import AddActivityForm from "./AddActivityForm.jsx";
 import AuthPanel from "./AuthPanel.jsx";
 import DataManagementPanel from "./DataManagementPanel.jsx";
+import StaffSetupWizard from "./StaffSetupWizard.jsx";
+import ScheduleDatePicker from "./ScheduleDatePicker.jsx";
+import DailyTemplateButtons from "./DailyTemplateButtons.jsx";
 import DocumentationPanel from "./DocumentationPanel.jsx";
 import EventLogPanel from "./EventLogPanel.jsx";
 import FirstThenBoardManager from "./FirstThenBoardManager.jsx";
@@ -14,6 +22,7 @@ import SupabaseSyncPanel from "./SupabaseSyncPanel.jsx";
 import TemplateManager from "./TemplateManager.jsx";
 
 const staffTabs = [
+  { id: "setup", label: "Setup" },
   { id: "students", label: "Students" },
   { id: "choices", label: "Choices" },
   { id: "schedule", label: "Schedule" },
@@ -51,6 +60,8 @@ export default function StaffView({
   displaySettings,
   selectedActivity,
   selectedActivityId,
+  scheduleDate,
+  onScheduleDateChange,
   documentationDate,
   dailyNote,
   copyStatus,
@@ -66,6 +77,7 @@ export default function StaffView({
   isAuthWorking,
   onSignIn,
   onSignUp,
+  onGoogleSignIn,
   onSignOut,
   onDocumentationDateChange,
   onUpdateDailyNote,
@@ -83,6 +95,8 @@ export default function StaffView({
   onDismissReview,
   onUpdateFirstThenBoard,
   onAddFirstThenToSchedule,
+  onApplyDailyTemplate,
+  onOpenStudentMode,
   onSaveCurrentScheduleAsTemplate,
   onApplyTemplateToProfile,
   onDeleteTemplate,
@@ -103,7 +117,7 @@ export default function StaffView({
   onResetDemo,
   onClearSchedule,
 }) {
-  const [activeStaffTab, setActiveStaffTab] = useState("students");
+  const [activeStaffTab, setActiveStaffTab] = useState("setup");
 
   return (
     <div className="staff-view v13-staff-flow">
@@ -118,6 +132,26 @@ export default function StaffView({
         onChange={setActiveStaffTab}
         label="Staff tools"
       />
+
+{activeStaffTab === "setup" ? (
+  <section className="staff-tab-screen" aria-labelledby="staff-setup-heading">
+    <div className="focus-header compact-focus-header">
+      <p className="eyebrow">Setup</p>
+      <h2 id="staff-setup-heading">Guided setup</h2>
+      <p>Use this path when setting up AccessFlow for a new student/client.</p>
+    </div>
+
+    <StaffSetupWizard
+      selectedProfile={selectedProfile}
+      activityBank={activityBank}
+      activities={activities}
+      onUpdateProfile={onUpdateProfile}
+      onAddChoiceToBank={onAddChoiceToBank}
+      onAddBankChoiceToSchedule={onAddBankChoiceToSchedule}
+      onOpenStudentMode={onOpenStudentMode}
+    />
+  </section>
+) : null}
 
       {activeStaffTab === "students" ? (
         <section className="staff-tab-screen" aria-labelledby="staff-students-heading">
@@ -182,6 +216,13 @@ export default function StaffView({
             <h2 id="staff-schedule-heading">Today’s schedule</h2>
             <p>Add one-time activities or edit today’s assigned activities.</p>
           </div>
+
+          <ScheduleDatePicker
+            scheduleDate={scheduleDate}
+            onScheduleDateChange={onScheduleDateChange}
+          />
+
+          <DailyTemplateButtons onApplyDailyTemplate={onApplyDailyTemplate} />
 
           <ReviewQueuePanel
             activities={activities}
@@ -254,6 +295,7 @@ export default function StaffView({
               isAuthWorking={isAuthWorking}
               onSignIn={onSignIn}
               onSignUp={onSignUp}
+              onGoogleSignIn={onGoogleSignIn}
               onSignOut={onSignOut}
             />
 

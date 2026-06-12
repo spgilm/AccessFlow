@@ -1,3 +1,8 @@
+/**
+ * Student-facing quick communication board for common wants/needs and approved activity choices.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import VisualSupport from "./VisualSupport.jsx";
 
 const quickChoices = [

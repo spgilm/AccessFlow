@@ -488,3 +488,113 @@ Fixes the mobile read-aloud toggle icon.
 The issue was caused by mobile CSS hiding the last `<span>` in top toggle buttons to remove the Light/Dark text label. After the read-aloud button became icon-only, its only `<span>` was also the last span, so the mobile CSS hid the 🔇 / 🔊 icon.
 
 The read-aloud icon now has its own `.tts-icon` class and a mobile override to keep it visible.
+
+
+## v14.2 patch
+
+Adds Google OAuth staff sign-in through Supabase Auth.
+
+### App changes
+
+- Staff sign-in panels now show **Continue with Google**.
+- Google OAuth uses Supabase `signInWithOAuth({ provider: "google" })`.
+- The redirect target is the current AccessFlow URL.
+- Existing Supabase session handling opens Staff Mode after sign-in.
+
+### Supabase setup required
+
+In Supabase:
+
+1. Authentication → Providers → Google → enable Google.
+2. Add the Google OAuth client ID and client secret.
+3. Authentication → URL Configuration:
+   - Site URL: your AccessFlow Render URL.
+   - Redirect URLs: your AccessFlow Render URL and optional wildcard form.
+4. In Google Cloud OAuth settings, include the callback URL Supabase shows for the Google provider.
+
+
+## v15 guided daily-use release
+
+This version focuses on real-world daily use while keeping the student-facing flow clean.
+
+### Major additions
+
+- Google OAuth button is hidden unless `VITE_ENABLE_GOOGLE_AUTH=true`.
+- Staff Setup Wizard.
+- Schedule-by-date support.
+- Daily schedule templates.
+- Structured Break Plan.
+- Code comments added across `src`.
+- `CODE_EXPLANATION.md` added as a developer cheat sheet.
+
+### Google OAuth flag
+
+By default:
+
+```txt
+VITE_ENABLE_GOOGLE_AUTH=false
+```
+
+Set this only after Google OAuth is configured in Supabase:
+
+```txt
+VITE_ENABLE_GOOGLE_AUTH=true
+```
+
+### Date-based schedules
+
+Staff can now select a schedule date in Staff Mode → Schedule. Student Mode → Today also shows the selected date.
+
+The app keeps `profile.activities` synced for backward compatibility, but v15 stores selected-date schedules under:
+
+```txt
+profile.schedulesByDate[date].activities
+```
+
+### Staff Setup Wizard
+
+Staff Mode now opens to Setup by default. The guided setup flow is:
+
+```txt
+1. Profile
+2. Display
+3. Choices
+4. Schedule
+5. Test
+```
+
+### Daily templates
+
+Staff Mode → Schedule includes routine starters:
+
+```txt
+Morning Routine
+School Day
+Vocational Day
+Community Trip
+Evening Routine
+```
+
+### Structured Break Plan
+
+Student Mode → Today includes a collapsed Break Plan with:
+
+```txt
+Quiet
+Walk
+Music
+Breathing
+Water
+Sensory item
+2 / 5 / 10 minute timer
+```
+
+### Developer documentation
+
+See:
+
+```txt
+CODE_EXPLANATION.md
+```
+
+for a feature/function map of the codebase.

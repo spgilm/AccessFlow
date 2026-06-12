@@ -1,8 +1,15 @@
+/**
+ * Student-facing workflow screen. Keeps student tools split into Today, Choose, Make, and Board so each screen has one clear job.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { useState } from "react";
 import ActivityCard from "./ActivityCard.jsx";
 import EmptyState from "./EmptyState.jsx";
 import FirstThenView from "./FirstThenView.jsx";
 import ProgressSummary from "./ProgressSummary.jsx";
+import ScheduleDatePicker from "./ScheduleDatePicker.jsx";
+import StudentBreakPlan from "./StudentBreakPlan.jsx";
 import StudentActivityDetail from "./StudentActivityDetail.jsx";
 import StudentChoiceBank from "./StudentChoiceBank.jsx";
 import StudentChoiceBoard from "./StudentChoiceBoard.jsx";
@@ -43,6 +50,8 @@ export default function StudentView({
   activities,
   selectedActivity,
   selectedActivityId,
+  scheduleDate,
+  onScheduleDateChange,
   studentActivityLibrary,
   independenceSettings,
   displaySettings,
@@ -64,6 +73,7 @@ export default function StudentView({
   isAuthWorking,
   onSignIn,
   onSignUp,
+  onGoogleSignIn,
   onSignOut,
   onOpenStaffMode,
 }) {
@@ -95,6 +105,7 @@ export default function StudentView({
         isAuthWorking={isAuthWorking}
         onSignIn={onSignIn}
         onSignUp={onSignUp}
+        onGoogleSignIn={onGoogleSignIn}
         onSignOut={onSignOut}
         onOpenStaffMode={onOpenStaffMode}
       />
@@ -118,11 +129,22 @@ export default function StudentView({
             <h2 id="student-today-heading">What am I doing?</h2>
           </div>
 
+          <ScheduleDatePicker
+            scheduleDate={scheduleDate}
+            onScheduleDateChange={onScheduleDateChange}
+            compact
+          />
+
           {displaySettings?.showProgress !== false ? (
             <ProgressSummary activities={activities} />
           ) : null}
 
           <StudentSupportPanel
+            currentActivity={currentActivity}
+            onSupportRequest={onSupportRequest}
+          />
+
+          <StudentBreakPlan
             currentActivity={currentActivity}
             onSupportRequest={onSupportRequest}
           />

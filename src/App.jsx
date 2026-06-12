@@ -1,3 +1,8 @@
+/**
+ * Main application coordinator. Owns global state, selected profile, selected date, auth session, cloud sync, and all handlers passed into student/staff screens.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { useEffect, useMemo, useRef, useState } from "react";
 import ModeToggle from "./components/ModeToggle.jsx";
 import StaffView from "./components/StaffView.jsx";
@@ -23,12 +28,14 @@ import {
   validateBackupPayload,
 } from "./utils/exportHelpers.js";
 import { normalizeImportedBackupData } from "./utils/importHelpers.js";
+import { getScheduleForDate, updateProfileScheduleForDate } from "./utils/scheduleDateHelpers.js";
 import {
   getCurrentSession,
   isSupabaseConfigured,
   loadLatestWorkspaceSnapshot,
   saveWorkspaceSnapshot,
   signInWithEmail,
+  signInWithGoogle,
   signOut,
   signUpWithEmail,
   subscribeToAuthChanges,
@@ -42,9 +49,11 @@ const TEMPLATES_STORAGE_KEY = "accessflow.templates.v5";
 const MODE_STORAGE_KEY = "accessflow.mode.v5";
 const STUDENT_VIEW_STORAGE_KEY = "accessflow.studentView.v5";
 const DOCUMENTATION_DATE_STORAGE_KEY = "accessflow.documentationDate.v5";
+const SCHEDULE_DATE_STORAGE_KEY = "accessflow.scheduleDate.v15";
 const SYNC_METADATA_STORAGE_KEY = "accessflow.syncMetadata.v9";
 const THEME_STORAGE_KEY = "accessflow.theme.v10";
 const TEXT_TO_SPEECH_STORAGE_KEY = "accessflow.textToSpeech.v14";
+const ENABLE_GOOGLE_AUTH = import.meta.env.VITE_ENABLE_GOOGLE_AUTH === "true";
 
 export default function App() {
   const [profiles, setProfiles] = useLocalStorage(PROFILES_STORAGE_KEY, starterProfiles);
@@ -62,6 +71,10 @@ export default function App() {
   );
   const [documentationDate, setDocumentationDate] = useLocalStorage(
     DOCUMENTATION_DATE_STORAGE_KEY,
+    getTodayDateKey()
+  );
+  const [scheduleDate, setScheduleDate] = useLocalStorage(
+    SCHEDULE_DATE_STORAGE_KEY,
     getTodayDateKey()
   );
   const [selectedActivityId, setSelectedActivityId] = useState(
@@ -92,7 +105,7 @@ export default function App() {
     return profiles.find((profile) => profile.id === selectedProfileId) ?? profiles[0] ?? null;
   }, [profiles, selectedProfileId]);
 
-  const activities = selectedProfile?.activities ?? [];
+  const activities = getScheduleForDate(selectedProfile, scheduleDate);
   const activityBank = selectedProfile?.activityBank ?? [];
   const supportEvents = selectedProfile?.supportEvents ?? [];
   const firstThenBoard = selectedProfile?.firstThenBoard ?? { firstChoiceId: "", thenChoiceId: "" };
@@ -114,10 +127,11 @@ export default function App() {
       templates,
       selectedProfileId: selectedProfile?.id ?? selectedProfileId,
       documentationDate,
+      scheduleDate,
       mode,
       studentViewMode,
     }),
-    [profiles, templates, selectedProfile?.id, selectedProfileId, documentationDate, mode, studentViewMode]
+    [profiles, templates, selectedProfile?.id, selectedProfileId, documentationDate, scheduleDate, mode, studentViewMode]
   );
 
   const workspaceDataFingerprint = useMemo(
@@ -283,10 +297,7 @@ export default function App() {
   }
 
   function updateSelectedProfileActivities(updater) {
-    updateSelectedProfile((profile) => ({
-      ...profile,
-      activities: updater(profile.activities ?? []),
-    }));
+    updateSelectedProfile((profile) => updateProfileScheduleForDate(profile, scheduleDate, updater));
   }
 
   function updateSelectedProfileActivityBank(updater) {
@@ -341,6 +352,22 @@ export default function App() {
       setIsAuthWorking(false);
     }
   }
+
+
+async function handleGoogleSignIn() {
+  setIsAuthWorking(true);
+  setAuthStatus("");
+
+  try {
+    await signInWithGoogle();
+    setAuthStatus("Redirecting to Google sign-in...");
+    setAnnouncement("Redirecting to Google sign-in.");
+  } catch (error) {
+    setAuthStatus(`Google sign-in failed: ${error.message}`);
+  } finally {
+    setIsAuthWorking(false);
+  }
+}
 
   async function handleSignIn(email, password) {
     setIsAuthWorking(true);
@@ -500,6 +527,25 @@ export default function App() {
     setAnnouncement(`${activity.label} added to the schedule.`);
   }
 
+
+  async function handleApplyDailyTemplate(template) {
+    if (!selectedProfile || !template?.tasks?.length) {
+      setAnnouncement("Choose a daily template before applying it.");
+      return;
+    }
+
+    const generatedActivities = [];
+
+    for (const task of template.tasks) {
+      generatedActivities.push(await generateActivityFromTask(task));
+    }
+
+    updateSelectedProfileActivities(() => generatedActivities);
+    setSelectedActivityId(generatedActivities[0]?.id ?? null);
+    clearPortableStatuses();
+    setAnnouncement(`${template.label} applied to ${scheduleDate}.`);
+  }
+
   function handleStudentClearSchedule() {
     if (!selectedProfile) {
       return;
@@ -542,6 +588,16 @@ export default function App() {
     const viewLabel = nextViewMode === "firstThen" ? "First / Then" : "My Schedule";
 
     setAnnouncement(`${viewLabel} view selected.`);
+  }
+
+
+  function handleScheduleDateChange(nextDate) {
+    const safeDate = nextDate || getTodayDateKey();
+    setScheduleDate(safeDate);
+    setDocumentationDate(safeDate);
+    setSelectedActivityId(getScheduleForDate(selectedProfile, safeDate)[0]?.id ?? null);
+    clearPortableStatuses();
+    setAnnouncement(`Schedule date changed to ${safeDate}.`);
   }
 
   function handleDocumentationDateChange(nextDate) {
@@ -629,6 +685,7 @@ export default function App() {
         setTemplates(imported.templates);
         setSelectedProfileId(imported.selectedProfileId);
         setDocumentationDate(imported.documentationDate || getTodayDateKey());
+        setScheduleDate(imported.scheduleDate || imported.documentationDate || getTodayDateKey());
         setMode(imported.mode);
         setStudentViewMode(imported.studentViewMode);
 
@@ -1156,6 +1213,8 @@ export default function App() {
           activities={activities}
           selectedActivity={selectedActivity}
           selectedActivityId={selectedActivityId}
+          scheduleDate={scheduleDate}
+          onScheduleDateChange={handleScheduleDateChange}
           studentViewMode={studentViewMode}
           studentActivityLibrary={activityBank}
           independenceSettings={getIndependenceSettings(selectedProfile)}
@@ -1179,6 +1238,7 @@ export default function App() {
           isAuthWorking={isAuthWorking}
           onSignIn={handleSignIn}
           onSignUp={handleSignUp}
+          onGoogleSignIn={ENABLE_GOOGLE_AUTH ? handleGoogleSignIn : null}
           onSignOut={handleSignOut}
           onOpenStaffMode={() => handleModeChange("staff")}
         />
@@ -1195,6 +1255,8 @@ export default function App() {
           displaySettings={displaySettings}
           selectedActivity={selectedActivity}
           selectedActivityId={selectedActivityId}
+          scheduleDate={scheduleDate}
+          onScheduleDateChange={handleScheduleDateChange}
           documentationDate={documentationDate}
           dailyNote={dailyNote}
           copyStatus={copyStatus}
@@ -1210,6 +1272,7 @@ export default function App() {
           isAuthWorking={isAuthWorking}
           onSignIn={handleSignIn}
           onSignUp={handleSignUp}
+          onGoogleSignIn={ENABLE_GOOGLE_AUTH ? handleGoogleSignIn : null}
           onSignOut={handleSignOut}
           onDocumentationDateChange={handleDocumentationDateChange}
           onUpdateDailyNote={handleUpdateDailyNote}
@@ -1227,6 +1290,8 @@ export default function App() {
           onDismissReview={handleDismissReview}
           onUpdateFirstThenBoard={handleUpdateFirstThenBoard}
           onAddFirstThenToSchedule={handleAddFirstThenToSchedule}
+          onApplyDailyTemplate={handleApplyDailyTemplate}
+          onOpenStudentMode={() => handleModeChange("student")}
           onSaveCurrentScheduleAsTemplate={handleSaveCurrentScheduleAsTemplate}
           onApplyTemplateToProfile={handleApplyTemplateToProfile}
           onDeleteTemplate={handleDeleteTemplate}

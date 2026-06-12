@@ -1,3 +1,8 @@
+/**
+ * Student-facing task-analysis step list with completion, prompt tracking, timers, and icon editing.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import EmojiPickerButton from "./EmojiPickerButton.jsx";
 import TimerButton from "./TimerButton.jsx";
 

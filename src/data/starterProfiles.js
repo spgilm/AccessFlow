@@ -1,3 +1,8 @@
+/**
+ * Source file for AccessFlow. Provides part of the app's student, staff, data, service, or utility layer.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
 import { starterActivities } from "./starterActivities.js";
 import { createId } from "../utils/formatters.js";
 import { defaultIndependenceSettings } from "./independenceSettings.js";
@@ -12,6 +17,7 @@ export const starterProfiles = [
     activities: starterActivities,
     activityBank: [],
     supportEvents: [],
+    schedulesByDate: {},
     firstThenBoard: { firstChoiceId: "", thenChoiceId: "" },
     displaySettings: { ...defaultDisplaySettings },
     independenceSettings: { ...defaultIndependenceSettings },
@@ -27,6 +33,7 @@ export function createBlankProfile(name = "New Student") {
     activities: [],
     activityBank: [],
     supportEvents: [],
+    schedulesByDate: {},
     firstThenBoard: { firstChoiceId: "", thenChoiceId: "" },
     displaySettings: { ...defaultDisplaySettings },
     independenceSettings: { ...defaultIndependenceSettings },
