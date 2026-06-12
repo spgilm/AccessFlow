@@ -7,6 +7,7 @@ export default function ActivityCard({
   onToggleComplete,
 }) {
   const statusText = activity.completed ? "Complete" : "Not complete";
+  const actionText = isSelected ? "Hide smaller steps" : "Show smaller steps";
 
   return (
     <article
@@ -19,13 +20,16 @@ export default function ActivityCard({
         type="button"
         onClick={() => onSelect(activity.id)}
         aria-pressed={isSelected}
-        aria-label={`Open ${activity.label}. Status: ${statusText}.`}
+        aria-label={`${actionText} for ${activity.label}. Status: ${statusText}.`}
       >
         <VisualSupport visual={activity.visual ?? activity.emoji} className="activity-visual" />
         <span className="activity-text">
           <span className="activity-label">{activity.label}</span>
           <span className="activity-summary">{activity.summary}</span>
           <span className="activity-status">{statusText}</span>
+          <span className="activity-hint">
+            {isSelected ? "Tap card to close steps" : "Tap card for steps"}
+          </span>
         </span>
       </button>
 

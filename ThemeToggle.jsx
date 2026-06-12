@@ -8,6 +8,7 @@ export default function AuthPanel({
   onSignIn,
   onSignUp,
   onSignOut,
+  variant = "full",
 }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -26,12 +27,18 @@ export default function AuthPanel({
     await onSignUp(email, password);
   }
 
+  const isCompact = variant === "compact";
+  const headingId = isCompact ? "student-staff-auth-heading" : "auth-heading";
+
   return (
-    <section className="panel auth-panel" aria-labelledby="auth-heading">
+    <section
+      className={`${isCompact ? "auth-panel compact-auth-panel" : "panel auth-panel"}`}
+      aria-labelledby={headingId}
+    >
       <div className="section-heading-row">
         <div>
           <p className="eyebrow">Account</p>
-          <h2 id="auth-heading">Staff sign-in</h2>
+          <h2 id={headingId}>Staff sign-in</h2>
         </div>
       </div>
 
@@ -99,8 +106,8 @@ export default function AuthPanel({
       ) : null}
 
       <p className="field-help auth-help">
-        v8 uses Supabase email/password auth when configured. Some projects require email
-        confirmation before first sign-in.
+        AccessFlow uses Supabase email/password auth when configured. Some projects require
+        email confirmation before first sign-in.
       </p>
     </section>
   );

@@ -200,3 +200,31 @@ v10.1 corrects the Student Mode flow after v10:
 ## v10.2 patch
 
 Student Mode’s Now/Next progress cards now use the same visual support rendering as the main schedule cards. This restores emoji/image visuals in the top Now/Next section and keeps the student view schedule-first.
+
+
+## v10.3 patch
+
+Student Mode's **My Schedule** page now uses an accordion-style interaction:
+
+- the schedule remains visible as the default page
+- tapping an activity opens its smaller steps inline
+- tapping the same activity closes the steps
+- completing all individual steps automatically folds the activity back into the schedule
+- the separate side-by-side task breakdown is removed from the main My Schedule page
+
+Queued for the next planning pass: a reusable staff-controlled task breakdown library so staff can save a task such as "Eat an Orange" once and assign the same step breakdown to multiple students.
+
+
+## v10.4 patch
+
+Student Mode now includes a compact staff access panel near the top of the page:
+
+- staff can open sign-in/create-account without first switching away from Student Mode
+- successful staff sign-in automatically opens Staff Mode
+- users can still manually switch between Student Mode and Staff Mode afterward
+
+The app also now includes a persistent light/dark display toggle in the header:
+
+- ☀️ light mode
+- 🌙 dark mode
+- selected theme is saved in local browser storage

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import ModeToggle from "./components/ModeToggle.jsx";
+import ThemeToggle from "./components/ThemeToggle.jsx";
 import StaffView from "./components/StaffView.jsx";
 import StudentView from "./components/StudentView.jsx";
 import { starterProfiles, createBlankProfile } from "./data/starterProfiles.js";
@@ -43,6 +44,7 @@ const MODE_STORAGE_KEY = "accessflow.mode.v5";
 const STUDENT_VIEW_STORAGE_KEY = "accessflow.studentView.v5";
 const DOCUMENTATION_DATE_STORAGE_KEY = "accessflow.documentationDate.v5";
 const SYNC_METADATA_STORAGE_KEY = "accessflow.syncMetadata.v9";
+const THEME_STORAGE_KEY = "accessflow.theme.v10";
 
 export default function App() {
   const [profiles, setProfiles] = useLocalStorage(PROFILES_STORAGE_KEY, starterProfiles);
@@ -52,6 +54,7 @@ export default function App() {
   );
   const [templates, setTemplates] = useLocalStorage(TEMPLATES_STORAGE_KEY, starterTemplates);
   const [mode, setMode] = useLocalStorage(MODE_STORAGE_KEY, "student");
+  const [theme, setTheme] = useLocalStorage(THEME_STORAGE_KEY, "light");
   const [studentViewMode, setStudentViewMode] = useLocalStorage(
     STUDENT_VIEW_STORAGE_KEY,
     "schedule"
@@ -82,6 +85,7 @@ export default function App() {
   const dirtyBaselineRef = useRef("");
   const hasInitializedDirtyTrackingRef = useRef(false);
   const suppressNextDirtyCheckRef = useRef(false);
+  const lastSessionUserIdRef = useRef(null);
 
   const selectedProfile = useMemo(() => {
     return profiles.find((profile) => profile.id === selectedProfileId) ?? profiles[0] ?? null;
@@ -151,6 +155,13 @@ export default function App() {
   }
 
   useEffect(() => {
+    const safeTheme = theme === "dark" ? "dark" : "light";
+
+    document.documentElement.dataset.theme = safeTheme;
+    document.documentElement.style.colorScheme = safeTheme;
+  }, [theme]);
+
+  useEffect(() => {
     if (!hasInitializedDirtyTrackingRef.current) {
       hasInitializedDirtyTrackingRef.current = true;
       dirtyBaselineRef.current = workspaceDataFingerprint;
@@ -180,6 +191,10 @@ export default function App() {
       .then((currentSession) => {
         if (active) {
           setSession(currentSession);
+
+          if (currentSession?.user?.id) {
+            lastSessionUserIdRef.current = currentSession.user.id;
+          }
         }
       })
       .catch((error) => {
@@ -189,7 +204,17 @@ export default function App() {
       });
 
     const unsubscribe = subscribeToAuthChanges((nextSession) => {
+      const previousUserId = lastSessionUserIdRef.current;
+      const nextUserId = nextSession?.user?.id ?? null;
+
       setSession(nextSession);
+
+      if (nextUserId && nextUserId !== previousUserId) {
+        setMode("staff");
+        setAnnouncement("Staff signed in. Staff Mode opened.");
+      }
+
+      lastSessionUserIdRef.current = nextUserId;
     });
 
     return () => {
@@ -235,8 +260,17 @@ export default function App() {
     setAuthStatus("");
 
     try {
-      await signUpWithEmail(email, password);
-      setAuthStatus("Account created. Check email confirmation settings if sign-in does not work immediately.");
+      const data = await signUpWithEmail(email, password);
+
+      if (data?.session) {
+        setSession(data.session);
+        lastSessionUserIdRef.current = data.session.user?.id ?? null;
+        setMode("staff");
+        setAuthStatus("Account created. Staff Mode opened.");
+        setAnnouncement("Staff account created. Staff Mode opened.");
+      } else {
+        setAuthStatus("Account created. Check your email if confirmation is required, then sign in.");
+      }
     } catch (error) {
       setAuthStatus(`Sign-up failed: ${error.message}`);
     } finally {
@@ -251,7 +285,10 @@ export default function App() {
     try {
       const data = await signInWithEmail(email, password);
       setSession(data.session ?? null);
-      setAuthStatus("Signed in.");
+      lastSessionUserIdRef.current = data.session?.user?.id ?? null;
+      setMode("staff");
+      setAuthStatus("Signed in. Staff Mode opened.");
+      setAnnouncement("Staff signed in. Staff Mode opened.");
     } catch (error) {
       setAuthStatus(`Sign-in failed: ${error.message}`);
     } finally {
@@ -266,6 +303,7 @@ export default function App() {
     try {
       await signOut();
       setSession(null);
+      lastSessionUserIdRef.current = null;
       setAuthStatus("Signed out.");
       setSyncStatus("");
     } catch (error) {
@@ -336,6 +374,12 @@ export default function App() {
   function handleModeChange(nextMode) {
     setMode(nextMode);
     setAnnouncement(`${nextMode === "student" ? "Student" : "Staff"} Mode selected.`);
+  }
+
+  function handleThemeChange(nextTheme) {
+    const safeTheme = nextTheme === "dark" ? "dark" : "light";
+    setTheme(safeTheme);
+    setAnnouncement(`${safeTheme === "dark" ? "Dark" : "Light"} mode selected.`);
   }
 
   function handleStudentViewModeChange(nextViewMode) {
@@ -623,6 +667,16 @@ export default function App() {
   }
 
   function handleToggleStep(activityId, stepId) {
+    const currentActivity = activities.find((activity) => activity.id === activityId);
+    const updatedStepsForSelectedActivity = currentActivity?.steps.map((step) =>
+      step.id === stepId ? { ...step, completed: !step.completed } : step
+    );
+    const willCompleteSelectedActivity =
+      currentActivity &&
+      selectedActivityId === activityId &&
+      updatedStepsForSelectedActivity.length > 0 &&
+      updatedStepsForSelectedActivity.every((step) => step.completed);
+
     updateSelectedProfileActivities((currentActivities) =>
       updateActivityById(currentActivities, activityId, (activity) => {
         const updatedSteps = activity.steps.map((step) =>
@@ -640,6 +694,11 @@ export default function App() {
         };
       })
     );
+
+    if (willCompleteSelectedActivity) {
+      setSelectedActivityId(null);
+    }
+
     clearPortableStatuses();
   }
 
@@ -821,7 +880,10 @@ export default function App() {
           </p>
         </div>
 
-        <ModeToggle mode={mode} onModeChange={handleModeChange} />
+        <div className="header-controls">
+          <ModeToggle mode={mode} onModeChange={handleModeChange} />
+          <ThemeToggle theme={theme} onThemeChange={handleThemeChange} />
+        </div>
       </header>
 
       <div className="sr-only" aria-live="polite">
@@ -846,6 +908,13 @@ export default function App() {
           onRemoveActivity={handleStudentRemoveActivity}
           onStudentClearSchedule={handleStudentClearSchedule}
           onCloseDetail={() => setSelectedActivityId(null)}
+          session={session}
+          authStatus={authStatus}
+          isAuthWorking={isAuthWorking}
+          onSignIn={handleSignIn}
+          onSignUp={handleSignUp}
+          onSignOut={handleSignOut}
+          onOpenStaffMode={() => handleModeChange("staff")}
         />
       ) : (
         <StaffView

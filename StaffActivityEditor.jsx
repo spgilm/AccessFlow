@@ -3,8 +3,10 @@ import EmptyState from "./EmptyState.jsx";
 import FirstThenView from "./FirstThenView.jsx";
 import ProgressSummary from "./ProgressSummary.jsx";
 import StudentActivityDetail from "./StudentActivityDetail.jsx";
+import StudentInlineSteps from "./StudentInlineSteps.jsx";
 import StudentScheduleBuilder from "./StudentScheduleBuilder.jsx";
 import StudentViewToggle from "./StudentViewToggle.jsx";
+import StaffAccessPanel from "./StaffAccessPanel.jsx";
 
 export default function StudentView({
   profile,
@@ -23,6 +25,13 @@ export default function StudentView({
   onRemoveActivity,
   onStudentClearSchedule,
   onCloseDetail,
+  session,
+  authStatus,
+  isAuthWorking,
+  onSignIn,
+  onSignUp,
+  onSignOut,
+  onOpenStaffMode,
 }) {
   const isFirstThenView = studentViewMode === "firstThen";
   const canReorder = independenceSettings.studentCanReorderSchedule;
@@ -34,6 +43,15 @@ export default function StudentView({
     canRemove ||
     canClear;
 
+  function handleScheduleCardSelect(activityId) {
+    if (activityId === selectedActivityId) {
+      onCloseDetail();
+      return;
+    }
+
+    onSelectActivity(activityId);
+  }
+
   return (
     <>
       <section className="panel student-profile-banner" aria-label="Active student profile">
@@ -43,6 +61,16 @@ export default function StudentView({
         </div>
         {profile?.notes ? <p>{profile.notes}</p> : null}
       </section>
+
+      <StaffAccessPanel
+        session={session}
+        authStatus={authStatus}
+        isAuthWorking={isAuthWorking}
+        onSignIn={onSignIn}
+        onSignUp={onSignUp}
+        onSignOut={onSignOut}
+        onOpenStaffMode={onOpenStaffMode}
+      />
 
       <ProgressSummary activities={activities} />
 
@@ -70,39 +98,51 @@ export default function StudentView({
         <>
           <section className="panel student-schedule-guidance" aria-labelledby="student-schedule-guidance-heading">
             <p className="eyebrow">Student independence</p>
-            <h2 id="student-schedule-guidance-heading">See the schedule first. Change it here too.</h2>
+            <h2 id="student-schedule-guidance-heading">My schedule stays on this page.</h2>
             <p>
-              The schedule is the default view. Students can use the schedule and, when staff allows it, add or adjust activities without leaving this page.
+              Tap an activity to open the smaller steps inside the schedule. Finish every step and the activity folds back up automatically.
             </p>
           </section>
 
-          <div className="workspace-grid student-schedule-workspace">
-            <section className="schedule-section student-schedule-primary" aria-labelledby="schedule-heading">
-              <div className="section-heading-row">
-                <div>
-                  <p className="eyebrow">Student / client view</p>
-                  <h2 id="schedule-heading">My schedule</h2>
-                </div>
-
-                {canClear && activities.length > 0 ? (
-                  <button type="button" className="small-danger-button" onClick={onStudentClearSchedule}>
-                    Start over
-                  </button>
-                ) : null}
+          <section className="schedule-section student-schedule-primary" aria-labelledby="schedule-heading">
+            <div className="section-heading-row">
+              <div>
+                <p className="eyebrow">Student / client view</p>
+                <h2 id="schedule-heading">My schedule</h2>
               </div>
 
-              {activities.length === 0 ? (
-                <EmptyState />
-              ) : (
-                <div className="schedule-list">
-                  {activities.map((activity, index) => (
-                    <div key={activity.id} className="student-schedule-item">
+              {canClear && activities.length > 0 ? (
+                <button type="button" className="small-danger-button" onClick={onStudentClearSchedule}>
+                  Start over
+                </button>
+              ) : null}
+            </div>
+
+            {activities.length === 0 ? (
+              <EmptyState />
+            ) : (
+              <div className="schedule-list">
+                {activities.map((activity, index) => {
+                  const isExpanded = activity.id === selectedActivityId;
+
+                  return (
+                    <div
+                      key={activity.id}
+                      className={`student-schedule-item ${isExpanded ? "is-expanded" : ""}`}
+                    >
                       <ActivityCard
                         activity={activity}
-                        isSelected={activity.id === selectedActivityId}
-                        onSelect={onSelectActivity}
+                        isSelected={isExpanded}
+                        onSelect={handleScheduleCardSelect}
                         onToggleComplete={onToggleActivityComplete}
                       />
+
+                      {isExpanded ? (
+                        <StudentInlineSteps
+                          activity={activity}
+                          onToggleStep={onToggleStep}
+                        />
+                      ) : null}
 
                       {canReorder || canRemove ? (
                         <div className="student-card-actions" aria-label={`Change ${activity.label}`}>
@@ -137,18 +177,11 @@ export default function StudentView({
                         </div>
                       ) : null}
                     </div>
-                  ))}
-                </div>
-              )}
-            </section>
-
-            <StudentActivityDetail
-              activity={selectedActivity}
-              onClose={onCloseDetail}
-              onToggleStep={onToggleStep}
-              onToggleActivityComplete={onToggleActivityComplete}
-            />
-          </div>
+                  );
+                })}
+              </div>
+            )}
+          </section>
 
           {canChangeSchedule ? (
             <StudentScheduleBuilder

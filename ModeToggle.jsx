@@ -30,6 +30,34 @@
   --radius-lg: 22px;
   --radius-md: 16px;
   --tap-target: 52px;
+  --panel-bg: rgba(255, 255, 255, 0.94);
+  --control-bg: #ffffff;
+  --control-bg-strong: #f8fbff;
+  --body-glow: rgba(23, 79, 120, 0.16);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #08131f;
+  --surface: #101e2d;
+  --surface-strong: #17283a;
+  --text: #eef6ff;
+  --muted: #aac0d4;
+  --border: #35516d;
+  --border-strong: #6e8baa;
+  --primary: #8ccfff;
+  --primary-strong: #d7efff;
+  --primary-soft: #173b57;
+  --success: #89e5a8;
+  --success-soft: #173b27;
+  --danger: #ff9c9c;
+  --danger-soft: #451c1c;
+  --warning-focus: #f6c453;
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.42);
+  --panel-bg: rgba(16, 30, 45, 0.96);
+  --control-bg: #101e2d;
+  --control-bg-strong: #17283a;
+  --body-glow: rgba(140, 207, 255, 0.12);
 }
 
 * {
@@ -46,7 +74,7 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    radial-gradient(circle at top left, rgba(23, 79, 120, 0.16), transparent 32rem),
+    radial-gradient(circle at top left, var(--body-glow), transparent 32rem),
     var(--bg);
 }
 
@@ -130,7 +158,7 @@ h3 {
   padding: 0.35rem;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.86);
+  background: color-mix(in srgb, var(--control-bg) 86%, transparent);
   box-shadow: var(--shadow);
 }
 
@@ -161,7 +189,7 @@ h3 {
 .first-then-card {
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
-  background: rgba(255, 255, 255, 0.94);
+  background: var(--panel-bg);
   box-shadow: var(--shadow);
 }
 
@@ -247,7 +275,7 @@ h3 {
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: #e1eaf3;
+  background: var(--surface-strong);
 }
 
 .progress-fill {
@@ -294,7 +322,7 @@ textarea {
   border: 2px solid var(--border-strong);
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
-  background: white;
+  background: var(--control-bg);
   color: var(--text);
   font-size: 1rem;
 }
@@ -409,7 +437,7 @@ textarea {
 .visual-support {
   overflow: hidden;
   border: 2px solid var(--border);
-  background: white;
+  background: var(--control-bg);
 }
 
 .visual-image-wrapper {
@@ -468,7 +496,7 @@ textarea {
   border: 2px solid var(--primary);
   border-radius: var(--radius-md);
   padding: 0.7rem 1rem;
-  background: white;
+  background: var(--control-bg);
   color: var(--primary-strong);
   font-weight: 950;
 }
@@ -510,7 +538,7 @@ textarea {
   min-height: 48px;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: white;
+  background: var(--control-bg);
   color: var(--text);
   font-size: 2rem;
   line-height: 1;
@@ -549,7 +577,7 @@ textarea {
   border: 2px solid var(--border);
   border-radius: var(--radius-md);
   padding: 0.6rem;
-  background: white;
+  background: var(--control-bg);
   color: var(--text);
   text-align: left;
 }
@@ -585,7 +613,7 @@ textarea {
 .step-state {
   border-radius: 999px;
   padding: 0.25rem 0.55rem;
-  background: #edf3f8;
+  background: var(--surface-strong);
   color: var(--primary-strong);
   font-weight: 900;
   font-size: 0.8rem;
@@ -689,7 +717,7 @@ textarea {
   width: 100%;
   border: 0;
   border-radius: var(--radius-md);
-  background: white;
+  background: var(--control-bg);
   color: var(--text);
   text-align: left;
   padding: 0.6rem;
@@ -739,7 +767,7 @@ textarea {
 .row-actions button,
 .secondary-button {
   border: 2px solid var(--border-strong);
-  background: white;
+  background: var(--control-bg);
   color: var(--primary-strong);
 }
 
@@ -833,7 +861,7 @@ textarea {
 
 .file-input-label input {
   padding: 0.55rem;
-  background: white;
+  background: var(--control-bg);
 }
 
 .sr-only {
@@ -938,7 +966,7 @@ select {
   border: 2px solid var(--border-strong);
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
-  background: white;
+  background: var(--control-bg);
   color: var(--text);
   font: inherit;
 }
@@ -1198,7 +1226,7 @@ select:focus-visible {
   border: 2px solid var(--border-strong);
   border-radius: var(--radius-md);
   padding: 0.85rem 1rem;
-  background: white;
+  background: var(--control-bg);
   color: var(--primary-strong);
   font-weight: 950;
   text-align: center;
@@ -1339,7 +1367,7 @@ select:focus-visible {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 0.85rem;
-  background: white;
+  background: var(--control-bg);
 }
 
 .sync-metadata-card span,
@@ -1450,7 +1478,7 @@ select:focus-visible {
   border: 2px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 0.85rem;
-  background: white;
+  background: var(--control-bg);
   color: var(--text);
   text-align: center;
 }
@@ -1499,7 +1527,7 @@ select:focus-visible {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 0.75rem;
-  background: white;
+  background: var(--control-bg);
 }
 
 .student-plan-main {
@@ -1548,7 +1576,7 @@ select:focus-visible {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 0.75rem;
-  background: white;
+  background: var(--control-bg);
 }
 
 .checkbox-row input[type="checkbox"] {
@@ -1627,7 +1655,7 @@ select:focus-visible {
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 0.45rem 0.85rem;
-  background: white;
+  background: var(--control-bg);
   color: var(--primary-strong);
   font-weight: 900;
 }
@@ -1651,5 +1679,217 @@ select:focus-visible {
   .student-view-toggle {
     grid-template-columns: repeat(2, 1fr);
     width: 480px;
+  }
+}
+
+/* v10.3: inline student step breakdowns */
+.activity-hint {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.student-schedule-item.is-expanded .activity-card {
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+}
+
+.inline-steps-panel {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: -0.15rem;
+  padding: 1rem;
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-xl);
+  background: var(--primary-soft);
+  box-shadow: var(--shadow);
+}
+
+.inline-steps-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.inline-steps-header h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.05;
+}
+
+.inline-step-progress {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.45rem 0.75rem;
+  background: var(--control-bg);
+  color: var(--primary-strong);
+  font-weight: 950;
+}
+
+.inline-steps-summary,
+.inline-steps-help {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 750;
+}
+
+.inline-step-list {
+  margin-bottom: 0;
+}
+
+.inline-steps-help {
+  font-size: 0.9rem;
+}
+
+/* v10.4: header controls, theme toggle, and top-of-student staff access */
+.header-controls {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.theme-toggle-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: fit-content;
+  min-height: var(--tap-target);
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--control-bg) 86%, transparent);
+  box-shadow: var(--shadow);
+}
+
+.theme-icon {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.theme-toggle {
+  min-width: 5.1rem;
+  min-height: 2.65rem;
+  border: 0;
+  border-radius: 999px;
+  padding: 0.25rem;
+  background: var(--surface-strong);
+}
+
+.theme-toggle-track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 2.15rem;
+  border-radius: 999px;
+  background: var(--primary-soft);
+}
+
+.theme-toggle-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0.2rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: var(--control-bg);
+  box-shadow: 0 8px 18px rgba(16, 32, 51, 0.22);
+  transform: translateY(-50%);
+  transition: left 160ms ease;
+}
+
+.theme-toggle.is-dark .theme-toggle-thumb {
+  left: calc(100% - 1.95rem);
+}
+
+.staff-access-panel {
+  display: grid;
+  gap: 0.85rem;
+  padding: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.staff-access-collapsed,
+.staff-access-panel.is-signed-in {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.staff-access-summary {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-weight: 750;
+}
+
+.staff-access-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.staff-access-warning {
+  margin: 0;
+}
+
+.staff-access-auth {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.compact-auth-panel {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.compact-auth-panel .section-heading-row {
+  margin-bottom: 0;
+}
+
+.compact-auth-panel .section-heading-row h2 {
+  font-size: 1.35rem;
+}
+
+.compact-auth-panel .auth-help {
+  margin-top: 0;
+}
+
+[data-theme="dark"] .visual-support,
+[data-theme="dark"] .visual-image-wrapper img {
+  background: var(--control-bg);
+}
+
+[data-theme="dark"] .activity-card.is-complete,
+[data-theme="dark"] .step-item.is-complete .step-button {
+  background: var(--success-soft);
+}
+
+[data-theme="dark"] .student-card-actions .small-danger-button,
+[data-theme="dark"] .small-danger-button,
+[data-theme="dark"] .danger-button,
+[data-theme="dark"] .danger-wide-button {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+[data-theme="dark"] .theme-toggle-thumb {
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.38);
+}
+
+@media (min-width: 760px) {
+  .header-controls {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .staff-access-collapsed,
+  .staff-access-panel.is-signed-in {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
   }
 }
