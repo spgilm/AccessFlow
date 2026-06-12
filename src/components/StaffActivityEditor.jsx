@@ -9,6 +9,7 @@ export default function StaffActivityEditor({
   onAddStep,
   onDeleteStep,
   onMoveStep,
+  onSaveActivityToBank,
   onDeleteActivity,
 }) {
   const [visualError, setVisualError] = useState("");
@@ -47,6 +48,16 @@ export default function StaffActivityEditor({
           <p className="eyebrow">Editor</p>
           <h2 id="activity-editor-heading">Edit activity</h2>
         </div>
+
+        {onSaveActivityToBank ? (
+          <button
+            type="button"
+            className="secondary-button save-choice-button"
+            onClick={() => onSaveActivityToBank(activity.id)}
+          >
+            Save to Student Choices
+          </button>
+        ) : null}
       </div>
 
       {visualError ? (

@@ -8,21 +8,45 @@ export default function StudentScheduleBuilder({
   onAddActivity,
 }) {
   const [customTask, setCustomTask] = useState("");
+  const [customSteps, setCustomSteps] = useState(["", ""]);
 
   const canBuild = independenceSettings.studentCanBuildSchedule;
   const canAddCustom = independenceSettings.studentCanAddCustomActivities;
   const hasChoices = libraryItems.length > 0;
 
+  function updateCustomStep(index, value) {
+    setCustomSteps((currentSteps) =>
+      currentSteps.map((step, stepIndex) => (stepIndex === index ? value : step))
+    );
+  }
+
+  function addCustomStep() {
+    setCustomSteps((currentSteps) => [...currentSteps, ""]);
+  }
+
+  function removeCustomStep(index) {
+    setCustomSteps((currentSteps) =>
+      currentSteps.filter((_, stepIndex) => stepIndex !== index)
+    );
+  }
+
   function handleCustomSubmit(event) {
     event.preventDefault();
 
     const trimmed = customTask.trim();
+    const stepLabels = customSteps.map((step) => step.trim()).filter(Boolean);
+
     if (!trimmed) {
       return;
     }
 
-    onAddActivity({ type: "custom", taskText: trimmed });
+    onAddActivity({
+      type: "custom",
+      taskText: trimmed,
+      stepLabels,
+    });
     setCustomTask("");
+    setCustomSteps(["", ""]);
   }
 
   if (!canBuild) {
@@ -74,19 +98,58 @@ export default function StudentScheduleBuilder({
       )}
 
       {canAddCustom ? (
-        <form className="student-custom-form simplified-custom-form" onSubmit={handleCustomSubmit}>
+        <form className="student-custom-form simplified-custom-form student-step-builder" onSubmit={handleCustomSubmit}>
+          <div className="simple-section-title">
+            <p className="eyebrow">Make my own</p>
+            <h2>Add an activity and steps</h2>
+          </div>
+
           <label>
-            Ask for another activity
-            <div className="inline-control-row">
-              <input
-                type="text"
-                value={customTask}
-                placeholder="Type activity"
-                onChange={(event) => setCustomTask(event.target.value)}
-              />
-              <button type="submit">Add</button>
-            </div>
+            Activity
+            <input
+              type="text"
+              value={customTask}
+              placeholder="Example: make a snack"
+              onChange={(event) => setCustomTask(event.target.value)}
+            />
           </label>
+
+          <div className="student-made-steps" aria-label="Student-created smaller steps">
+            <div className="section-heading-row compact-heading-row">
+              <h3>Smaller steps</h3>
+              <button type="button" className="secondary-button" onClick={addCustomStep}>
+                Add step
+              </button>
+            </div>
+
+            {customSteps.map((step, index) => (
+              <div key={`custom-step-${index}`} className="student-made-step-row">
+                <span className="step-number">{index + 1}</span>
+                <input
+                  type="text"
+                  value={step}
+                  placeholder={`Step ${index + 1}`}
+                  onChange={(event) => updateCustomStep(index, event.target.value)}
+                />
+                {customSteps.length > 1 ? (
+                  <button
+                    type="button"
+                    className="small-danger-button"
+                    onClick={() => removeCustomStep(index)}
+                  >
+                    Remove
+                  </button>
+                ) : null}
+              </div>
+            ))}
+          </div>
+
+          <button type="submit" className="primary-wide-button">
+            Add to my schedule
+          </button>
+          <p className="field-help">
+            Staff can review this later and save it to Student Choices.
+          </p>
         </form>
       ) : null}
     </section>

@@ -70,6 +70,7 @@ export default function StaffView({
   onAddActivity,
   onAddChoiceToBank,
   onUpdateBankChoice,
+  onSaveActivityToBank,
   onAddBankChoiceToSchedule,
   onDeleteBankChoice,
   onSelectActivity,
@@ -152,6 +153,7 @@ export default function StaffView({
             onAddStep={onAddStep}
             onDeleteStep={onDeleteStep}
             onMoveStep={onMoveStep}
+            onSaveActivityToBank={onSaveActivityToBank}
             onDeleteActivity={onDeleteActivity}
           />
         </div>

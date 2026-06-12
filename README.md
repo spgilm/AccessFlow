@@ -338,3 +338,29 @@ Staff Mode now uses progressive disclosure with grouped sections:
 5. Save and account
 
 This makes the staff side less like one giant dashboard and more like a guided setup/support flow.
+
+
+## v12.1 patch
+
+This version adds two workflow fixes:
+
+- Student Mode custom activities can include student-created smaller steps before adding the activity to the schedule.
+- Staff Mode activity editor now has a clear **Save to Student Choices** button so a reviewed schedule activity can become a reusable bank choice.
+
+This keeps the model explicit:
+
+- Student Choices = reusable approved choices.
+- Today’s Schedule = what is on the current schedule.
+- A student-created schedule item can be reviewed by staff and intentionally saved to Student Choices.
+
+
+## v12.2 patch
+
+Dark mode now uses a blue background instead of black, with forced high-contrast text rules:
+
+- deep blue page background
+- darker blue panels
+- white body/headline text
+- yellow labels, active controls, and key status text
+- no inherited deep-blue text in dark mode
+- root text color now uses `var(--text)` instead of a hardcoded light-mode color

@@ -368,7 +368,9 @@ export default function App() {
 
       activity = cloneBankChoiceForSchedule(choice);
     } else if (request?.type === "custom") {
-      activity = await generateActivityFromTask(request.taskText);
+      activity = await generateActivityFromTask(request.taskText, {
+        customSteps: request.stepLabels,
+      });
     }
 
     if (!activity) {
@@ -894,6 +896,28 @@ export default function App() {
     clearPortableStatuses();
   }
 
+  function handleSaveActivityToBank(activityId) {
+    const activity = activities.find((item) => item.id === activityId);
+
+    if (!activity) {
+      setAnnouncement("Choose an activity before saving it to Student Choices.");
+      return;
+    }
+
+    if (isDuplicateBankChoice(activityBank, activity)) {
+      setAnnouncement(`${activity.label} is already in Student Choices.`);
+      return;
+    }
+
+    updateSelectedProfileActivityBank((currentBank) => [
+      ...currentBank,
+      cloneActivityForChoiceBank(activity),
+    ]);
+
+    clearPortableStatuses();
+    setAnnouncement(`${activity.label} saved to Student Choices.`);
+  }
+
   function handleAddBankChoiceToSchedule(choiceId) {
     const choice = activityBank.find((item) => item.id === choiceId);
 
@@ -1075,6 +1099,7 @@ export default function App() {
           onAddActivity={handleAddActivity}
           onAddChoiceToBank={handleAddChoiceToBank}
           onUpdateBankChoice={handleUpdateBankChoice}
+          onSaveActivityToBank={handleSaveActivityToBank}
           onAddBankChoiceToSchedule={handleAddBankChoiceToSchedule}
           onDeleteBankChoice={handleDeleteBankChoice}
           onSelectActivity={handleSelectActivity}

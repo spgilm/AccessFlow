@@ -42,18 +42,37 @@ function createFallbackSteps(taskText, emoji) {
  * This is shaped like an async AI call on purpose, so it can later be replaced
  * with a real backend AI endpoint without changing the React components.
  */
-export async function generateActivityFromTask(taskText) {
+export async function generateActivityFromTask(taskText, options = {}) {
   const normalized = normalizeTaskText(taskText);
 
   if (!normalized) {
     throw new Error("Task text is required.");
   }
 
+  const customStepLabels = Array.isArray(options.customSteps)
+    ? options.customSteps
+        .map((step) => String(step ?? "").trim())
+        .filter(Boolean)
+    : [];
+
   const template = resolveTemplate(normalized);
   const label = template?.label ?? toDisplayLabel(normalized);
   const emoji = template?.emoji ?? guessEmoji(normalized);
-  const steps = template?.steps ?? createFallbackSteps(normalized, emoji);
-  const summary = template?.summary ?? `Complete ${normalized} using simple steps.`;
+  const templateSteps = template?.steps ?? createFallbackSteps(normalized, emoji);
+  const steps =
+    customStepLabels.length > 0
+      ? customStepLabels.map((stepLabel, index) => ({
+          label: stepLabel,
+          emoji:
+            index === customStepLabels.length - 1
+              ? "✅"
+              : guessEmoji(normalizeTaskText(stepLabel)),
+        }))
+      : templateSteps;
+  const summary =
+    customStepLabels.length > 0
+      ? `Complete ${normalized} using student-created steps.`
+      : template?.summary ?? `Complete ${normalized} using simple steps.`;
 
   return {
     id: createId("activity"),
