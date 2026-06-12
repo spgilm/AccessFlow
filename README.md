@@ -479,3 +479,12 @@ This version adds first-pass implementations of the larger AccessFlow roadmap.
 - Optional step timers.
 - Step-level support/prompt tracking.
 - Visual upload inputs now support taking a photo on compatible mobile browsers.
+
+
+## v14.1 patch
+
+Fixes the mobile read-aloud toggle icon.
+
+The issue was caused by mobile CSS hiding the last `<span>` in top toggle buttons to remove the Light/Dark text label. After the read-aloud button became icon-only, its only `<span>` was also the last span, so the mobile CSS hid the 🔇 / 🔊 icon.
+
+The read-aloud icon now has its own `.tts-icon` class and a mobile override to keep it visible.

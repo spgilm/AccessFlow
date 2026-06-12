@@ -3711,9 +3711,13 @@ select:focus-visible {
     padding-inline: 0.45rem;
   }
 
-  .combined-toggle .theme-segment-button span:last-child,
-  .combined-toggle .tts-segment-button span:last-child {
+  .combined-toggle .theme-segment-button span:last-child {
     display: none;
+  }
+
+  .combined-toggle .tts-segment-button .tts-icon {
+    display: inline-grid !important;
+    place-items: center;
   }
 }
 
@@ -3940,4 +3944,20 @@ select:focus-visible {
 .mode-toggle .tts-segment-button span:first-child {
   font-size: 1.15rem;
   line-height: 1;
+}
+
+
+/* v14.1: keep read-aloud icon visible on mobile */
+.mode-toggle .tts-segment-button .tts-icon,
+.combined-toggle .tts-segment-button .tts-icon {
+  display: inline-grid !important;
+  place-items: center;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+@media (max-width: 520px) {
+  .combined-toggle .tts-segment-button .tts-icon {
+    display: inline-grid !important;
+  }
 }

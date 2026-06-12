@@ -47,7 +47,7 @@ export default function ModeToggle({
         disabled={!textToSpeechAvailable}
         title={textToSpeechAvailable ? "Read text aloud" : "Read aloud is not supported in this browser"}
       >
-        <span aria-hidden="true">{textToSpeechEnabled ? "🔊" : "🔇"}</span>
+        <span className="tts-icon" aria-hidden="true">{textToSpeechEnabled ? "🔊" : "🔇"}</span>
       </button>
     </div>
   );
