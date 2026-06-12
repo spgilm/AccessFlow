@@ -20,6 +20,7 @@
   --primary: #174f78;
   --primary-strong: #0c3858;
   --primary-soft: #dbefff;
+  --on-primary: #ffffff;
   --success: #1f6b3a;
   --success-soft: #daf5e4;
   --danger: #8a1f1f;
@@ -38,26 +39,27 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #08131f;
-  --surface: #101e2d;
-  --surface-strong: #17283a;
-  --text: #eef6ff;
-  --muted: #aac0d4;
-  --border: #35516d;
-  --border-strong: #6e8baa;
-  --primary: #8ccfff;
-  --primary-strong: #d7efff;
-  --primary-soft: #173b57;
-  --success: #89e5a8;
-  --success-soft: #173b27;
-  --danger: #ff9c9c;
-  --danger-soft: #451c1c;
-  --warning-focus: #f6c453;
-  --shadow: 0 20px 50px rgba(0, 0, 0, 0.42);
-  --panel-bg: rgba(16, 30, 45, 0.96);
-  --control-bg: #101e2d;
-  --control-bg-strong: #17283a;
-  --body-glow: rgba(140, 207, 255, 0.12);
+  --bg: #020617;
+  --surface: #08111f;
+  --surface-strong: #111d31;
+  --text: #f8fbff;
+  --muted: #d7e8f7;
+  --border: #6ea8dc;
+  --border-strong: #b9dcff;
+  --primary: #9bdcff;
+  --primary-strong: #f2fbff;
+  --primary-soft: #073653;
+  --on-primary: #03111f;
+  --success: #9ef0b8;
+  --success-soft: #09331c;
+  --danger: #ffb4b4;
+  --danger-soft: #4a1118;
+  --warning-focus: #ffe08a;
+  --shadow: 0 18px 46px rgba(0, 0, 0, 0.72);
+  --panel-bg: #08111f;
+  --control-bg: #0d1726;
+  --control-bg-strong: #16243a;
+  --body-glow: rgba(155, 220, 255, 0.16);
 }
 
 * {
@@ -182,7 +184,7 @@ h3 {
 .mode-toggle button.is-active,
 .student-view-toggle button.is-active {
   background: var(--primary);
-  color: white;
+  color: var(--on-primary);
 }
 
 .panel,
@@ -345,7 +347,7 @@ textarea {
   border-radius: var(--radius-md);
   padding: 0.85rem 1rem;
   background: var(--primary);
-  color: white;
+  color: var(--on-primary);
   font-weight: 900;
 }
 
@@ -597,7 +599,7 @@ textarea {
   height: 2rem;
   border-radius: 999px;
   background: var(--primary);
-  color: white;
+  color: var(--on-primary);
   font-weight: 950;
 }
 
@@ -733,7 +735,7 @@ textarea {
   height: 2rem;
   border-radius: 999px;
   background: var(--primary);
-  color: white;
+  color: var(--on-primary);
   font-weight: 950;
 }
 
@@ -1026,7 +1028,7 @@ select:focus-visible {
   border-radius: var(--radius-md);
   padding: 0.85rem 1rem;
   background: var(--primary);
-  color: white;
+  color: var(--on-primary);
   font-weight: 900;
 }
 
@@ -1312,7 +1314,7 @@ select:focus-visible {
   height: 1.6rem;
   margin-right: 0.45rem;
   border-radius: 999px;
-  color: white;
+  color: var(--on-primary);
   font-weight: 950;
 }
 
@@ -2014,4 +2016,106 @@ select:focus-visible {
   margin: 0;
   color: var(--muted);
   font-weight: 800;
+}
+
+/* v10.8: higher-contrast dark mode refinements */
+[data-theme="dark"] body {
+  background:
+    radial-gradient(circle at top left, var(--body-glow), transparent 28rem),
+    var(--bg);
+}
+
+[data-theme="dark"] .app-kicker,
+[data-theme="dark"] .eyebrow {
+  color: #bfe8ff;
+}
+
+[data-theme="dark"] .panel,
+[data-theme="dark"] .progress-panel,
+[data-theme="dark"] .activity-card,
+[data-theme="dark"] .first-then-card {
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .field-help,
+[data-theme="dark"] .detail-summary,
+[data-theme="dark"] .empty-state p,
+[data-theme="dark"] .first-then-complete p,
+[data-theme="dark"] .editor-note,
+[data-theme="dark"] .activity-summary,
+[data-theme="dark"] .first-then-summary,
+[data-theme="dark"] .staff-access-summary,
+[data-theme="dark"] .bank-choice-main p,
+[data-theme="dark"] .inline-steps-summary,
+[data-theme="dark"] .inline-steps-help,
+[data-theme="dark"] .now-next-summary {
+  color: var(--muted);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  border-color: var(--border-strong);
+  background: #020617;
+  color: var(--text);
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #b5c9dd;
+}
+
+[data-theme="dark"] .complete-button,
+[data-theme="dark"] .secondary-button,
+[data-theme="dark"] .student-card-actions button,
+[data-theme="dark"] .small-danger-button,
+[data-theme="dark"] .chip {
+  border-color: var(--border-strong);
+}
+
+[data-theme="dark"] .activity-status,
+[data-theme="dark"] .activity-hint,
+[data-theme="dark"] .step-state,
+[data-theme="dark"] .library-step-count,
+[data-theme="dark"] .bank-choice-main span {
+  border: 1px solid var(--border);
+  background: #020617;
+  color: var(--primary-strong);
+}
+
+[data-theme="dark"] .now-card,
+[data-theme="dark"] .inline-steps-panel,
+[data-theme="dark"] .first-then-card.first {
+  border-color: var(--border-strong);
+  background: var(--primary-soft);
+}
+
+[data-theme="dark"] .step-button,
+[data-theme="dark"] .staff-select-button,
+[data-theme="dark"] .staff-activity-row,
+[data-theme="dark"] .staff-step-editor-row,
+[data-theme="dark"] .bank-choice-card,
+[data-theme="dark"] .empty-bank-message {
+  border-color: var(--border);
+  background: var(--surface-strong);
+  color: var(--text);
+}
+
+[data-theme="dark"] .step-item.is-complete .step-button,
+[data-theme="dark"] .activity-card.is-complete {
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+
+[data-theme="dark"] .mode-toggle button.is-active,
+[data-theme="dark"] .student-view-toggle button.is-active,
+[data-theme="dark"] .input-row button,
+[data-theme="dark"] .primary-wide-button,
+[data-theme="dark"] .step-number,
+[data-theme="dark"] .staff-row-number {
+  color: var(--on-primary);
+}
+
+[data-theme="dark"] .copy-status {
+  color: var(--primary-strong);
 }

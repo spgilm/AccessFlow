@@ -265,3 +265,15 @@ Key behavior:
 - Student Mode shows only that selected student's bank choices
 - choosing a bank item clones its saved step breakdown into the student's schedule
 - staff-created scheduled tasks are also saved to the choice bank automatically
+
+
+## v10.8 patch
+
+Dark mode now uses a higher-contrast palette:
+
+- darker page and panel backgrounds
+- brighter primary accents
+- stronger borders
+- brighter body and helper text
+- explicit `--on-primary` text color for selected/primary buttons
+- improved input, card, chip, status-pill, and step contrast in dark mode
