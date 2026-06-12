@@ -4,7 +4,6 @@ import StaffView from "./components/StaffView.jsx";
 import StudentView from "./components/StudentView.jsx";
 import { starterProfiles, createBlankProfile } from "./data/starterProfiles.js";
 import { getIndependenceSettings } from "./data/independenceSettings.js";
-import { studentActivityLibrary } from "./data/studentActivityLibrary.js";
 import { starterTemplates } from "./data/starterTemplates.js";
 import { useLocalStorage } from "./hooks/useLocalStorage.js";
 import { generateActivityFromTask } from "./services/taskGenerator.js";
@@ -34,7 +33,7 @@ import {
   subscribeToAuthChanges,
 } from "./services/supabaseWorkspace.js";
 import { createId } from "./utils/formatters.js";
-import { cloneActivitiesForProfile, cloneActivitiesForTemplate } from "./utils/templateHelpers.js";
+import { cloneActivitiesForProfile, cloneActivitiesForTemplate, cloneActivityForChoiceBank, cloneBankChoiceForSchedule } from "./utils/templateHelpers.js";
 
 const PROFILES_STORAGE_KEY = "accessflow.profiles.v5";
 const SELECTED_PROFILE_STORAGE_KEY = "accessflow.selectedProfile.v5";
@@ -91,6 +90,7 @@ export default function App() {
   }, [profiles, selectedProfileId]);
 
   const activities = selectedProfile?.activities ?? [];
+  const activityBank = selectedProfile?.activityBank ?? [];
 
   const selectedActivity = useMemo(
     () => activities.find((activity) => activity.id === selectedActivityId) ?? null,
@@ -241,6 +241,32 @@ export default function App() {
     }));
   }
 
+  function updateSelectedProfileActivityBank(updater) {
+    updateSelectedProfile((profile) => ({
+      ...profile,
+      activityBank: updater(profile.activityBank ?? []),
+    }));
+  }
+
+  function isDuplicateBankChoice(bankChoices, candidate) {
+    const candidateKey = String(candidate.sourceText || candidate.label || "").toLowerCase();
+
+    return bankChoices.some((choice) => {
+      const choiceKey = String(choice.sourceText || choice.label || "").toLowerCase();
+      return choiceKey && candidateKey && choiceKey === candidateKey;
+    });
+  }
+
+  function ensureActivityInBank(activity) {
+    updateSelectedProfileActivityBank((currentBank) => {
+      if (isDuplicateBankChoice(currentBank, activity)) {
+        return currentBank;
+      }
+
+      return [...currentBank, cloneActivityForChoiceBank(activity)];
+    });
+  }
+
   function ensureSelectedActivityExists(nextActivities) {
     if (!nextActivities.some((activity) => activity.id === selectedActivityId)) {
       setSelectedActivityId(nextActivities[0]?.id ?? null);
@@ -320,12 +346,13 @@ export default function App() {
     const activity = await generateActivityFromTask(taskText);
 
     updateSelectedProfileActivities((currentActivities) => [...currentActivities, activity]);
+    ensureActivityInBank(activity);
     setSelectedActivityId(activity.id);
     clearPortableStatuses();
-    setAnnouncement(`${activity.label} added to ${selectedProfile.name}'s schedule.`);
+    setAnnouncement(`${activity.label} added to ${selectedProfile.name}'s schedule and saved to the choice bank.`);
   }
 
-  async function handleStudentAddActivity(taskText) {
+  async function handleStudentAddActivity(request) {
     if (!selectedProfile) {
       return;
     }
@@ -337,7 +364,27 @@ export default function App() {
       return;
     }
 
-    const activity = await generateActivityFromTask(taskText);
+    let activity = null;
+
+    if (typeof request === "string") {
+      activity = await generateActivityFromTask(request);
+    } else if (request?.type === "bank") {
+      const choice = activityBank.find((item) => item.id === request.choiceId);
+
+      if (!choice) {
+        setAnnouncement("That bank choice is no longer available.");
+        return;
+      }
+
+      activity = cloneBankChoiceForSchedule(choice);
+    } else if (request?.type === "custom") {
+      activity = await generateActivityFromTask(request.taskText);
+    }
+
+    if (!activity) {
+      setAnnouncement("Choose an activity before adding it to the schedule.");
+      return;
+    }
 
     updateSelectedProfileActivities((currentActivities) => [...currentActivities, activity]);
     setSelectedActivityId(activity.id);
@@ -820,6 +867,70 @@ export default function App() {
     setAnnouncement("Activity deleted.");
   }
 
+  async function handleAddChoiceToBank(taskText) {
+    if (!selectedProfile) {
+      return;
+    }
+
+    const activity = await generateActivityFromTask(taskText);
+
+    updateSelectedProfileActivityBank((currentBank) => {
+      if (isDuplicateBankChoice(currentBank, activity)) {
+        return currentBank;
+      }
+
+      return [...currentBank, cloneActivityForChoiceBank(activity)];
+    });
+
+    clearPortableStatuses();
+    setAnnouncement(`${activity.label} added to ${selectedProfile.name}'s choice bank.`);
+  }
+
+  function handleSaveActivityToBank(activityId) {
+    const activity = activities.find((item) => item.id === activityId);
+
+    if (!activity) {
+      setAnnouncement("Choose an activity to save to the bank.");
+      return;
+    }
+
+    updateSelectedProfileActivityBank((currentBank) => {
+      if (isDuplicateBankChoice(currentBank, activity)) {
+        return currentBank;
+      }
+
+      return [...currentBank, cloneActivityForChoiceBank(activity)];
+    });
+
+    clearPortableStatuses();
+    setAnnouncement(`${activity.label} saved to the choice bank.`);
+  }
+
+  function handleAddBankChoiceToSchedule(choiceId) {
+    const choice = activityBank.find((item) => item.id === choiceId);
+
+    if (!choice) {
+      setAnnouncement("That bank choice is no longer available.");
+      return;
+    }
+
+    const activity = cloneBankChoiceForSchedule(choice);
+
+    updateSelectedProfileActivities((currentActivities) => [...currentActivities, activity]);
+    setSelectedActivityId(activity.id);
+    clearPortableStatuses();
+    setAnnouncement(`${activity.label} added to ${selectedProfile?.name ?? "the selected profile"}'s schedule.`);
+  }
+
+  function handleDeleteBankChoice(choiceId) {
+    updateSelectedProfileActivityBank((currentBank) =>
+      currentBank.filter((choice) => choice.id !== choiceId)
+    );
+
+    clearPortableStatuses();
+    setAnnouncement("Choice removed from the bank.");
+  }
+
   function handleSaveCurrentScheduleAsTemplate(name, description) {
     if (!selectedProfile) {
       return;
@@ -908,10 +1019,11 @@ export default function App() {
         <StudentView
           profile={selectedProfile}
           activities={activities}
+          activityBank={activityBank}
           selectedActivity={selectedActivity}
           selectedActivityId={selectedActivityId}
           studentViewMode={studentViewMode}
-          studentActivityLibrary={studentActivityLibrary}
+          studentActivityLibrary={activityBank}
           independenceSettings={getIndependenceSettings(selectedProfile)}
           onStudentViewModeChange={handleStudentViewModeChange}
           onSelectActivity={handleSelectActivity}
@@ -937,6 +1049,7 @@ export default function App() {
           selectedProfileId={selectedProfile?.id ?? selectedProfileId}
           templates={templates}
           activities={activities}
+          activityBank={activityBank}
           selectedActivity={selectedActivity}
           selectedActivityId={selectedActivityId}
           documentationDate={documentationDate}
@@ -972,6 +1085,10 @@ export default function App() {
           onApplyTemplateToProfile={handleApplyTemplateToProfile}
           onDeleteTemplate={handleDeleteTemplate}
           onAddActivity={handleAddActivity}
+          onAddChoiceToBank={handleAddChoiceToBank}
+          onSaveActivityToBank={handleSaveActivityToBank}
+          onAddBankChoiceToSchedule={handleAddBankChoiceToSchedule}
+          onDeleteBankChoice={handleDeleteBankChoice}
           onSelectActivity={handleSelectActivity}
           onMoveActivity={handleMoveActivity}
           onUpdateActivity={handleUpdateActivity}

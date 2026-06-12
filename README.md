@@ -249,3 +249,19 @@ The light/dark theme toggle is now inside the same rounded control bar as the St
 - ☀️ Light / 🌙 Dark
 
 This makes the theme control visible in the primary header controls instead of appearing as a separate secondary widget.
+
+
+## v10.7 patch
+
+Student activity choices now come from a staff-managed **choice bank** instead of a built-in default list.
+
+Key behavior:
+
+- each student/profile has an `activityBank`
+- the student-facing activity choices start blank
+- Staff Mode can add new activities to the selected student's bank
+- Staff Mode can save existing scheduled activities into the bank
+- Staff Mode can add a bank choice directly to the schedule
+- Student Mode shows only that selected student's bank choices
+- choosing a bank item clones its saved step breakdown into the student's schedule
+- staff-created scheduled tasks are also saved to the choice bank automatically

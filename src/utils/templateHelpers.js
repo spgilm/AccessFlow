@@ -25,3 +25,29 @@ export function cloneActivitiesForTemplate(activities) {
     })),
   }));
 }
+
+export function cloneActivityForChoiceBank(activity) {
+  return {
+    ...activity,
+    id: createId("bank-activity"),
+    completed: false,
+    steps: activity.steps.map((step) => ({
+      ...step,
+      id: createId("bank-step"),
+      completed: false,
+    })),
+  };
+}
+
+export function cloneBankChoiceForSchedule(choice) {
+  return {
+    ...choice,
+    id: createId("activity"),
+    completed: false,
+    steps: choice.steps.map((step) => ({
+      ...step,
+      id: createId("step"),
+      completed: false,
+    })),
+  };
+}

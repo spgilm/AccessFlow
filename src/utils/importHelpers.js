@@ -6,6 +6,7 @@ export function normalizeImportedProfile(profile) {
     name: profile.name || "Imported Profile",
     notes: profile.notes || "",
     activities: Array.isArray(profile.activities) ? profile.activities : [],
+    activityBank: Array.isArray(profile.activityBank) ? profile.activityBank : [],
     independenceSettings: getIndependenceSettings(profile),
     documentationByDate:
       profile.documentationByDate && typeof profile.documentationByDate === "object"

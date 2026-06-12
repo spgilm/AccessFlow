@@ -96,7 +96,7 @@ export default function AddActivityForm({ onAddActivity }) {
       <div className="section-heading-row">
         <div>
           <p className="eyebrow">Create</p>
-          <h2 id="add-activity-heading">Add a visual activity</h2>
+          <h2 id="add-activity-heading">Add activity to schedule and bank</h2>
         </div>
       </div>
 
@@ -125,7 +125,7 @@ export default function AddActivityForm({ onAddActivity }) {
           </button>
         </div>
         <p className="field-help">
-          Type or dictate a general task. Local templates create a starting label, visual, and steps.
+          Type or dictate a general task. This adds it to the selected schedule and saves it to this student's choice bank.
         </p>
         {error ? (
           <p className="form-error" role="alert">

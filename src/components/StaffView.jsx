@@ -5,6 +5,7 @@ import DocumentationPanel from "./DocumentationPanel.jsx";
 import ProfileManager from "./ProfileManager.jsx";
 import StaffActivityEditor from "./StaffActivityEditor.jsx";
 import StaffActivityList from "./StaffActivityList.jsx";
+import StaffChoiceBankPanel from "./StaffChoiceBankPanel.jsx";
 import SupabaseSyncPanel from "./SupabaseSyncPanel.jsx";
 import TemplateManager from "./TemplateManager.jsx";
 
@@ -14,6 +15,7 @@ export default function StaffView({
   selectedProfileId,
   templates,
   activities,
+  activityBank,
   selectedActivity,
   selectedActivityId,
   documentationDate,
@@ -49,6 +51,10 @@ export default function StaffView({
   onApplyTemplateToProfile,
   onDeleteTemplate,
   onAddActivity,
+  onAddChoiceToBank,
+  onSaveActivityToBank,
+  onAddBankChoiceToSchedule,
+  onDeleteBankChoice,
   onSelectActivity,
   onMoveActivity,
   onUpdateActivity,
@@ -123,6 +129,16 @@ export default function StaffView({
           onLoadCloudSnapshot={onLoadCloudSnapshot}
         />
       </div>
+
+      <StaffChoiceBankPanel
+        selectedProfile={selectedProfile}
+        activities={activities}
+        activityBank={activityBank}
+        onAddChoiceToBank={onAddChoiceToBank}
+        onSaveActivityToBank={onSaveActivityToBank}
+        onAddBankChoiceToSchedule={onAddBankChoiceToSchedule}
+        onDeleteBankChoice={onDeleteBankChoice}
+      />
 
       <AddActivityForm onAddActivity={onAddActivity} />
 
