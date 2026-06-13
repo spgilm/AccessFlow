@@ -267,22 +267,6 @@ useEffect(() => {
         />
       ) : null}
 
-      {studentTabs.length > 1 ? (
-        <nav className="student-mobile-quick-nav" aria-label="Quick student navigation">
-          {studentTabs.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              className={activeStudentTab === tab.id ? "is-active" : ""}
-              onClick={() => setActiveStudentTab(tab.id)}
-              aria-pressed={activeStudentTab === tab.id}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
-      ) : null}
-
       {activeStudentTab === "profile" ? (
         <section className="student-tab-screen student-profile-screen" aria-labelledby="student-profile-heading">
           <div className="focus-header compact-focus-header">

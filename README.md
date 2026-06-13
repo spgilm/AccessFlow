@@ -2113,3 +2113,8 @@ v51.2 adds a dedicated Staff Auth Gate. If Staff Mode is opened while signed out
 ## v51.3 Navigation Symmetry Pack
 
 v51.3 makes Student Mode and Staff Mode both use 8-tab navigation. Student Mode adds Help. Staff Mode adds Reports. Both tab bars are styled as matching 2x4 grids.
+
+
+## v51.4 Duplicate Tabs Fix
+
+v51.4 fixes Student Mode showing duplicate tab bars by removing the old `student-mobile-quick-nav` rendering block.

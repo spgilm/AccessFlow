@@ -463,3 +463,13 @@ Use this checklist before adding more features.
 - [ ] Notes tab opens and focuses on documentation/observation entry.
 - [ ] Staff Auth Gate still appears when signed out.
 - [ ] Build succeeds on Render.
+
+
+## v51.4 Duplicate Tabs Fix Checks
+
+- [ ] Student Mode shows one tab bar, not two.
+- [ ] Staff Mode shows one tab bar.
+- [ ] Student tab bar still shows 8 tabs.
+- [ ] Staff tab bar still shows 8 tabs.
+- [ ] Help, Relax, and Games tabs still open.
+- [ ] Staff Auth Gate still works when signed out.

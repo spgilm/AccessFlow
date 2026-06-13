@@ -1548,3 +1548,8 @@ StaffView now imports `StaffReleaseReadinessPanel` before rendering the v50 rele
 ## v51.3 Navigation Symmetry Pack
 
 Student tab resolution now includes Help. StaffView now includes Reports. CSS overrides make workflow navigation use a matching 4-column, 2-row grid for both student and staff tab bars.
+
+
+## v51.4 Duplicate Tabs Fix
+
+`StudentView.jsx` now renders one tab navigation system: `WorkflowTabs`. The old second mobile quick nav block was removed.
