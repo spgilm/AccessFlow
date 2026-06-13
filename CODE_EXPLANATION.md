@@ -1543,3 +1543,8 @@ StaffView now imports `StaffReleaseReadinessPanel` before rendering the v50 rele
 ## v51.2 Staff Auth Gate Fix
 
 `App.jsx` now renders `StaffAuthGate` when `mode === "staff"` and `session` is missing. `StaffView` only renders after sign-in.
+
+
+## v51.3 Navigation Symmetry Pack
+
+Student tab resolution now includes Help. StaffView now includes Reports. CSS overrides make workflow navigation use a matching 4-column, 2-row grid for both student and staff tab bars.

@@ -72,6 +72,7 @@ const staffTabs = [
   { id: "choices", label: "Choices" },
   { id: "schedule", label: "Schedule" },
   { id: "notes", label: "Notes" },
+  { id: "reports", label: "Reports" },
   { id: "save", label: "Save" },
 ];
 
@@ -501,7 +502,8 @@ export default function StaffView({
         <section className="staff-tab-screen" aria-labelledby="staff-notes-heading">
           <div className="focus-header compact-focus-header">
             <p className="eyebrow">Notes</p>
-            <h2 id="staff-notes-heading">Progress documentation</h2>
+            <h2 id="staff-notes-heading">Daily documentation</h2>
+            <p>Write notes, log observations, update goals, and review accessibility supports.</p>
           </div>
 
           <StaffGoalPanel
@@ -511,12 +513,6 @@ export default function StaffView({
             onAddGoal={onAddGoal}
             onUpdateGoal={onUpdateGoal}
             onDeleteGoal={onDeleteGoal}
-          />
-
-          <WeeklyProgressPanel
-            summary={weeklyProgressSummary}
-            report={weeklyProgressReport}
-            onDownloadWeeklyReport={onDownloadWeeklyReport}
           />
 
           <AccessibilityReviewPanel
@@ -529,6 +525,38 @@ export default function StaffView({
           <StaffObservationLogPanel
             activities={activities}
             onAddSupportObservation={onAddSupportObservation}
+          />
+
+          <DocumentationPanel
+            profile={selectedProfile}
+            activities={activities}
+            documentationDate={documentationDate}
+            dailyNote={dailyNote}
+            supportEvents={supportEvents}
+            copyStatus={copyStatus}
+            onDocumentationDateChange={onDocumentationDateChange}
+            onUpdateDailyNote={onUpdateDailyNote}
+            onCopyDailyNote={onCopyDailyNote}
+            onDownloadDailyNote={onDownloadDailyNote}
+            onDownloadActivityCsv={onDownloadActivityCsv}
+          />
+
+          <EventLogPanel events={supportEvents} />
+        </section>
+      ) : null}
+
+      {activeStaffTab === "reports" ? (
+        <section className="staff-tab-screen" aria-labelledby="staff-reports-heading">
+          <div className="focus-header compact-focus-header">
+            <p className="eyebrow">Reports</p>
+            <h2 id="staff-reports-heading">Patterns and handoffs</h2>
+            <p>Review weekly progress, support patterns, readiness, communication history, and handoff summaries.</p>
+          </div>
+
+          <WeeklyProgressPanel
+            summary={weeklyProgressSummary}
+            report={weeklyProgressReport}
+            onDownloadWeeklyReport={onDownloadWeeklyReport}
           />
 
           <HandoffReportPanel
@@ -566,22 +594,6 @@ export default function StaffView({
             selectedProfile={selectedProfile}
             aboutMeProfile={aboutMeProfile}
           />
-
-          <DocumentationPanel
-            profile={selectedProfile}
-            activities={activities}
-            documentationDate={documentationDate}
-            dailyNote={dailyNote}
-            supportEvents={supportEvents}
-            copyStatus={copyStatus}
-            onDocumentationDateChange={onDocumentationDateChange}
-            onUpdateDailyNote={onUpdateDailyNote}
-            onCopyDailyNote={onCopyDailyNote}
-            onDownloadDailyNote={onDownloadDailyNote}
-            onDownloadActivityCsv={onDownloadActivityCsv}
-          />
-
-          <EventLogPanel events={supportEvents} />
         </section>
       ) : null}
 

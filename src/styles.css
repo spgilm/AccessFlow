@@ -7442,3 +7442,98 @@ a:focus-visible,
   color: #ffffff;
   border-color: #ffffff;
 }
+
+
+/* v51.3: navigation symmetry - matching 8-tab 2x4 grids */
+.student-profile-screen,
+.student-schedule-screen,
+.student-board-screen,
+.student-help-screen,
+.student-relax-screen,
+.student-games-screen {
+  display: grid;
+  gap: 1rem;
+}
+
+.workflow-tabs,
+.student-mobile-quick-nav {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  overflow: visible;
+  padding: 0.45rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--panel-bg);
+  box-shadow: var(--shadow);
+}
+
+.workflow-tabs button,
+.student-mobile-quick-nav button {
+  min-width: 0;
+  min-height: var(--tap-target);
+  white-space: normal;
+  line-height: 1.05;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.35rem;
+  background: var(--control-bg);
+  color: var(--primary-strong);
+  font-size: clamp(0.78rem, 2.7vw, 0.95rem);
+  font-weight: 950;
+  text-align: center;
+}
+
+.workflow-tabs button.is-active,
+.student-mobile-quick-nav button.is-active {
+  background: var(--primary);
+  color: var(--on-primary);
+  border-color: var(--primary);
+}
+
+.staff-workflow-tabs {
+  margin-bottom: 1rem;
+}
+
+.student-help-screen .student-tool-group:first-of-type {
+  border-color: var(--primary);
+}
+
+.student-relax-screen .student-tool-group:first-of-type {
+  border-color: var(--border);
+}
+
+@media (max-width: 360px) {
+  .workflow-tabs,
+  .student-mobile-quick-nav {
+    gap: 0.35rem;
+    padding: 0.35rem;
+  }
+
+  .workflow-tabs button,
+  .student-mobile-quick-nav button {
+    font-size: 0.72rem;
+    padding-inline: 0.2rem;
+  }
+}
+
+[data-theme="dark"] .workflow-tabs,
+[data-theme="dark"] .student-mobile-quick-nav {
+  background: #052f52;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .workflow-tabs button,
+[data-theme="dark"] .student-mobile-quick-nav button {
+  background: #063b66;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .workflow-tabs button.is-active,
+[data-theme="dark"] .student-mobile-quick-nav button.is-active {
+  background: #ffe066;
+  color: #001a2e;
+  border-color: #ffe066;
+}

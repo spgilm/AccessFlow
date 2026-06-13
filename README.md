@@ -2108,3 +2108,8 @@ v51.1 fixes a Staff Mode white-screen runtime crash caused by a missing `StaffRe
 ## v51.2 Staff Auth Gate Fix
 
 v51.2 adds a dedicated Staff Auth Gate. If Staff Mode is opened while signed out, the app now shows login/create-account UI instead of rendering StaffView and risking a white screen.
+
+
+## v51.3 Navigation Symmetry Pack
+
+v51.3 makes Student Mode and Staff Mode both use 8-tab navigation. Student Mode adds Help. Staff Mode adds Reports. Both tab bars are styled as matching 2x4 grids.

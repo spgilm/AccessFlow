@@ -174,3 +174,8 @@ Future v51+ work should prioritize live browser testing, uploaded-photo workflow
 ## v51 student navigation cleanup note
 
 v51 makes Student Mode easier to polish visually by separating the student experience into clearer product areas. Future work can add small calm-down games in the Games tab and a persistent favorites dock across Profile/Schedule/Board/Relax.
+
+
+## v51.3 navigation symmetry note
+
+v51.3 stabilizes the navigation model before visual beautification. The next polish pass should treat the 8-tab grid as the main Student/Staff information architecture.

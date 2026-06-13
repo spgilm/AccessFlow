@@ -17,6 +17,7 @@ export const defaultDisplaySettings = {
   showChooseTab: true,
   showMakeTab: true,
   showChoiceBoardTab: true,
+  showHelpTab: true,
   showRelaxTab: true,
   showGamesTab: true,
   showGuidedScheduleBuilder: true,
@@ -89,6 +90,7 @@ export function resolveStudentTabs(displaySettings) {
       settings.showProfileTab !== false ? { id: "profile", label: "Profile" } : null,
       { id: "schedule", label: "Schedule" },
       settings.showChoiceBoardTab !== false ? { id: "board", label: "Board" } : null,
+      settings.showHelpTab !== false ? { id: "help", label: "Help" } : null,
       settings.showRelaxTab !== false ? { id: "relax", label: "Relax" } : null,
       settings.showGamesTab !== false ? { id: "games", label: "Games" } : null,
     ].filter(Boolean);
@@ -100,6 +102,7 @@ export function resolveStudentTabs(displaySettings) {
     settings.showChooseTab !== false ? { id: "choose", label: "Choose" } : null,
     settings.showMakeTab !== false && settings.interfaceLevel !== "simple" ? { id: "make", label: "Make" } : null,
     settings.showChoiceBoardTab !== false ? { id: "board", label: "Board" } : null,
+    settings.showHelpTab !== false ? { id: "help", label: "Help" } : null,
     settings.showRelaxTab !== false ? { id: "relax", label: "Relax" } : null,
     settings.showGamesTab !== false ? { id: "games", label: "Games" } : null,
   ].filter(Boolean);

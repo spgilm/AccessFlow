@@ -1,5 +1,5 @@
 /**
- * Student-facing workflow screen. v51 splits tools into Profile, Schedule, Choose, Make, Board, Relax, and Games so each screen has one clearer job.
+ * Student-facing workflow screen. v51 splits tools into Profile, Schedule, Choose, Make, Board, Help, Relax, and Games so each screen has one clearer job.
  *
  * Comment added in v15 to make the prototype easier to study and modify.
  */
@@ -194,6 +194,7 @@ const hasSelfAdvocacyTools =
   displaySettings?.showDecisionSupport !== false ||
   displaySettings?.showStuckPathway !== false ||
   displaySettings?.showScheduleChangeRequest !== false;
+const hasHelpTools = hasSupportTools || hasSelfAdvocacyTools;
 const hasLifeSkillsTools =
   displaySettings?.showCommunityAccessPanel !== false ||
   displaySettings?.showVocationalTaskPanel !== false;
@@ -582,12 +583,67 @@ useEffect(() => {
             </StudentToolGroup>
           ) : null}
 
-          {hasSelfAdvocacyTools ? (
+          {hasLifeSkillsTools ? (
             <StudentToolGroup
-              title="Self-advocacy"
-              description="Yes/no, help, choices, stuck, and change requests"
+              title="Community and work"
+              description="Community access and vocational supports"
               defaultOpen={studentPanelLayout === "open"}
             >
+              {displaySettings?.showCommunityAccessPanel !== false ? (
+                <StudentCommunityAccessPanel
+                  lifeSkillsSettings={lifeSkillsSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showVocationalTaskPanel !== false ? (
+                <StudentVocationalTaskPanel
+                  lifeSkillsSettings={lifeSkillsSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+            </StudentToolGroup>
+          ) : null}
+        </section>
+      ) : null}
+
+      {activeStudentTab === "help" ? (
+        <section className="student-tab-screen student-help-screen" aria-labelledby="student-help-heading">
+          <div className="focus-header compact-focus-header">
+            <p className="eyebrow">Help</p>
+            <h2 id="student-help-heading">I need help</h2>
+            <p>Fast support, break requests, choices, stuck tools, and schedule change requests.</p>
+          </div>
+
+          {hasHelpTools ? (
+            <StudentToolGroup
+              title="Help and support"
+              description="Ask for help, request a break, solve stuck moments, or ask for a change"
+              defaultOpen
+            >
+              {displaySettings?.showSupportButtons !== false ? (
+                <StudentSupportPanel
+                  currentActivity={currentActivity}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showBreakPlan !== false ? (
+                <StudentBreakPlan
+                  currentActivity={currentActivity}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showTransitionSupports !== false ? (
+                <StudentTransitionPanel
+                  currentActivity={currentActivity}
+                  nextActivity={nextActivity}
+                  transitionSettings={transitionSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
               {displaySettings?.showYesNoPanel !== false ? (
                 <StudentYesNoPanel
                   selfAdvocacySupportSettings={selfAdvocacySupportSettings}
@@ -624,29 +680,12 @@ useEffect(() => {
                 />
               ) : null}
             </StudentToolGroup>
-          ) : null}
-
-          {hasLifeSkillsTools ? (
-            <StudentToolGroup
-              title="Community and work"
-              description="Community access and vocational supports"
-              defaultOpen={studentPanelLayout === "open"}
-            >
-              {displaySettings?.showCommunityAccessPanel !== false ? (
-                <StudentCommunityAccessPanel
-                  lifeSkillsSettings={lifeSkillsSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showVocationalTaskPanel !== false ? (
-                <StudentVocationalTaskPanel
-                  lifeSkillsSettings={lifeSkillsSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-            </StudentToolGroup>
-          ) : null}
+          ) : (
+            <div className="games-placeholder-card">
+              <strong>No help tools are turned on</strong>
+              <p>Staff can enable help, break, yes/no, stuck, and schedule-change tools in Staff Mode.</p>
+            </div>
+          )}
         </section>
       ) : null}
 
@@ -655,39 +694,8 @@ useEffect(() => {
           <div className="focus-header compact-focus-header">
             <p className="eyebrow">Relax</p>
             <h2 id="student-relax-heading">Help me calm down</h2>
-            <p>Breaks, sensory supports, waiting help, and calm communication.</p>
+            <p>Sensory supports, regulation, waiting help, and calm communication.</p>
           </div>
-
-          {hasSupportTools ? (
-            <StudentToolGroup
-              title="Help and break tools"
-              description="Help, breaks, and transition support"
-              defaultOpen
-            >
-              {displaySettings?.showSupportButtons !== false ? (
-                <StudentSupportPanel
-                  currentActivity={currentActivity}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showBreakPlan !== false ? (
-                <StudentBreakPlan
-                  currentActivity={currentActivity}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showTransitionSupports !== false ? (
-                <StudentTransitionPanel
-                  currentActivity={currentActivity}
-                  nextActivity={nextActivity}
-                  transitionSettings={transitionSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-            </StudentToolGroup>
-          ) : null}
 
           {hasCommunicationTools ? (
             <StudentToolGroup

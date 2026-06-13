@@ -450,3 +450,16 @@ Use this checklist before adding more features.
 - [ ] Back to Student Mode works.
 - [ ] Sign in and confirm Staff Dashboard loads.
 - [ ] Sign out again and confirm Staff Auth Gate returns.
+
+
+## v51.3 Navigation Symmetry Checks
+
+- [ ] Student Mode shows 8 tabs: Profile, Schedule, Choose, Make, Board, Help, Relax, Games.
+- [ ] Staff Mode shows 8 tabs: Dashboard, Setup, Students, Choices, Schedule, Notes, Reports, Save.
+- [ ] Student and Staff tab bars visually match as 2x4 grids.
+- [ ] Help tab opens and shows urgent support/self-advocacy tools.
+- [ ] Relax tab opens and shows calm/regulation/sensory tools.
+- [ ] Reports tab opens and shows progress, handoff, and pattern tools.
+- [ ] Notes tab opens and focuses on documentation/observation entry.
+- [ ] Staff Auth Gate still appears when signed out.
+- [ ] Build succeeds on Render.

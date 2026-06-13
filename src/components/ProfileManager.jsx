@@ -243,6 +243,7 @@ function getStudentPreviewSummary() {
                 showChooseTab: false,
                 showMakeTab: false,
                 showChoiceBoardTab: true,
+                showHelpTab: true,
                 showProgress: false,
                 showPromptControls: false,
                 showStepNumbers: false,
@@ -264,6 +265,7 @@ function getStudentPreviewSummary() {
                   showChooseTab: true,
                   showMakeTab: true,
                   showChoiceBoardTab: true,
+                showHelpTab: true,
                   showProgress: true,
                   showPromptControls: true,
                   showStepNumbers: true,
@@ -284,6 +286,7 @@ function getStudentPreviewSummary() {
                   showChooseTab: true,
                   showMakeTab: true,
                   showChoiceBoardTab: true,
+                showHelpTab: true,
                   showProgress: true,
                   showPromptControls: false,
                   showStepNumbers: true,
@@ -347,6 +350,7 @@ function getStudentPreviewSummary() {
       <option value="choose">Choose</option>
       <option value="make">Make</option>
       <option value="board">Board</option>
+      <option value="help">Help</option>
       <option value="relax">Relax</option>
       <option value="games">Games</option>
     </select>
@@ -444,6 +448,7 @@ function getStudentPreviewSummary() {
     ["showChooseTab", "Show Choose tab"],
     ["showMakeTab", "Show Make tab"],
     ["showChoiceBoardTab", "Show Board tab"],
+    ["showHelpTab", "Show Help tab"],
     ["showRelaxTab", "Show Relax tab"],
     ["showGamesTab", "Show Games tab"],
     ["showGuidedScheduleBuilder", "Show guided schedule builder"],
