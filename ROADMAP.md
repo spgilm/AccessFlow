@@ -169,3 +169,8 @@ Future work could add bulk visual-style presets, visual contrast checks, uploade
 
 v50 stabilizes the visual-symbol architecture and adds student visual preference modes plus a staff release-readiness dashboard.
 Future v51+ work should prioritize live browser testing, uploaded-photo workflows, backend schema alignment, and deeper production-readiness planning.
+
+
+## v51 student navigation cleanup note
+
+v51 makes Student Mode easier to polish visually by separating the student experience into clearer product areas. Future work can add small calm-down games in the Games tab and a persistent favorites dock across Profile/Schedule/Board/Relax.

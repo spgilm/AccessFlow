@@ -7346,3 +7346,76 @@ a:focus-visible,
 [data-theme="dark"] .release-readiness-summary-grid strong {
   color: #ffe066;
 }
+
+
+/* v51: Student navigation cleanup and lower-clutter tab separation */
+.student-profile-screen,
+.student-schedule-screen,
+.student-board-screen,
+.student-relax-screen,
+.student-games-screen {
+  display: grid;
+  gap: 1rem;
+}
+
+.workflow-tabs,
+.student-mobile-quick-nav {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+}
+
+.workflow-tabs button,
+.student-mobile-quick-nav button {
+  white-space: nowrap;
+}
+
+.student-mobile-quick-nav {
+  grid-template-columns: repeat(7, minmax(5.75rem, 1fr));
+}
+
+.games-placeholder-card {
+  display: grid;
+  gap: 0.5rem;
+  border: 2px dashed var(--border-strong);
+  border-radius: var(--radius-xl);
+  padding: 1.25rem;
+  background: var(--surface-strong);
+}
+
+.games-placeholder-card strong {
+  font-size: 1.35rem;
+  color: var(--primary-strong);
+}
+
+.games-placeholder-card p {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.student-relax-screen .student-tool-group:first-of-type {
+  border-color: var(--primary);
+}
+
+.student-board-screen > .choice-board-panel,
+.student-board-screen > .student-choice-board,
+.student-board-screen > section:first-of-type {
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 900px) {
+  .student-mobile-quick-nav {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}
+
+[data-theme="dark"] .games-placeholder-card {
+  background: #052f52;
+  color: #ffffff;
+  border-color: #ffe066;
+}
+
+[data-theme="dark"] .games-placeholder-card strong {
+  color: #ffe066;
+}

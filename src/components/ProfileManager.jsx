@@ -69,14 +69,14 @@ function getStudentPreviewSummary() {
   }
 
   if (displaySettings.interfaceLevel === "simple") {
-    return "Student Mode will show a simplified Today view and Board.";
+    return "Student Mode will show a simplified Schedule, Board, Relax, and Games layout.";
   }
 
   if (displaySettings.interfaceLevel === "advanced") {
-    return "Student Mode will show the full Today, Choose, Make, and Board workflow.";
+    return "Student Mode will show the full Profile, Schedule, Choose, Make, Board, Relax, and Games workflow.";
   }
 
-  return "Student Mode will show the standard tabbed workflow with moderate detail.";
+  return "Student Mode will show the standard Profile, Schedule, Choose, Make, Board, Relax, and Games workflow.";
 }
 
   return (
@@ -239,7 +239,7 @@ function getStudentPreviewSummary() {
                 interfaceLevel: "simple",
                 studentModeLayout: "tabs",
                 studentPanelLayout: "minimal",
-                defaultStudentView: "today",
+                defaultStudentView: "schedule",
                 showChooseTab: false,
                 showMakeTab: false,
                 showChoiceBoardTab: true,
@@ -260,7 +260,7 @@ function getStudentPreviewSummary() {
                   interfaceLevel: "advanced",
                   studentModeLayout: "tabs",
                   studentPanelLayout: "open",
-                  defaultStudentView: "today",
+                  defaultStudentView: "schedule",
                   showChooseTab: true,
                   showMakeTab: true,
                   showChoiceBoardTab: true,
@@ -280,7 +280,7 @@ function getStudentPreviewSummary() {
                   interfaceLevel: "standard",
                   studentModeLayout: "tabs",
                   studentPanelLayout: "grouped",
-                  defaultStudentView: "today",
+                  defaultStudentView: "schedule",
                   showChooseTab: true,
                   showMakeTab: true,
                   showChoiceBoardTab: true,
@@ -342,10 +342,13 @@ function getStudentPreviewSummary() {
       onChange={(event) => updateDisplaySetting("defaultStudentView", event.target.value)}
       disabled={displaySettings.studentModeLayout !== "tabs"}
     >
-      <option value="today">Today</option>
+      <option value="profile">Profile</option>
+      <option value="schedule">Schedule</option>
       <option value="choose">Choose</option>
       <option value="make">Make</option>
-      <option value="board">Choice Board</option>
+      <option value="board">Board</option>
+      <option value="relax">Relax</option>
+      <option value="games">Games</option>
     </select>
   </label>
 
@@ -436,9 +439,13 @@ function getStudentPreviewSummary() {
     ["eyeGazeFriendly", "Eye-gaze friendly spacing"],
     ["showBoardActivitySection", "Show activities section on Board"],
     ["showStudentToolSummary", "Show student settings summary"],
+    ["showProfileTab", "Show Profile tab"],
+    ["showScheduleTab", "Show Schedule tab"],
     ["showChooseTab", "Show Choose tab"],
     ["showMakeTab", "Show Make tab"],
-    ["showChoiceBoardTab", "Show Choice Board tab"],
+    ["showChoiceBoardTab", "Show Board tab"],
+    ["showRelaxTab", "Show Relax tab"],
+    ["showGamesTab", "Show Games tab"],
     ["showGuidedScheduleBuilder", "Show guided schedule builder"],
     ["showAboutMePanel", "Show About Me profile"],
     ["showStepNumbers", "Show step numbers"],

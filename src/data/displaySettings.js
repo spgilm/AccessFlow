@@ -12,9 +12,13 @@ export const defaultDisplaySettings = {
   touchSize: "standard",
   textDisplay: "iconsAndWords",
   visualPreference: "balanced",
+  showProfileTab: true,
+  showScheduleTab: true,
   showChooseTab: true,
   showMakeTab: true,
   showChoiceBoardTab: true,
+  showRelaxTab: true,
+  showGamesTab: true,
   showGuidedScheduleBuilder: true,
   showAboutMePanel: true,
   showWords: true,
@@ -56,7 +60,7 @@ export const defaultDisplaySettings = {
   reduceMotion: false,
   confirmBeforeMajorActions: true,
   playAudioFeedback: false,
-  defaultStudentView: "today",
+  defaultStudentView: "schedule",
 };
 
 export function getDisplaySettings(profile) {
@@ -77,21 +81,27 @@ export function resolveStudentTabs(displaySettings) {
   }
 
   if (settings.studentModeLayout === "firstThenOnly") {
-    return [{ id: "today", label: "First / Then" }];
+    return [{ id: "schedule", label: "First / Then" }];
   }
 
   if (settings.interfaceLevel === "simple") {
     return [
-      { id: "today", label: "Today" },
+      settings.showProfileTab !== false ? { id: "profile", label: "Profile" } : null,
+      { id: "schedule", label: "Schedule" },
       settings.showChoiceBoardTab !== false ? { id: "board", label: "Board" } : null,
+      settings.showRelaxTab !== false ? { id: "relax", label: "Relax" } : null,
+      settings.showGamesTab !== false ? { id: "games", label: "Games" } : null,
     ].filter(Boolean);
   }
 
   return [
-    { id: "today", label: "Today" },
+    settings.showProfileTab !== false ? { id: "profile", label: "Profile" } : null,
+    settings.showScheduleTab !== false ? { id: "schedule", label: "Schedule" } : null,
     settings.showChooseTab !== false ? { id: "choose", label: "Choose" } : null,
     settings.showMakeTab !== false && settings.interfaceLevel !== "simple" ? { id: "make", label: "Make" } : null,
     settings.showChoiceBoardTab !== false ? { id: "board", label: "Board" } : null,
+    settings.showRelaxTab !== false ? { id: "relax", label: "Relax" } : null,
+    settings.showGamesTab !== false ? { id: "games", label: "Games" } : null,
   ].filter(Boolean);
 }
 
@@ -106,10 +116,14 @@ export function resolveInitialStudentTab(displaySettings) {
   }
 
   if (settings.studentModeLayout === "firstThenOnly") {
-    return "today";
+    return "schedule";
   }
 
-  return settings.defaultStudentView || "today";
+  if (settings.defaultStudentView === "today") {
+    return "schedule";
+  }
+
+  return settings.defaultStudentView || "schedule";
 }
 
 export function shouldShowText(displaySettings) {

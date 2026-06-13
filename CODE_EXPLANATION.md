@@ -1528,3 +1528,8 @@ StudentView receives the visual preference as a CSS class, so buttons do not nee
 ## v50.1 Render Fix
 
 v50.1 fixes invalid JSX syntax in four Student Mode panels that caused Render/Vite deployment failure. No feature behavior changed.
+
+
+## v51 Student Navigation Cleanup Pack
+
+`resolveStudentTabs` now returns separate Student Mode sections. `StudentView.jsx` no longer places every support panel inside the old Today screen. The old Today concept is now Schedule, while Profile, Board, Relax, and Games handle separate jobs.

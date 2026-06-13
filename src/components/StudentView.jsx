@@ -1,5 +1,5 @@
 /**
- * Student-facing workflow screen. Keeps student tools split into Today, Choose, Make, and Board so each screen has one clear job.
+ * Student-facing workflow screen. v51 splits tools into Profile, Schedule, Choose, Make, Board, Relax, and Games so each screen has one clearer job.
  *
  * Comment added in v15 to make the prototype easier to study and modify.
  */
@@ -215,7 +215,7 @@ useEffect(() => {
   const availableTabIds = studentTabs.map((tab) => tab.id);
 
   if (!availableTabIds.includes(activeStudentTab)) {
-    setActiveStudentTab(availableTabIds[0] ?? "today");
+    setActiveStudentTab(availableTabIds[0] ?? "schedule");
   }
 
   if (isFirstThenOnly) {
@@ -282,409 +282,60 @@ useEffect(() => {
         </nav>
       ) : null}
 
-      {activeStudentTab === "today" ? (
-        <section className="student-tab-screen" aria-labelledby="student-today-heading">
+      {activeStudentTab === "profile" ? (
+        <section className="student-tab-screen student-profile-screen" aria-labelledby="student-profile-heading">
           <div className="focus-header compact-focus-header">
-            <p className="eyebrow">Today</p>
-            <h2 id="student-today-heading">What am I doing?</h2>
+            <p className="eyebrow">Profile</p>
+            <h2 id="student-profile-heading">About me</h2>
+            <p>My preferences, check-ins, rewards, and progress in one place.</p>
           </div>
 
-          {groupStudentPanels ? (
-            <>
-              {hasCoreTools ? (
-                <StudentToolGroup
-                  title="Start tools"
-                  description="Date, check-in, rewards, and progress"
-                  defaultOpen={coreToolsOpen}
-                >
-                  {displaySettings?.showAboutMePanel !== false ? (
-                    <StudentAboutMePanel
-                      profile={profile}
-                      aboutMeProfile={aboutMeProfile}
-                    />
-                  ) : null}
+          {displaySettings?.showAboutMePanel !== false ? (
+            <StudentAboutMePanel
+              profile={profile}
+              aboutMeProfile={aboutMeProfile}
+            />
+          ) : null}
 
-                  {displaySettings?.showScheduleDate !== false ? (
-                    <ScheduleDatePicker
-                      scheduleDate={scheduleDate}
-                      onScheduleDateChange={onScheduleDateChange}
-                      compact
-                    />
-                  ) : null}
+          {displaySettings?.showCheckIn !== false ? (
+            <StudentCheckInPanel onRecordCheckIn={onRecordCheckIn} />
+          ) : null}
 
-                  {displaySettings?.showCheckIn !== false ? (
-                    <StudentCheckInPanel onRecordCheckIn={onRecordCheckIn} />
-                  ) : null}
+          {displaySettings?.showRewardBoard !== false ? (
+            <StudentRewardPanel
+              reinforcementSettings={reinforcementSettings}
+              onRequestReward={onRequestReward}
+            />
+          ) : null}
 
-                  {displaySettings?.showRewardBoard !== false ? (
-                    <StudentRewardPanel
-                      reinforcementSettings={reinforcementSettings}
-                      onRequestReward={onRequestReward}
-                    />
-                  ) : null}
+          {displaySettings?.showProgress !== false ? (
+            <ProgressSummary activities={activities} />
+          ) : null}
+        </section>
+      ) : null}
 
-                  {displaySettings?.showProgress !== false ? (
-                    <ProgressSummary activities={activities} />
-                  ) : null}
-                </StudentToolGroup>
-              ) : null}
+      {activeStudentTab === "schedule" ? (
+        <section className="student-tab-screen student-schedule-screen" aria-labelledby="student-schedule-screen-heading">
+          <div className="focus-header compact-focus-header">
+            <p className="eyebrow">Schedule</p>
+            <h2 id="student-schedule-screen-heading">What am I doing?</h2>
+            <p>My plan, first/then view, and activity support.</p>
+          </div>
 
-              {hasSupportTools ? (
-                <StudentToolGroup
-                  title="Help tools"
-                  description="Help, breaks, and transition support"
-                  defaultOpen={supportToolsOpen}
-                >
-                  {displaySettings?.showSupportButtons !== false ? (
-                    <StudentSupportPanel
-                      currentActivity={currentActivity}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
+          {displaySettings?.showScheduleDate !== false ? (
+            <ScheduleDatePicker
+              scheduleDate={scheduleDate}
+              onScheduleDateChange={onScheduleDateChange}
+              compact
+            />
+          ) : null}
 
-                  {displaySettings?.showBreakPlan !== false ? (
-                    <StudentBreakPlan
-                      currentActivity={currentActivity}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showTransitionSupports !== false ? (
-                    <StudentTransitionPanel
-                      currentActivity={currentActivity}
-                      nextActivity={nextActivity}
-                      transitionSettings={transitionSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-                </StudentToolGroup>
-              ) : null}
-
-              {hasCommunicationTools ? (
-                <StudentToolGroup
-                  title="Communication tools"
-                  description="Pain, sensory, feelings, and waiting"
-                  defaultOpen={studentPanelLayout === "open"}
-                >
-                  {displaySettings?.showPainBodyPanel !== false ? (
-                    <StudentPainBodyPanel
-                      communicationSupportSettings={communicationSupportSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showSensoryPanel !== false ? (
-                    <StudentSensoryPanel
-                      communicationSupportSettings={communicationSupportSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showRegulationPathway !== false ? (
-                    <StudentRegulationPathway
-                      communicationSupportSettings={communicationSupportSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showWaitingSupport !== false ? (
-                    <StudentWaitingSupport
-                      communicationSupportSettings={communicationSupportSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-                </StudentToolGroup>
-              ) : null}
-
-              {hasSelfAdvocacyTools ? (
-                <StudentToolGroup
-                  title="Self-advocacy tools"
-                  description="Answers, help, choices, stuck, and change requests"
-                  defaultOpen={studentPanelLayout === "open"}
-                >
-                  {displaySettings?.showYesNoPanel !== false ? (
-                    <StudentYesNoPanel
-                      selfAdvocacySupportSettings={selfAdvocacySupportSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showHelpRequestBuilder !== false ? (
-                    <StudentHelpRequestBuilder
-                      selfAdvocacySupportSettings={selfAdvocacySupportSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showDecisionSupport !== false ? (
-                    <StudentDecisionSupport
-                      selfAdvocacySupportSettings={selfAdvocacySupportSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showStuckPathway !== false ? (
-                    <StudentStuckPathway
-                      selfAdvocacySupportSettings={selfAdvocacySupportSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showScheduleChangeRequest !== false ? (
-                    <StudentScheduleChangeRequest
-                      currentActivity={currentActivity}
-                      selfAdvocacySupportSettings={selfAdvocacySupportSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-                </StudentToolGroup>
-              ) : null}
-
-              {hasLifeSkillsTools ? (
-                <StudentToolGroup
-                  title="Life skills tools"
-                  description="Community access and work task supports"
-                  defaultOpen={studentPanelLayout === "open"}
-                >
-                  {displaySettings?.showCommunityAccessPanel !== false ? (
-                    <StudentCommunityAccessPanel
-                      lifeSkillsSettings={lifeSkillsSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showVocationalTaskPanel !== false ? (
-                    <StudentVocationalTaskPanel
-                      lifeSkillsSettings={lifeSkillsSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-                </StudentToolGroup>
-              ) : null}
-
-              {hasActivityReadinessTools ? (
-                <StudentToolGroup
-                  title="Activity readiness tools"
-                  description="Prepare, reflect, and try again later"
-                  defaultOpen={studentPanelLayout === "open"}
-                >
-                  {displaySettings?.showActivityPrepPanel !== false ? (
-                    <StudentActivityPrepPanel
-                      currentActivity={currentActivity}
-                      aboutMeProfile={aboutMeProfile}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showActivityReflectionPanel !== false ? (
-                    <StudentActivityReflectionPanel
-                      currentActivity={currentActivity}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showTryAgainLaterPanel !== false ? (
-                    <StudentTryAgainLaterPanel
-                      currentActivity={currentActivity}
-                      supportEvents={supportEvents}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-                </StudentToolGroup>
-              ) : null}
-
-              {hasAlternativeAccessTools ? (
-                <StudentToolGroup
-                  title="Alternative access and calm tools"
-                  description="Calm screen, repair messages, and switch scanning"
-                  defaultOpen={studentPanelLayout === "open" || displaySettings?.reducedChoiceMode === true}
-                >
-                  {displaySettings?.showCalmScreenPanel !== false ? (
-                    <StudentCalmScreenPanel
-                      aboutMeProfile={aboutMeProfile}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showCommunicationRepairPanel !== false ? (
-                    <StudentCommunicationRepairPanel onSupportRequest={onSupportRequest} />
-                  ) : null}
-
-                  {displaySettings?.showSwitchScannerPanel !== false ? (
-                    <StudentSwitchScannerPanel onSupportRequest={onSupportRequest} />
-                  ) : null}
-                </StudentToolGroup>
-              ) : null}
-
-              {hasAacExpansionTools ? (
-                <StudentToolGroup
-                  title="AAC expansion tools"
-                  description="Core words, quick phrases, feelings, and social scripts"
-                  defaultOpen={studentPanelLayout === "open"}
-                >
-                  {displaySettings?.showCoreWordsPanel !== false ? (
-                    <StudentAacCoreWordsPanel
-                      aacExpansionSettings={aacExpansionSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showQuickPhrasesPanel !== false ? (
-                    <StudentQuickPhrasesPanel
-                      aacExpansionSettings={aacExpansionSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showFeelingsIntensityPanel !== false ? (
-                    <StudentFeelingsIntensityPanel
-                      aacExpansionSettings={aacExpansionSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-
-                  {displaySettings?.showSocialScriptsPanel !== false ? (
-                    <StudentSocialScriptsPanel
-                      aacExpansionSettings={aacExpansionSettings}
-                      onSupportRequest={onSupportRequest}
-                    />
-                  ) : null}
-                </StudentToolGroup>
-              ) : null}
-            </>
-          ) : (
-            <>
-              {displaySettings?.showAboutMePanel !== false ? (
-                <StudentAboutMePanel
-                  profile={profile}
-                  aboutMeProfile={aboutMeProfile}
-                />
-              ) : null}
-
-              {displaySettings?.showScheduleDate !== false ? (
-                <ScheduleDatePicker
-                  scheduleDate={scheduleDate}
-                  onScheduleDateChange={onScheduleDateChange}
-                  compact
-                />
-              ) : null}
-
-              {displaySettings?.showCheckIn !== false ? (
-                <StudentCheckInPanel onRecordCheckIn={onRecordCheckIn} />
-              ) : null}
-
-              {displaySettings?.showRewardBoard !== false ? (
-                <StudentRewardPanel
-                  reinforcementSettings={reinforcementSettings}
-                  onRequestReward={onRequestReward}
-                />
-              ) : null}
-
-              {displaySettings?.showProgress !== false ? (
-                <ProgressSummary activities={activities} />
-              ) : null}
-
-              {displaySettings?.showSupportButtons !== false ? (
-                <StudentSupportPanel
-                  currentActivity={currentActivity}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showBreakPlan !== false ? (
-                <StudentBreakPlan
-                  currentActivity={currentActivity}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showTransitionSupports !== false ? (
-                <StudentTransitionPanel
-                  currentActivity={currentActivity}
-                  nextActivity={nextActivity}
-                  transitionSettings={transitionSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showPainBodyPanel !== false ? (
-                <StudentPainBodyPanel
-                  communicationSupportSettings={communicationSupportSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showSensoryPanel !== false ? (
-                <StudentSensoryPanel
-                  communicationSupportSettings={communicationSupportSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showRegulationPathway !== false ? (
-                <StudentRegulationPathway
-                  communicationSupportSettings={communicationSupportSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showWaitingSupport !== false ? (
-                <StudentWaitingSupport
-                  communicationSupportSettings={communicationSupportSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showYesNoPanel !== false ? (
-                <StudentYesNoPanel
-                  selfAdvocacySupportSettings={selfAdvocacySupportSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showHelpRequestBuilder !== false ? (
-                <StudentHelpRequestBuilder
-                  selfAdvocacySupportSettings={selfAdvocacySupportSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showDecisionSupport !== false ? (
-                <StudentDecisionSupport
-                  selfAdvocacySupportSettings={selfAdvocacySupportSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showStuckPathway !== false ? (
-                <StudentStuckPathway
-                  selfAdvocacySupportSettings={selfAdvocacySupportSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showScheduleChangeRequest !== false ? (
-                <StudentScheduleChangeRequest
-                  currentActivity={currentActivity}
-                  selfAdvocacySupportSettings={selfAdvocacySupportSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showCommunityAccessPanel !== false ? (
-                <StudentCommunityAccessPanel
-                  lifeSkillsSettings={lifeSkillsSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showVocationalTaskPanel !== false ? (
-                <StudentVocationalTaskPanel
-                  lifeSkillsSettings={lifeSkillsSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
+          {hasActivityReadinessTools ? (
+            <StudentToolGroup
+              title="Activity support"
+              description="Prepare, reflect, and ask to try later"
+              defaultOpen={studentPanelLayout === "open"}
+            >
               {displaySettings?.showActivityPrepPanel !== false ? (
                 <StudentActivityPrepPanel
                   currentActivity={currentActivity}
@@ -707,54 +358,11 @@ useEffect(() => {
                   onSupportRequest={onSupportRequest}
                 />
               ) : null}
-
-              {displaySettings?.showCalmScreenPanel !== false ? (
-                <StudentCalmScreenPanel
-                  aboutMeProfile={aboutMeProfile}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showCommunicationRepairPanel !== false ? (
-                <StudentCommunicationRepairPanel onSupportRequest={onSupportRequest} />
-              ) : null}
-
-              {displaySettings?.showSwitchScannerPanel !== false ? (
-                <StudentSwitchScannerPanel onSupportRequest={onSupportRequest} />
-              ) : null}
-
-              {displaySettings?.showCoreWordsPanel !== false ? (
-                <StudentAacCoreWordsPanel
-                  aacExpansionSettings={aacExpansionSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showQuickPhrasesPanel !== false ? (
-                <StudentQuickPhrasesPanel
-                  aacExpansionSettings={aacExpansionSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showFeelingsIntensityPanel !== false ? (
-                <StudentFeelingsIntensityPanel
-                  aacExpansionSettings={aacExpansionSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-
-              {displaySettings?.showSocialScriptsPanel !== false ? (
-                <StudentSocialScriptsPanel
-                  aacExpansionSettings={aacExpansionSettings}
-                  onSupportRequest={onSupportRequest}
-                />
-              ) : null}
-            </>
-          )}
+            </StudentToolGroup>
+          ) : null}
 
           {!isFirstThenOnly ? (
-          <div className="view-mini-toggle" role="group" aria-label="Today view">
+          <div className="view-mini-toggle" role="group" aria-label="Schedule view">
             <button
               type="button"
               className={todayView === "schedule" ? "is-active" : ""}
@@ -889,6 +497,7 @@ useEffect(() => {
               )}
             </section>
           )}
+
         </section>
       ) : null}
 
@@ -922,13 +531,241 @@ useEffect(() => {
       ) : null}
 
       {activeStudentTab === "board" ? (
-        <StudentChoiceBoard
-          boardItems={choiceBoardItems}
-          libraryItems={displaySettings?.showBoardActivitySection === false ? [] : studentActivityLibrary}
-          displaySettings={displaySettings}
-          onAddActivity={onStudentAddActivity}
-          onSupportRequest={onSupportRequest}
-        />
+        <section className="student-tab-screen student-board-screen" aria-labelledby="student-board-heading">
+          <div className="focus-header compact-focus-header">
+            <p className="eyebrow">Board</p>
+            <h2 id="student-board-heading">Words and choices</h2>
+            <p>Communication boards, choice board, self-advocacy, and community/work cards.</p>
+          </div>
+
+          <StudentChoiceBoard
+            boardItems={choiceBoardItems}
+            libraryItems={displaySettings?.showBoardActivitySection === false ? [] : studentActivityLibrary}
+            displaySettings={displaySettings}
+            onAddActivity={onStudentAddActivity}
+            onSupportRequest={onSupportRequest}
+          />
+
+          {hasAacExpansionTools ? (
+            <StudentToolGroup
+              title="AAC words and phrases"
+              description="Core words, quick phrases, feelings, and social scripts"
+              defaultOpen={studentPanelLayout === "open"}
+            >
+              {displaySettings?.showCoreWordsPanel !== false ? (
+                <StudentAacCoreWordsPanel
+                  aacExpansionSettings={aacExpansionSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showQuickPhrasesPanel !== false ? (
+                <StudentQuickPhrasesPanel
+                  aacExpansionSettings={aacExpansionSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showFeelingsIntensityPanel !== false ? (
+                <StudentFeelingsIntensityPanel
+                  aacExpansionSettings={aacExpansionSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showSocialScriptsPanel !== false ? (
+                <StudentSocialScriptsPanel
+                  aacExpansionSettings={aacExpansionSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+            </StudentToolGroup>
+          ) : null}
+
+          {hasSelfAdvocacyTools ? (
+            <StudentToolGroup
+              title="Self-advocacy"
+              description="Yes/no, help, choices, stuck, and change requests"
+              defaultOpen={studentPanelLayout === "open"}
+            >
+              {displaySettings?.showYesNoPanel !== false ? (
+                <StudentYesNoPanel
+                  selfAdvocacySupportSettings={selfAdvocacySupportSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showHelpRequestBuilder !== false ? (
+                <StudentHelpRequestBuilder
+                  selfAdvocacySupportSettings={selfAdvocacySupportSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showDecisionSupport !== false ? (
+                <StudentDecisionSupport
+                  selfAdvocacySupportSettings={selfAdvocacySupportSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showStuckPathway !== false ? (
+                <StudentStuckPathway
+                  selfAdvocacySupportSettings={selfAdvocacySupportSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showScheduleChangeRequest !== false ? (
+                <StudentScheduleChangeRequest
+                  currentActivity={currentActivity}
+                  selfAdvocacySupportSettings={selfAdvocacySupportSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+            </StudentToolGroup>
+          ) : null}
+
+          {hasLifeSkillsTools ? (
+            <StudentToolGroup
+              title="Community and work"
+              description="Community access and vocational supports"
+              defaultOpen={studentPanelLayout === "open"}
+            >
+              {displaySettings?.showCommunityAccessPanel !== false ? (
+                <StudentCommunityAccessPanel
+                  lifeSkillsSettings={lifeSkillsSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showVocationalTaskPanel !== false ? (
+                <StudentVocationalTaskPanel
+                  lifeSkillsSettings={lifeSkillsSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+            </StudentToolGroup>
+          ) : null}
+        </section>
+      ) : null}
+
+      {activeStudentTab === "relax" ? (
+        <section className="student-tab-screen student-relax-screen" aria-labelledby="student-relax-heading">
+          <div className="focus-header compact-focus-header">
+            <p className="eyebrow">Relax</p>
+            <h2 id="student-relax-heading">Help me calm down</h2>
+            <p>Breaks, sensory supports, waiting help, and calm communication.</p>
+          </div>
+
+          {hasSupportTools ? (
+            <StudentToolGroup
+              title="Help and break tools"
+              description="Help, breaks, and transition support"
+              defaultOpen
+            >
+              {displaySettings?.showSupportButtons !== false ? (
+                <StudentSupportPanel
+                  currentActivity={currentActivity}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showBreakPlan !== false ? (
+                <StudentBreakPlan
+                  currentActivity={currentActivity}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showTransitionSupports !== false ? (
+                <StudentTransitionPanel
+                  currentActivity={currentActivity}
+                  nextActivity={nextActivity}
+                  transitionSettings={transitionSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+            </StudentToolGroup>
+          ) : null}
+
+          {hasCommunicationTools ? (
+            <StudentToolGroup
+              title="Body, sensory, and waiting"
+              description="Pain/body, sensory, feelings, and waiting support"
+              defaultOpen={studentPanelLayout === "open"}
+            >
+              {displaySettings?.showPainBodyPanel !== false ? (
+                <StudentPainBodyPanel
+                  communicationSupportSettings={communicationSupportSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showSensoryPanel !== false ? (
+                <StudentSensoryPanel
+                  communicationSupportSettings={communicationSupportSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showRegulationPathway !== false ? (
+                <StudentRegulationPathway
+                  communicationSupportSettings={communicationSupportSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showWaitingSupport !== false ? (
+                <StudentWaitingSupport
+                  communicationSupportSettings={communicationSupportSettings}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+            </StudentToolGroup>
+          ) : null}
+
+          {hasAlternativeAccessTools ? (
+            <StudentToolGroup
+              title="Calm and access tools"
+              description="Calm screen, repair messages, and switch scanning"
+              defaultOpen={studentPanelLayout === "open" || displaySettings?.reducedChoiceMode === true}
+            >
+              {displaySettings?.showCalmScreenPanel !== false ? (
+                <StudentCalmScreenPanel
+                  aboutMeProfile={aboutMeProfile}
+                  onSupportRequest={onSupportRequest}
+                />
+              ) : null}
+
+              {displaySettings?.showCommunicationRepairPanel !== false ? (
+                <StudentCommunicationRepairPanel onSupportRequest={onSupportRequest} />
+              ) : null}
+
+              {displaySettings?.showSwitchScannerPanel !== false ? (
+                <StudentSwitchScannerPanel onSupportRequest={onSupportRequest} />
+              ) : null}
+            </StudentToolGroup>
+          ) : null}
+        </section>
+      ) : null}
+
+      {activeStudentTab === "games" ? (
+        <section className="student-tab-screen student-games-screen" aria-labelledby="student-games-heading">
+          <div className="focus-header compact-focus-header">
+            <p className="eyebrow">Games</p>
+            <h2 id="student-games-heading">Calm games coming soon</h2>
+            <p>Future space for simple relaxation games, breathing games, matching games, and low-stimulation activities.</p>
+          </div>
+
+          <div className="games-placeholder-card">
+            <strong>No games yet</strong>
+            <p>
+              This section is intentionally empty for now. It gives AccessFlow a clean place to add small calming games later
+              without cluttering Schedule or Board.
+            </p>
+          </div>
+        </section>
       ) : null}
 
       <PrototypeSafetyFooter mode="student" />

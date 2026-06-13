@@ -416,3 +416,17 @@ Use this checklist before adding more features.
 - [ ] Student Community Access panel opens.
 - [ ] Student Vocational Task panel opens.
 - [ ] Labels remain visible under visual symbols.
+
+
+## v51 student navigation cleanup checks
+
+- [ ] Student Mode shows Profile, Schedule, Choose, Make, Board, Relax, and Games where enabled.
+- [ ] Schedule screen is less cluttered than old Today screen.
+- [ ] Profile screen shows About Me/check-in/rewards/progress.
+- [ ] Schedule screen shows date, activity support, First/Then, and schedule list.
+- [ ] Board screen shows Choice Board plus AAC/self-advocacy tools.
+- [ ] Relax screen shows help, break, sensory, regulation, waiting, calm, repair, and switch tools.
+- [ ] Games screen shows placeholder and does not break navigation.
+- [ ] Staff display settings include Profile/Schedule/Relax/Games tab controls.
+- [ ] Build succeeds on Render.
+- [ ] HIPAA/FERPA prototype footer remains visible.
