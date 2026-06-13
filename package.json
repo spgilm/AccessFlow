@@ -1,6 +1,6 @@
 {
   "name": "accessflow",
-  "version": "0.15.4",
+  "version": "0.50.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -13,7 +13,11 @@
     "@vitejs/plugin-react": "latest",
     "vite": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "@fortawesome/fontawesome-svg-core": "latest",
+    "@fortawesome/free-solid-svg-icons": "latest",
+    "@fortawesome/free-regular-svg-icons": "latest",
+    "@fortawesome/react-fontawesome": "latest"
   },
   "devDependencies": {},
   "engines": {

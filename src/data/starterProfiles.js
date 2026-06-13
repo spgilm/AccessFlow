@@ -8,6 +8,16 @@ import { createId } from "../utils/formatters.js";
 import { defaultIndependenceSettings } from "./independenceSettings.js";
 import { defaultDisplaySettings } from "./displaySettings.js";
 import { defaultChoiceBoardItems } from "./choiceBoardItems.js";
+import { defaultVisualLibraryItems } from "./visualLibrary.js";
+import { defaultProgressGoals } from "./progressGoals.js";
+import { defaultTransitionSettings } from "./transitionSettings.js";
+import { defaultReinforcementSettings } from "./reinforcementSettings.js";
+import { defaultRegulationPlan } from "./regulationPlan.js";
+import { getCommunicationSupportSettings } from "./communicationSupport.js";
+import { getSelfAdvocacySupportSettings } from "./selfAdvocacySupport.js";
+import { getLifeSkillsSettings } from "./lifeSkillsSettings.js";
+import { getAboutMeProfile } from "./aboutMeProfile.js";
+import { getAacExpansionSettings } from "./aacExpansion.js";
 
 export const starterProfiles = [
   {
@@ -18,7 +28,21 @@ export const starterProfiles = [
     activities: starterActivities,
     activityBank: [],
     choiceBoardItems: defaultChoiceBoardItems,
+    visualLibrary: defaultVisualLibraryItems,
+    progressGoals: defaultProgressGoals,
+    transitionSettings: { ...defaultTransitionSettings },
+    reinforcementSettings: { ...defaultReinforcementSettings },
+    regulationPlan: { ...defaultRegulationPlan },
+    communicationSupportSettings: getCommunicationSupportSettings(),
+    selfAdvocacySupportSettings: getSelfAdvocacySupportSettings(),
+    lifeSkillsSettings: getLifeSkillsSettings(),
+    aboutMeProfile: getAboutMeProfile(),
+    aacExpansionSettings: getAacExpansionSettings(),
+    checkIns: [],
+    sessionNotes: [],
+    accessibilityReview: {},
     supportEvents: [],
+    supportObservations: [],
     schedulesByDate: {},
     firstThenBoard: { firstChoiceId: "", thenChoiceId: "" },
     displaySettings: { ...defaultDisplaySettings },
@@ -35,7 +59,21 @@ export function createBlankProfile(name = "New Student") {
     activities: [],
     activityBank: [],
     choiceBoardItems: defaultChoiceBoardItems,
+    visualLibrary: defaultVisualLibraryItems,
+    progressGoals: defaultProgressGoals,
+    transitionSettings: { ...defaultTransitionSettings },
+    reinforcementSettings: { ...defaultReinforcementSettings },
+    regulationPlan: { ...defaultRegulationPlan },
+    communicationSupportSettings: getCommunicationSupportSettings(),
+    selfAdvocacySupportSettings: getSelfAdvocacySupportSettings(),
+    lifeSkillsSettings: getLifeSkillsSettings(),
+    aboutMeProfile: getAboutMeProfile(),
+    aacExpansionSettings: getAacExpansionSettings(),
+    checkIns: [],
+    sessionNotes: [],
+    accessibilityReview: {},
     supportEvents: [],
+    supportObservations: [],
     schedulesByDate: {},
     firstThenBoard: { firstChoiceId: "", thenChoiceId: "" },
     displaySettings: { ...defaultDisplaySettings },

@@ -11,6 +11,7 @@ export default function ModeToggle({
   textToSpeechEnabled,
   onTextToSpeechChange,
   textToSpeechAvailable = true,
+  hideStaffSwitch = false,
 }) {
   const isDark = theme === "dark";
   const nextTheme = isDark ? "light" : "dark";
@@ -25,14 +26,16 @@ export default function ModeToggle({
       >
         Student Mode
       </button>
-      <button
-        type="button"
-        className={mode === "staff" ? "is-active" : ""}
-        onClick={() => onModeChange("staff")}
-        aria-pressed={mode === "staff"}
-      >
-        Staff Mode
-      </button>
+      {!hideStaffSwitch ? (
+        <button
+          type="button"
+          className={mode === "staff" ? "is-active" : ""}
+          onClick={() => onModeChange("staff")}
+          aria-pressed={mode === "staff"}
+        >
+          Staff Mode
+        </button>
+      ) : null}
       <button
         type="button"
         className="theme-segment-button"

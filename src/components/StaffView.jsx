@@ -15,14 +15,57 @@ import EventLogPanel from "./EventLogPanel.jsx";
 import FirstThenBoardManager from "./FirstThenBoardManager.jsx";
 import ReviewQueuePanel from "./ReviewQueuePanel.jsx";
 import ProfileManager from "./ProfileManager.jsx";
+import StudentModePresetPanel from "./StudentModePresetPanel.jsx";
+import FeaturePresetPanel from "./FeaturePresetPanel.jsx";
 import StaffActivityEditor from "./StaffActivityEditor.jsx";
 import StaffActivityList from "./StaffActivityList.jsx";
 import StaffChoiceBankPanel from "./StaffChoiceBankPanel.jsx";
 import StaffChoiceBoardManager from "./StaffChoiceBoardManager.jsx";
+import StaffVisualLibraryPanel from "./StaffVisualLibraryPanel.jsx";
+import StaffIconLibraryPanel from "./StaffIconLibraryPanel.jsx";
+import StaffGoalPanel from "./StaffGoalPanel.jsx";
+import WeeklyProgressPanel from "./WeeklyProgressPanel.jsx";
+import ExportUpgradePanel from "./ExportUpgradePanel.jsx";
+import RoutineTemplatePanel from "./RoutineTemplatePanel.jsx";
+import AccessibilityReviewPanel from "./AccessibilityReviewPanel.jsx";
+import RolePermissionsPanel from "./RolePermissionsPanel.jsx";
+import StaffSecurityPanel from "./StaffSecurityPanel.jsx";
+import StaffTransitionSettingsPanel from "./StaffTransitionSettingsPanel.jsx";
+import StaffDashboardPanel from "./StaffDashboardPanel.jsx";
+import StaffFeatureGuidePanel from "./StaffFeatureGuidePanel.jsx";
+import ActivitySearchPanel from "./ActivitySearchPanel.jsx";
+import ProfileRecommendationsPanel from "./ProfileRecommendationsPanel.jsx";
+import PrintSchedulePanel from "./PrintSchedulePanel.jsx";
+import HandoffReportPanel from "./HandoffReportPanel.jsx";
+import CaregiverHandoffPanel from "./CaregiverHandoffPanel.jsx";
+import AboutMeExportPanel from "./AboutMeExportPanel.jsx";
+import CommunicationHistoryPanel from "./CommunicationHistoryPanel.jsx";
+import GoalSupportRecommendationsPanel from "./GoalSupportRecommendationsPanel.jsx";
+import ActivitySupportPatternPanel from "./ActivitySupportPatternPanel.jsx";
+import ActivityReadinessReviewPanel from "./ActivityReadinessReviewPanel.jsx";
+import TryAgainLaterQueuePanel from "./TryAgainLaterQueuePanel.jsx";
+import SessionNoteWizardPanel from "./SessionNoteWizardPanel.jsx";
+import StaffObservationLogPanel from "./StaffObservationLogPanel.jsx";
+import RegulationPlanPanel from "./RegulationPlanPanel.jsx";
+import StaffReinforcementPanel from "./StaffReinforcementPanel.jsx";
+import StaffCommunicationSupportPanel from "./StaffCommunicationSupportPanel.jsx";
+import StaffSelfAdvocacySupportPanel from "./StaffSelfAdvocacySupportPanel.jsx";
+import StaffLifeSkillsSettingsPanel from "./StaffLifeSkillsSettingsPanel.jsx";
+import StaffAboutMePanel from "./StaffAboutMePanel.jsx";
+import StaffAlternativeAccessGuidePanel from "./StaffAlternativeAccessGuidePanel.jsx";
+import StaffAacExpansionPanel from "./StaffAacExpansionPanel.jsx";
+import StaffVisualCoveragePanel from "./StaffVisualCoveragePanel.jsx";
 import SupabaseSyncPanel from "./SupabaseSyncPanel.jsx";
 import TemplateManager from "./TemplateManager.jsx";
+import PrototypeWarningPanel from "./PrototypeWarningPanel.jsx";
+import DataHealthPanel from "./DataHealthPanel.jsx";
+import BackendArchitecturePanel from "./BackendArchitecturePanel.jsx";
+import BackendNormalizationStartPanel from "./BackendNormalizationStartPanel.jsx";
+import ComplianceReadinessPanel from "./ComplianceReadinessPanel.jsx";
+import PrototypeSafetyFooter from "./PrototypeSafetyFooter.jsx";
 
 const staffTabs = [
+  { id: "dashboard", label: "Dashboard" },
   { id: "setup", label: "Setup" },
   { id: "students", label: "Students" },
   { id: "choices", label: "Choices" },
@@ -57,6 +100,25 @@ export default function StaffView({
   activities,
   activityBank,
   choiceBoardItems,
+  visualLibrary,
+  progressGoals,
+  weeklyProgressSummary,
+  weeklyProgressReport,
+  transitionSettings,
+  accessibilityReview,
+  staffSecurity,
+  rolePermissions,
+  reinforcementSettings,
+  regulationPlan,
+  communicationSupportSettings,
+  selfAdvocacySupportSettings,
+  lifeSkillsSettings,
+  aboutMeProfile,
+  aacExpansionSettings,
+  supportObservations,
+  handoffReport,
+  dataHealth,
+  sessionNotes,
   supportEvents,
   firstThenBoard,
   displaySettings,
@@ -105,6 +167,36 @@ export default function StaffView({
   onAddActivity,
   onAddChoiceToBank,
   onAddBoardItem,
+  onAddVisualLibraryItem,
+  onAddGoal,
+  onUpdateGoal,
+  onDeleteGoal,
+  onDownloadWeeklyReport,
+  onUpdateTransitionSettings,
+  onUpdateReinforcementSettings,
+  onUpdateRegulationPlan,
+  onUpdateCommunicationSupportSettings,
+  onUpdateSelfAdvocacySupportSettings,
+  onUpdateLifeSkillsSettings,
+  onUpdateAacExpansionSettings,
+  onUpdateAboutMeProfile,
+  onAddSupportObservation,
+  onAddSessionNote,
+  onDownloadHandoffReport,
+  onDownloadNormalizedExport,
+  onUpdateAccessibilityReview,
+  onUpdateStaffSecurity,
+  onLockStaff,
+  onUpdateRolePermissions,
+  onApplyCurrentScheduleToTomorrow,
+  onApplyCurrentScheduleToWeek,
+  onDownloadGoalCsv,
+  onDownloadSupportEventCsv,
+  onDownloadPromptCsv,
+  onExportSingleProfile,
+  onUpdateVisualLibraryItem,
+  onDeleteVisualLibraryItem,
+  onResetVisualLibrary,
   onUpdateBoardItem,
   onDeleteBoardItem,
   onResetBoardItems,
@@ -123,7 +215,7 @@ export default function StaffView({
   onResetDemo,
   onClearSchedule,
 }) {
-  const [activeStaffTab, setActiveStaffTab] = useState("setup");
+  const [activeStaffTab, setActiveStaffTab] = useState("dashboard");
 
   return (
     <div className="staff-view v13-staff-flow">
@@ -138,6 +230,35 @@ export default function StaffView({
         onChange={setActiveStaffTab}
         label="Staff tools"
       />
+
+{activeStaffTab === "dashboard" ? (
+  <>
+    <StaffDashboardPanel
+      selectedProfile={selectedProfile}
+      activities={activities}
+      dailyNote={dailyNote}
+      supportEvents={supportEvents}
+      weeklyProgressSummary={weeklyProgressSummary}
+      hasUnsavedCloudChanges={hasUnsavedCloudChanges}
+      syncMetadata={syncMetadata}
+      onOpenStudentMode={onOpenStudentMode}
+      onGoToTab={setActiveStaffTab}
+    />
+
+    <StaffReleaseReadinessPanel
+      profiles={profiles}
+      displaySettings={displaySettings}
+      aacExpansionSettings={aacExpansionSettings}
+      communicationSupportSettings={communicationSupportSettings}
+      selfAdvocacySupportSettings={selfAdvocacySupportSettings}
+      lifeSkillsSettings={lifeSkillsSettings}
+      visualLibrary={visualLibrary}
+      supportEvents={supportEvents}
+    />
+
+    <StaffFeatureGuidePanel onGoToTab={setActiveStaffTab} />
+  </>
+) : null}
 
 {activeStaffTab === "setup" ? (
   <section className="staff-tab-screen" aria-labelledby="staff-setup-heading">
@@ -167,6 +288,19 @@ export default function StaffView({
           </div>
 
           <div className="staff-management-grid">
+            <FeaturePresetPanel
+              selectedProfile={selectedProfile}
+              onUpdateProfile={onUpdateProfile}
+              onOpenStudentMode={onOpenStudentMode}
+            />
+
+            <StudentModePresetPanel
+              selectedProfile={selectedProfile}
+              displaySettings={displaySettings}
+              onUpdateProfile={onUpdateProfile}
+              onOpenStudentMode={onOpenStudentMode}
+            />
+
             <ProfileManager
               profiles={profiles}
               selectedProfile={selectedProfile}
@@ -178,12 +312,76 @@ export default function StaffView({
               displaySettings={displaySettings}
             />
 
+            <StaffAboutMePanel
+              aboutMeProfile={aboutMeProfile}
+              onUpdateAboutMeProfile={onUpdateAboutMeProfile}
+            />
+
+            <StaffAlternativeAccessGuidePanel displaySettings={displaySettings} />
+
             <TemplateManager
               templates={templates}
               selectedProfile={selectedProfile}
               onSaveCurrentScheduleAsTemplate={onSaveCurrentScheduleAsTemplate}
               onApplyTemplateToProfile={onApplyTemplateToProfile}
               onDeleteTemplate={onDeleteTemplate}
+            />
+
+            <StaffTransitionSettingsPanel
+              transitionSettings={transitionSettings}
+              onUpdateTransitionSettings={onUpdateTransitionSettings}
+            />
+
+            <ProfileRecommendationsPanel
+              displaySettings={displaySettings}
+              accessibilityReview={accessibilityReview}
+              transitionSettings={transitionSettings}
+              reinforcementSettings={reinforcementSettings}
+            />
+
+            <StaffReinforcementPanel
+              reinforcementSettings={reinforcementSettings}
+              onUpdateReinforcementSettings={onUpdateReinforcementSettings}
+            />
+
+            <RegulationPlanPanel
+              regulationPlan={regulationPlan}
+              onUpdateRegulationPlan={onUpdateRegulationPlan}
+            />
+
+            <StaffVisualCoveragePanel
+              aacExpansionSettings={aacExpansionSettings}
+              communicationSupportSettings={communicationSupportSettings}
+              selfAdvocacySupportSettings={selfAdvocacySupportSettings}
+              lifeSkillsSettings={lifeSkillsSettings}
+              onUpdateAacExpansionSettings={onUpdateAacExpansionSettings}
+              onUpdateCommunicationSupportSettings={onUpdateCommunicationSupportSettings}
+              onUpdateSelfAdvocacySupportSettings={onUpdateSelfAdvocacySupportSettings}
+              onUpdateLifeSkillsSettings={onUpdateLifeSkillsSettings}
+            />
+
+            <StaffCommunicationSupportPanel
+              communicationSupportSettings={communicationSupportSettings}
+              visualLibrary={visualLibrary}
+              onUpdateCommunicationSupportSettings={onUpdateCommunicationSupportSettings}
+            />
+
+            <StaffSelfAdvocacySupportPanel
+              selfAdvocacySupportSettings={selfAdvocacySupportSettings}
+              visualLibrary={visualLibrary}
+              onUpdateSelfAdvocacySupportSettings={onUpdateSelfAdvocacySupportSettings}
+            />
+
+            <StaffAacExpansionPanel
+              aacExpansionSettings={aacExpansionSettings}
+              visualLibrary={visualLibrary}
+              onUpdateAacExpansionSettings={onUpdateAacExpansionSettings}
+            />
+
+            <StaffLifeSkillsSettingsPanel
+              lifeSkillsSettings={lifeSkillsSettings}
+              visualLibrary={visualLibrary}
+              onUpdateLifeSkillsSettings={onUpdateLifeSkillsSettings}
             />
           </div>
         </section>
@@ -197,12 +395,30 @@ export default function StaffView({
             <p>Build communication buttons and approved schedule activities.</p>
           </div>
 
+          <ActivitySearchPanel
+            activities={activities}
+            activityBank={activityBank}
+            onSelectActivity={onSelectActivity}
+            onAddBankChoiceToSchedule={onAddBankChoiceToSchedule}
+          />
+
           <StaffChoiceBoardManager
             boardItems={choiceBoardItems}
             onAddBoardItem={onAddBoardItem}
             onUpdateBoardItem={onUpdateBoardItem}
             onDeleteBoardItem={onDeleteBoardItem}
             onResetBoardItems={onResetBoardItems}
+          />
+
+          <StaffIconLibraryPanel onAddVisualLibraryItem={onAddVisualLibraryItem} />
+
+          <StaffVisualLibraryPanel
+            selectedProfile={selectedProfile}
+            visualLibrary={visualLibrary}
+            onAddVisualLibraryItem={onAddVisualLibraryItem}
+            onUpdateVisualLibraryItem={onUpdateVisualLibraryItem}
+            onDeleteVisualLibraryItem={onDeleteVisualLibraryItem}
+            onResetVisualLibrary={onResetVisualLibrary}
           />
 
           <StaffChoiceBankPanel
@@ -236,6 +452,14 @@ export default function StaffView({
             onScheduleDateChange={onScheduleDateChange}
           />
 
+          <PrintSchedulePanel activities={activities} />
+
+          <RoutineTemplatePanel
+            onApplyDailyTemplate={onApplyDailyTemplate}
+            onApplyCurrentScheduleToTomorrow={onApplyCurrentScheduleToTomorrow}
+            onApplyCurrentScheduleToWeek={onApplyCurrentScheduleToWeek}
+          />
+
           <DailyTemplateButtons onApplyDailyTemplate={onApplyDailyTemplate} />
 
           <ReviewQueuePanel
@@ -258,6 +482,8 @@ export default function StaffView({
 
             <StaffActivityEditor
               activity={selectedActivity}
+              visualLibrary={visualLibrary}
+              onSaveVisualToLibrary={onAddVisualLibraryItem}
               onUpdateActivity={onUpdateActivity}
               onUpdateStep={onUpdateStep}
               onAddStep={onAddStep}
@@ -276,6 +502,69 @@ export default function StaffView({
             <p className="eyebrow">Notes</p>
             <h2 id="staff-notes-heading">Progress documentation</h2>
           </div>
+
+          <StaffGoalPanel
+            goals={progressGoals}
+            activities={activities}
+            activityBank={activityBank}
+            onAddGoal={onAddGoal}
+            onUpdateGoal={onUpdateGoal}
+            onDeleteGoal={onDeleteGoal}
+          />
+
+          <WeeklyProgressPanel
+            summary={weeklyProgressSummary}
+            report={weeklyProgressReport}
+            onDownloadWeeklyReport={onDownloadWeeklyReport}
+          />
+
+          <AccessibilityReviewPanel
+            accessibilityReview={accessibilityReview}
+            onUpdateAccessibilityReview={onUpdateAccessibilityReview}
+          />
+
+          <SessionNoteWizardPanel onAddSessionNote={onAddSessionNote} />
+
+          <StaffObservationLogPanel
+            activities={activities}
+            onAddSupportObservation={onAddSupportObservation}
+          />
+
+          <HandoffReportPanel
+            handoffReport={handoffReport}
+            onDownloadHandoffReport={onDownloadHandoffReport}
+          />
+
+          <CommunicationHistoryPanel supportEvents={supportEvents} />
+
+          <ActivitySupportPatternPanel
+            activities={activities}
+            supportEvents={supportEvents}
+            supportObservations={supportObservations}
+          />
+
+          <ActivityReadinessReviewPanel
+            activities={activities}
+            supportEvents={supportEvents}
+            supportObservations={supportObservations}
+          />
+
+          <TryAgainLaterQueuePanel supportEvents={supportEvents} />
+
+          <GoalSupportRecommendationsPanel
+            supportEvents={supportEvents}
+            progressGoals={progressGoals}
+          />
+
+          <CaregiverHandoffPanel
+            selectedProfile={selectedProfile}
+            lifeSkillsSettings={lifeSkillsSettings}
+          />
+
+          <AboutMeExportPanel
+            selectedProfile={selectedProfile}
+            aboutMeProfile={aboutMeProfile}
+          />
 
           <DocumentationPanel
             profile={selectedProfile}
@@ -302,7 +591,20 @@ export default function StaffView({
             <h2 id="staff-save-heading">Account, cloud, and export</h2>
           </div>
 
+          <PrototypeWarningPanel />
+
           <div className="staff-management-grid">
+            <DataHealthPanel
+              dataHealth={dataHealth}
+              onDownloadNormalizedExport={onDownloadNormalizedExport}
+            />
+
+            <BackendArchitecturePanel />
+
+            <BackendNormalizationStartPanel dataHealth={dataHealth} />
+
+            <ComplianceReadinessPanel />
+
             <AuthPanel
               session={session}
               authStatus={authStatus}
@@ -325,6 +627,24 @@ export default function StaffView({
             />
           </div>
 
+          <StaffSecurityPanel
+            staffSecurity={staffSecurity}
+            onUpdateStaffSecurity={onUpdateStaffSecurity}
+            onLockStaff={onLockStaff}
+          />
+
+          <RolePermissionsPanel
+            rolePermissions={rolePermissions}
+            onUpdateRolePermissions={onUpdateRolePermissions}
+          />
+
+          <ExportUpgradePanel
+            onDownloadGoalCsv={onDownloadGoalCsv}
+            onDownloadSupportEventCsv={onDownloadSupportEventCsv}
+            onDownloadPromptCsv={onDownloadPromptCsv}
+            onExportSingleProfile={onExportSingleProfile}
+          />
+
           <DataManagementPanel
             exportStatus={exportStatus}
             importStatus={importStatus}
@@ -342,6 +662,8 @@ export default function StaffView({
           </section>
         </section>
       ) : null}
+
+      <PrototypeSafetyFooter mode="staff" />
     </div>
   );
 }

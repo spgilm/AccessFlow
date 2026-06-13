@@ -5,6 +5,7 @@
  */
 import EmojiPickerButton from "./EmojiPickerButton.jsx";
 import TimerButton from "./TimerButton.jsx";
+import { shouldShowText, shouldShowVisuals } from "../data/displaySettings.js";
 
 export default function ActivityCard({
   activity,
@@ -12,7 +13,10 @@ export default function ActivityCard({
   onSelect,
   onToggleComplete,
   onUpdateVisual,
+  displaySettings,
 }) {
+  const showText = shouldShowText(displaySettings);
+  const showVisuals = shouldShowVisuals(displaySettings);
   const statusText = activity.completed ? "Complete" : "Not complete";
   const actionText = isSelected ? "Hide smaller steps" : "Show smaller steps";
 
@@ -23,13 +27,15 @@ export default function ActivityCard({
       }`}
     >
       <div className="activity-card-main-row">
-        <EmojiPickerButton
-          visual={activity.visual ?? activity.emoji}
-          displayVisual={activity.completed ? "✅" : undefined}
-          label={activity.label}
-          className="activity-visual-picker"
-          onChange={(visual) => onUpdateVisual?.(activity.id, visual)}
-        />
+        {showVisuals ? (
+          <EmojiPickerButton
+            visual={activity.visual ?? activity.emoji}
+            displayVisual={activity.completed ? "✅" : undefined}
+            label={activity.label}
+            className="activity-visual-picker"
+            onChange={(visual) => onUpdateVisual?.(activity.id, visual)}
+          />
+        ) : null}
 
         <button
           className="activity-main-button"
@@ -38,10 +44,17 @@ export default function ActivityCard({
           aria-pressed={isSelected}
           aria-label={`${actionText} for ${activity.label}. Status: ${statusText}.`}
         >
-          <span className="activity-text">
-            <span className="activity-label">{activity.label}</span>
-            <span className="activity-status">{isSelected ? "Steps open" : statusText}</span>
-          </span>
+          {showText ? (
+            <span className="activity-text">
+              <span className="activity-label">{activity.label}</span>
+              <span className="activity-status">{isSelected ? "Steps open" : statusText}</span>
+            </span>
+          ) : (
+            <span className="activity-text sr-only">
+              <span className="activity-label">{activity.label}</span>
+              <span className="activity-status">{isSelected ? "Steps open" : statusText}</span>
+            </span>
+          )}
         </button>
       </div>
 

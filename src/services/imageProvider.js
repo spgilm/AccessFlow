@@ -36,3 +36,12 @@ export function updateEmojiVisual(existingVisual, emoji, altText) {
     altText: altText || existingVisual?.altText || "Visual support",
   };
 }
+
+
+export function createFontAwesomeVisual(iconName, altText) {
+  return {
+    type: "fontawesome",
+    value: iconName,
+    altText: altText || "Icon visual support",
+  };
+}

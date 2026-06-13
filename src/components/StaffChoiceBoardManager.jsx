@@ -1,19 +1,11 @@
 /**
  * Staff-facing communication board manager.
  *
- * These buttons appear in Student Mode → Board and log wants/needs/support events.
+ * These buttons appear in Student Mode → Board and are used to build spoken messages.
  */
 import { useState } from "react";
 import EmojiPickerButton from "./EmojiPickerButton.jsx";
-
-const categoryOptions = [
-  "support",
-  "needs",
-  "regulation",
-  "movement",
-  "leisure",
-  "custom",
-];
+import { choiceBoardCategories } from "../data/choiceBoardItems.js";
 
 export default function StaffChoiceBoardManager({
   boardItems,
@@ -23,6 +15,7 @@ export default function StaffChoiceBoardManager({
   onResetBoardItems,
 }) {
   const [newLabel, setNewLabel] = useState("");
+  const [newPhraseText, setNewPhraseText] = useState("");
   const [newEmoji, setNewEmoji] = useState("⭐");
   const [newCategory, setNewCategory] = useState("custom");
 
@@ -36,10 +29,13 @@ export default function StaffChoiceBoardManager({
 
     onAddBoardItem({
       label: trimmed,
+      phraseText: newPhraseText.trim() || trimmed,
       emoji: newEmoji,
       category: newCategory,
+      isFavorite: false,
     });
     setNewLabel("");
+    setNewPhraseText("");
     setNewEmoji("⭐");
     setNewCategory("custom");
   }
@@ -51,12 +47,13 @@ export default function StaffChoiceBoardManager({
           <p className="eyebrow">Communication board</p>
           <h2 id="board-manager-heading">Student Board buttons</h2>
           <p className="field-help">
-            These buttons appear in Student Mode → Board. They log what the student wants or needs.
+            These buttons appear in Student Mode → Board. The label is what the student sees.
+            The spoken phrase is what gets added to the message strip.
           </p>
         </div>
       </div>
 
-      <form className="board-add-form" onSubmit={handleAdd}>
+      <form className="board-add-form v17-board-add-form" onSubmit={handleAdd}>
         <label>
           Button label
           <input
@@ -64,6 +61,16 @@ export default function StaffChoiceBoardManager({
             value={newLabel}
             placeholder="Example: Headphones"
             onChange={(event) => setNewLabel(event.target.value)}
+          />
+        </label>
+
+        <label>
+          Spoken phrase
+          <input
+            type="text"
+            value={newPhraseText}
+            placeholder="Example: I want headphones"
+            onChange={(event) => setNewPhraseText(event.target.value)}
           />
         </label>
 
@@ -81,9 +88,9 @@ export default function StaffChoiceBoardManager({
         <label>
           Category
           <select value={newCategory} onChange={(event) => setNewCategory(event.target.value)}>
-            {categoryOptions.map((category) => (
-              <option key={category} value={category}>
-                {category}
+            {choiceBoardCategories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.label}
               </option>
             ))}
           </select>
@@ -105,7 +112,7 @@ export default function StaffChoiceBoardManager({
       ) : (
         <div className="board-manager-list">
           {boardItems.map((item) => (
-            <article key={item.id} className="board-manager-card">
+            <article key={item.id} className="board-manager-card v17-board-manager-card">
               <EmojiPickerButton
                 visual={item.visual ?? item.emoji}
                 label={item.label}
@@ -113,7 +120,7 @@ export default function StaffChoiceBoardManager({
                 onChange={(visual) => onUpdateBoardItem(item.id, { visual })}
               />
 
-              <div className="board-manager-fields">
+              <div className="board-manager-fields v17-board-manager-fields">
                 <label>
                   Label
                   <input
@@ -132,14 +139,23 @@ export default function StaffChoiceBoardManager({
                 </label>
 
                 <label>
+                  Spoken phrase
+                  <input
+                    type="text"
+                    value={item.phraseText || item.label}
+                    onChange={(event) => onUpdateBoardItem(item.id, { phraseText: event.target.value })}
+                  />
+                </label>
+
+                <label>
                   Category
                   <select
                     value={item.category ?? "custom"}
                     onChange={(event) => onUpdateBoardItem(item.id, { category: event.target.value })}
                   >
-                    {categoryOptions.map((category) => (
-                      <option key={category} value={category}>
-                        {category}
+                    {choiceBoardCategories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.label}
                       </option>
                     ))}
                   </select>

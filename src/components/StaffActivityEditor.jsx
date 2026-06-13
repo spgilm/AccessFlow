@@ -9,6 +9,8 @@ import VisualEditor from "./VisualEditor.jsx";
 
 export default function StaffActivityEditor({
   activity,
+  visualLibrary = [],
+  onSaveVisualToLibrary,
   onUpdateActivity,
   onUpdateStep,
   onAddStep,
@@ -102,6 +104,8 @@ export default function StaffActivityEditor({
           visual={activity.visual}
           fallbackLabel={activity.label}
           onError={setVisualError}
+          visualLibrary={visualLibrary}
+          onSaveVisualToLibrary={onSaveVisualToLibrary}
           onChange={(visual) => onUpdateActivity(activity.id, { visual })}
         />
 
@@ -141,6 +145,8 @@ export default function StaffActivityEditor({
                   visual={step.visual}
                   fallbackLabel={step.label}
                   onError={setVisualError}
+                  visualLibrary={visualLibrary}
+                  onSaveVisualToLibrary={onSaveVisualToLibrary}
                   onChange={(visual) => onUpdateStep(activity.id, step.id, { visual })}
                 />
 

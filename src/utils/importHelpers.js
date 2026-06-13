@@ -7,6 +7,16 @@ import { getIndependenceSettings } from "../data/independenceSettings.js";
 import { getDisplaySettings } from "../data/displaySettings.js";
 import { normalizeSchedulesByDate } from "./scheduleDateHelpers.js";
 import { defaultChoiceBoardItems } from "../data/choiceBoardItems.js";
+import { defaultVisualLibraryItems } from "../data/visualLibrary.js";
+import { defaultProgressGoals } from "../data/progressGoals.js";
+import { getTransitionSettings } from "../data/transitionSettings.js";
+import { getReinforcementSettings } from "../data/reinforcementSettings.js";
+import { getRegulationPlan } from "../data/regulationPlan.js";
+import { getCommunicationSupportSettings } from "../data/communicationSupport.js";
+import { getSelfAdvocacySupportSettings } from "../data/selfAdvocacySupport.js";
+import { getLifeSkillsSettings } from "../data/lifeSkillsSettings.js";
+import { getAboutMeProfile } from "../data/aboutMeProfile.js";
+import { getAacExpansionSettings } from "../data/aacExpansion.js";
 
 export function normalizeImportedProfile(profile) {
   return {
@@ -16,7 +26,21 @@ export function normalizeImportedProfile(profile) {
     activities: Array.isArray(profile.activities) ? profile.activities : [],
     activityBank: Array.isArray(profile.activityBank) ? profile.activityBank : [],
     choiceBoardItems: Array.isArray(profile.choiceBoardItems) && profile.choiceBoardItems.length > 0 ? profile.choiceBoardItems : defaultChoiceBoardItems,
+    visualLibrary: Array.isArray(profile.visualLibrary) && profile.visualLibrary.length > 0 ? profile.visualLibrary : defaultVisualLibraryItems,
+    progressGoals: Array.isArray(profile.progressGoals) ? profile.progressGoals : defaultProgressGoals,
+    transitionSettings: getTransitionSettings(profile),
+    reinforcementSettings: getReinforcementSettings(profile),
+    regulationPlan: getRegulationPlan(profile),
+    communicationSupportSettings: getCommunicationSupportSettings(profile),
+    selfAdvocacySupportSettings: getSelfAdvocacySupportSettings(profile),
+    lifeSkillsSettings: getLifeSkillsSettings(profile),
+    aboutMeProfile: getAboutMeProfile(profile),
+    aacExpansionSettings: getAacExpansionSettings(profile),
+    checkIns: Array.isArray(profile.checkIns) ? profile.checkIns : [],
+    sessionNotes: Array.isArray(profile.sessionNotes) ? profile.sessionNotes : [],
+    accessibilityReview: profile.accessibilityReview && typeof profile.accessibilityReview === "object" ? profile.accessibilityReview : {},
     supportEvents: Array.isArray(profile.supportEvents) ? profile.supportEvents : [],
+    supportObservations: Array.isArray(profile.supportObservations) ? profile.supportObservations : [],
     schedulesByDate: normalizeSchedulesByDate(profile),
     firstThenBoard:
       profile.firstThenBoard && typeof profile.firstThenBoard === "object"

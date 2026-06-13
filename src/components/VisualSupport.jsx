@@ -1,8 +1,11 @@
 /**
- * Source file for AccessFlow. Provides part of the app's student, staff, data, service, or utility layer.
+ * VisualSupport
  *
- * Comment added in v15 to make the prototype easier to study and modify.
+ * Renders saved reusable visuals: emoji, uploaded images, and v45 Font Awesome icons.
  */
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { getIconDefinition } from "../data/iconLibrary.js";
+
 export default function VisualSupport({ visual, className = "", fallback = "⭐" }) {
   const safeVisual = normalizeVisual(visual, fallback);
 
@@ -12,6 +15,18 @@ export default function VisualSupport({ visual, className = "", fallback = "⭐"
         <img src={safeVisual.value} alt={safeVisual.altText || "Visual support"} />
       </span>
     );
+  }
+
+  if (safeVisual.type === "fontawesome" && safeVisual.value) {
+    const iconDefinition = getIconDefinition(safeVisual.value);
+
+    if (iconDefinition) {
+      return (
+        <span className={`visual-support visual-fontawesome ${className}`} aria-hidden="true">
+          <FontAwesomeIcon icon={iconDefinition} />
+        </span>
+      );
+    }
   }
 
   return (
@@ -43,6 +58,14 @@ function normalizeVisual(visual, fallback) {
       type: "image",
       value: visual.value,
       altText: visual.altText || "Visual support",
+    };
+  }
+
+  if (visual.type === "fontawesome") {
+    return {
+      type: "fontawesome",
+      value: visual.value,
+      altText: visual.altText || "Icon visual support",
     };
   }
 
