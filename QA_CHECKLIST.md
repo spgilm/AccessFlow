@@ -430,3 +430,12 @@ Use this checklist before adding more features.
 - [ ] Staff display settings include Profile/Schedule/Relax/Games tab controls.
 - [ ] Build succeeds on Render.
 - [ ] HIPAA/FERPA prototype footer remains visible.
+
+
+## v51.1 Staff Mode Fix Checks
+
+- [ ] Tapping Staff Mode does not show a white screen.
+- [ ] Staff Dashboard loads.
+- [ ] v50 release readiness panel appears.
+- [ ] Students tab loads.
+- [ ] Student Mode still loads after returning from Staff Mode.

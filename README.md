@@ -2098,3 +2098,8 @@ v50.1 fixes invalid JSX syntax in four Student Mode panels that caused Render/Vi
 ## v51 Student Navigation Cleanup Pack
 
 v51 splits Student Mode into Profile, Schedule, Choose, Make, Board, Relax, and Games. This lowers clutter by moving profile/check-in tools, schedule tools, communication tools, and calm/regulation tools into separate screens.
+
+
+## v51.1 Staff Mode Fix
+
+v51.1 fixes a Staff Mode white-screen runtime crash caused by a missing `StaffReleaseReadinessPanel` import in `StaffView.jsx`.

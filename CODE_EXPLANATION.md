@@ -1533,3 +1533,8 @@ v50.1 fixes invalid JSX syntax in four Student Mode panels that caused Render/Vi
 ## v51 Student Navigation Cleanup Pack
 
 `resolveStudentTabs` now returns separate Student Mode sections. `StudentView.jsx` no longer places every support panel inside the old Today screen. The old Today concept is now Schedule, while Profile, Board, Relax, and Games handle separate jobs.
+
+
+## v51.1 Staff Mode Fix
+
+StaffView now imports `StaffReleaseReadinessPanel` before rendering the v50 release-readiness dashboard.

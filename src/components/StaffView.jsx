@@ -55,6 +55,7 @@ import StaffAboutMePanel from "./StaffAboutMePanel.jsx";
 import StaffAlternativeAccessGuidePanel from "./StaffAlternativeAccessGuidePanel.jsx";
 import StaffAacExpansionPanel from "./StaffAacExpansionPanel.jsx";
 import StaffVisualCoveragePanel from "./StaffVisualCoveragePanel.jsx";
+import StaffReleaseReadinessPanel from "./StaffReleaseReadinessPanel.jsx";
 import SupabaseSyncPanel from "./SupabaseSyncPanel.jsx";
 import TemplateManager from "./TemplateManager.jsx";
 import PrototypeWarningPanel from "./PrototypeWarningPanel.jsx";
