@@ -28,7 +28,7 @@ export default function StudentVocationalTaskPanel({ lifeSkillsSettings, onSuppo
       <div className="support-choice-grid">
         {actions.map((item) => (
           <button key={item.id} type="button" className="support-choice-button" onClick={() => recordAction(item)}>
-            <IconSymbol item=item />
+            <IconSymbol item={item} />
             <strong>{item.label}</strong>
           </button>
         ))}

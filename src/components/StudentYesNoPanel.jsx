@@ -30,10 +30,10 @@ export default function StudentYesNoPanel({ selfAdvocacySupportSettings, onSuppo
             key={item.id}
             type="button"
             className="support-choice-button"
-            aria-label=item.label
+            aria-label={item.label}
             onClick={() => recordResponse(item)}
           >
-            <IconSymbol item=item />
+            <IconSymbol item={item} />
             <strong>{item.label}</strong>
           </button>
         ))}

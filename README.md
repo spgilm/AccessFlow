@@ -2088,3 +2088,8 @@ src/components/StaffReleaseReadinessPanel.jsx
 V50_SOLID_RELEASE_CANDIDATE_REPORT.md
 V50_CLEANUP_AND_REFACTOR_NOTES.md
 ```
+
+
+## v50.1 Render Fix
+
+v50.1 fixes invalid JSX syntax in four Student Mode panels that caused Render/Vite deployment failure. No feature behavior changed.

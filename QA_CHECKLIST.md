@@ -406,3 +406,13 @@ Use this checklist before adding more features.
 - [ ] Font Awesome icons still render.
 - [ ] Prototype HIPAA/FERPA footer still appears in Student and Staff Mode.
 - [ ] No real student/client data is used during testing.
+
+
+## v50.1 Render Fix Checks
+
+- [ ] Render/Vite build no longer fails on invalid JSX.
+- [ ] Student Yes/No panel opens.
+- [ ] Student Sensory panel opens.
+- [ ] Student Community Access panel opens.
+- [ ] Student Vocational Task panel opens.
+- [ ] Labels remain visible under visual symbols.

@@ -1523,3 +1523,8 @@ labelsOnly
 ```
 
 StudentView receives the visual preference as a CSS class, so buttons do not need duplicate logic.
+
+
+## v50.1 Render Fix
+
+v50.1 fixes invalid JSX syntax in four Student Mode panels that caused Render/Vite deployment failure. No feature behavior changed.

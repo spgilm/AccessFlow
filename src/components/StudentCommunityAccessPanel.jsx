@@ -29,7 +29,7 @@ export default function StudentCommunityAccessPanel({ lifeSkillsSettings, onSupp
       <div className="support-choice-grid">
         {cards.map((item) => (
           <button key={item.id} type="button" className="support-choice-button" onClick={() => recordCard(item)}>
-            <IconSymbol item=item />
+            <IconSymbol item={item} />
             <strong>{item.label}</strong>
           </button>
         ))}
