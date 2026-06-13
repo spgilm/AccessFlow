@@ -42,6 +42,7 @@ import StudentFeelingsIntensityPanel from "./StudentFeelingsIntensityPanel.jsx";
 import StudentSocialScriptsPanel from "./StudentSocialScriptsPanel.jsx";
 import StudentInlineSteps from "./StudentInlineSteps.jsx";
 import StudentMakeActivity from "./StudentMakeActivity.jsx";
+import StudentGamesPanel from "./StudentGamesPanel.jsx";
 import StaffAccessPanel from "./StaffAccessPanel.jsx";
 import PrototypeSafetyFooter from "./PrototypeSafetyFooter.jsx";
 import { resolveInitialStudentTab, resolveStudentTabs } from "../data/displaySettings.js";
@@ -746,17 +747,11 @@ useEffect(() => {
         <section className="student-tab-screen student-games-screen" aria-labelledby="student-games-heading">
           <div className="focus-header compact-focus-header">
             <p className="eyebrow">Games</p>
-            <h2 id="student-games-heading">Calm games coming soon</h2>
-            <p>Future space for simple relaxation games, breathing games, matching games, and low-stimulation activities.</p>
+            <h2 id="student-games-heading">Simple games</h2>
+            <p>Low-stimulation games for choice-making, turn-taking, attention, and calm breaks.</p>
           </div>
 
-          <div className="games-placeholder-card">
-            <strong>No games yet</strong>
-            <p>
-              This section is intentionally empty for now. It gives AccessFlow a clean place to add small calming games later
-              without cluttering Schedule or Board.
-            </p>
-          </div>
+          <StudentGamesPanel />
         </section>
       ) : null}
 

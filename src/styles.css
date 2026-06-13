@@ -7537,3 +7537,340 @@ a:focus-visible,
   color: #001a2e;
   border-color: #ffe066;
 }
+
+
+/* v52: Simple Games Pack */
+.student-games-panel,
+.student-game-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.student-game-card {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 1rem;
+  background: var(--panel-bg);
+  box-shadow: var(--shadow);
+}
+
+.student-game-card-header {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.student-game-card-header h3,
+.student-game-card-header p {
+  margin: 0;
+}
+
+.student-game-card-header p {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.game-picker-grid,
+.game-choice-grid {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.game-picker-grid button,
+.game-choice-button,
+.letter-grid button,
+.tic-tac-toe-board button,
+.snake-controls button,
+.memory-grid button {
+  min-height: var(--tap-target);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--control-bg);
+  color: var(--primary-strong);
+  font-weight: 950;
+}
+
+.game-picker-grid button.is-active,
+.letter-grid button.is-correct,
+.memory-grid button.is-matched {
+  background: var(--success-soft);
+  color: var(--success);
+  border-color: var(--success);
+}
+
+.game-choice-button {
+  display: grid;
+  place-items: center;
+  gap: 0.35rem;
+  padding: 0.75rem;
+  min-height: 6rem;
+}
+
+.game-choice-button span {
+  font-size: 2.2rem;
+}
+
+.three-choice-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.game-status-card {
+  display: grid;
+  gap: 0.25rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.85rem;
+  background: var(--surface-strong);
+}
+
+.game-status-card p {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.wheel-layout {
+  display: grid;
+  gap: 1rem;
+}
+
+.choice-wheel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, 16rem);
+  aspect-ratio: 1;
+  justify-self: center;
+  border: 8px solid var(--primary);
+  border-radius: 999px;
+  background:
+    conic-gradient(
+      #ffb3b3 0deg 60deg,
+      #b3d8ff 60deg 120deg,
+      #fff1a8 120deg 180deg,
+      #b9f5c5 180deg 240deg,
+      #d9c2ff 240deg 300deg,
+      #ffd0a8 300deg 360deg
+    );
+  font-weight: 950;
+}
+
+.choice-wheel::after {
+  content: "▼";
+  position: absolute;
+  top: -1.65rem;
+  color: var(--danger);
+  font-size: 1.7rem;
+}
+
+.wheel-chip {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: var(--control-bg);
+  color: var(--primary-strong);
+  border: 2px solid var(--border-strong);
+}
+
+.wheel-chip-1 { transform: translate(0, -5.5rem); }
+.wheel-chip-2 { transform: translate(4.75rem, -2.75rem); }
+.wheel-chip-3 { transform: translate(4.75rem, 2.75rem); }
+.wheel-chip-4 { transform: translate(0, 5.5rem); }
+.wheel-chip-5 { transform: translate(-4.75rem, 2.75rem); }
+.wheel-chip-6 { transform: translate(-4.75rem, -2.75rem); }
+
+.word-rescue-display {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  font-size: clamp(2rem, 10vw, 3rem);
+  font-weight: 950;
+  letter-spacing: 0.08em;
+}
+
+.word-rescue-display span {
+  min-width: 1.8rem;
+  text-align: center;
+}
+
+.letter-grid {
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.letter-grid button:disabled {
+  opacity: 0.45;
+}
+
+.tic-tac-toe-board {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(100%, 22rem);
+  justify-self: center;
+}
+
+.tic-tac-toe-board button {
+  aspect-ratio: 1;
+  font-size: clamp(2rem, 14vw, 4rem);
+}
+
+.snake-board {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  width: min(100%, 22rem);
+  justify-self: center;
+  border: 3px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface-strong);
+}
+
+.snake-board span {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+
+.snake-board span.is-snake {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+
+.snake-board span.is-food {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.snake-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.dino-game-stage,
+.float-bird-stage {
+  position: relative;
+  height: 11rem;
+  overflow: hidden;
+  border: 3px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(var(--primary-soft), var(--surface-strong));
+}
+
+.dino-player {
+  position: absolute;
+  left: 8%;
+  bottom: 1.2rem;
+  font-size: 2.5rem;
+  transition: bottom 140ms ease;
+}
+
+.dino-player.is-jumping {
+  bottom: 5.6rem;
+}
+
+.dino-obstacle {
+  position: absolute;
+  bottom: 1.35rem;
+  font-size: 2rem;
+  color: var(--danger);
+}
+
+.memory-grid {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: min(100%, 24rem);
+  justify-self: center;
+}
+
+.memory-grid button {
+  aspect-ratio: 1;
+  font-size: clamp(1.8rem, 10vw, 3rem);
+}
+
+.memory-grid button.is-shown {
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+}
+
+.float-bird-player {
+  position: absolute;
+  left: 13%;
+  transform: translateY(-50%);
+  font-size: 2.4rem;
+  z-index: 2;
+}
+
+.float-pipe {
+  position: absolute;
+  width: 3rem;
+  background: var(--primary);
+  border: 2px solid var(--primary-strong);
+  border-radius: 0.65rem;
+}
+
+.top-pipe {
+  top: 0;
+}
+
+.bottom-pipe {
+  bottom: 0;
+}
+
+@media (min-width: 760px) {
+  .game-picker-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .wheel-layout {
+    grid-template-columns: auto 1fr;
+    align-items: center;
+  }
+}
+
+@media (max-width: 420px) {
+  .three-choice-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .letter-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+[data-theme="dark"] .student-game-card,
+[data-theme="dark"] .game-status-card,
+[data-theme="dark"] .snake-board,
+[data-theme="dark"] .dino-game-stage,
+[data-theme="dark"] .float-bird-stage {
+  background: #052f52;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .game-choice-button,
+[data-theme="dark"] .game-picker-grid button,
+[data-theme="dark"] .letter-grid button,
+[data-theme="dark"] .tic-tac-toe-board button,
+[data-theme="dark"] .snake-controls button,
+[data-theme="dark"] .memory-grid button {
+  background: #063b66;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .game-picker-grid button.is-active,
+[data-theme="dark"] .letter-grid button.is-correct,
+[data-theme="dark"] .memory-grid button.is-matched {
+  background: #ffe066;
+  color: #001a2e;
+  border-color: #ffe066;
+}

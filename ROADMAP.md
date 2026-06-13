@@ -179,3 +179,8 @@ v51 makes Student Mode easier to polish visually by separating the student exper
 ## v51.3 navigation symmetry note
 
 v51.3 stabilizes the navigation model before visual beautification. The next polish pass should treat the 8-tab grid as the main Student/Staff information architecture.
+
+
+## v52 simple games note
+
+v52 starts the Games area with simple prototype games. Future versions can add staff controls for hiding specific games, difficulty settings, visual themes, sound toggles, and game-based reinforcement options.

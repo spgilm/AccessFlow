@@ -2118,3 +2118,8 @@ v51.3 makes Student Mode and Staff Mode both use 8-tab navigation. Student Mode 
 ## v51.4 Duplicate Tabs Fix
 
 v51.4 fixes Student Mode showing duplicate tab bars by removing the old `student-mobile-quick-nav` rendering block.
+
+
+## v52 Simple Games Pack
+
+v52 adds a real Student Mode Games panel with Rock Paper Scissors, Choice / Color Wheel, Word Rescue, Tic Tac Toe, Snake, Dino Jump, Memory Match, and Float Bird. Games are prototype-level, touch-friendly, low-stimulation, and do not require student/client data.

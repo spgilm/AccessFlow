@@ -473,3 +473,20 @@ Use this checklist before adding more features.
 - [ ] Staff tab bar still shows 8 tabs.
 - [ ] Help, Relax, and Games tabs still open.
 - [ ] Staff Auth Gate still works when signed out.
+
+
+## v52 Simple Games Pack Checks
+
+- [ ] Games tab opens.
+- [ ] Game picker shows 8 games.
+- [ ] Rock Paper Scissors can play a round.
+- [ ] Choice / Color Wheel can spin and show a result.
+- [ ] Word Rescue reveals letters and uses no hangman imagery.
+- [ ] Tic Tac Toe accepts X/O moves and detects wins/ties.
+- [ ] Snake starts, pauses, moves, scores, and resets.
+- [ ] Dino Jump starts, jumps, scores, ends, and resets.
+- [ ] Memory Match flips cards and matches pairs.
+- [ ] Float Bird starts, flaps, scores, ends, and resets.
+- [ ] Student and Staff still show one 8-tab navigation bar.
+- [ ] Staff Auth Gate still appears when signed out.
+- [ ] Build succeeds on Render.

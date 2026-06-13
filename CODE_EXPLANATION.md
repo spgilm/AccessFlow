@@ -1553,3 +1553,8 @@ Student tab resolution now includes Help. StaffView now includes Reports. CSS ov
 ## v51.4 Duplicate Tabs Fix
 
 `StudentView.jsx` now renders one tab navigation system: `WorkflowTabs`. The old second mobile quick nav block was removed.
+
+
+## v52 Simple Games Pack
+
+`StudentGamesPanel.jsx` contains the v52 games. `StudentView.jsx` imports and renders `StudentGamesPanel` inside the existing Games tab. `styles.css` adds the shared game-card, board, grid, wheel, snake, dino, memory, and float-game styles.
