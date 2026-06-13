@@ -2103,3 +2103,8 @@ v51 splits Student Mode into Profile, Schedule, Choose, Make, Board, Relax, and 
 ## v51.1 Staff Mode Fix
 
 v51.1 fixes a Staff Mode white-screen runtime crash caused by a missing `StaffReleaseReadinessPanel` import in `StaffView.jsx`.
+
+
+## v51.2 Staff Auth Gate Fix
+
+v51.2 adds a dedicated Staff Auth Gate. If Staff Mode is opened while signed out, the app now shows login/create-account UI instead of rendering StaffView and risking a white screen.

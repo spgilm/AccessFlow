@@ -7419,3 +7419,26 @@ a:focus-visible,
 [data-theme="dark"] .games-placeholder-card strong {
   color: #ffe066;
 }
+
+
+/* v51.2: staff authentication gate */
+.staff-auth-gate {
+  display: grid;
+  gap: 1rem;
+}
+
+.staff-auth-gate .auth-panel {
+  max-width: 44rem;
+}
+
+.staff-auth-gate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+[data-theme="dark"] .staff-auth-gate .auth-panel {
+  background: #052f52;
+  color: #ffffff;
+  border-color: #ffffff;
+}

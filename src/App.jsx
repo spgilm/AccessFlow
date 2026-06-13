@@ -6,6 +6,7 @@
 import { useMemo, useState } from "react";
 import ModeToggle from "./components/ModeToggle.jsx";
 import StaffView from "./components/StaffView.jsx";
+import StaffAuthGate from "./components/StaffAuthGate.jsx";
 import StudentView from "./components/StudentView.jsx";
 import { starterProfiles } from "./data/starterProfiles.js";
 import { getIndependenceSettings } from "./data/independenceSettings.js";
@@ -653,7 +654,7 @@ const {
           onSignOut={handleSignOut}
           onOpenStaffMode={() => handleModeChange("staff")}
         />
-      ) : (
+      ) : session ? (
         <StaffView
           profiles={profiles}
           selectedProfile={selectedProfile}
@@ -776,6 +777,17 @@ const {
           onDeleteActivity={handleDeleteActivity}
           onResetDemo={handleResetDemo}
           onClearSchedule={handleClearSchedule}
+        />
+      ) : (
+        <StaffAuthGate
+          session={session}
+          authStatus={authStatus}
+          isAuthWorking={isAuthWorking}
+          onSignIn={handleSignIn}
+          onSignUp={handleSignUp}
+          onGoogleSignIn={ENABLE_GOOGLE_AUTH ? handleGoogleSignIn : null}
+          onSignOut={handleSignOut}
+          onOpenStudentMode={() => handleModeChange("student")}
         />
       )}
       </div>

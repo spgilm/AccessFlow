@@ -439,3 +439,14 @@ Use this checklist before adding more features.
 - [ ] v50 release readiness panel appears.
 - [ ] Students tab loads.
 - [ ] Student Mode still loads after returning from Staff Mode.
+
+
+## v51.2 Staff Auth Gate Checks
+
+- [ ] Sign out.
+- [ ] Tap Staff.
+- [ ] Staff login/create-account screen appears.
+- [ ] No white screen appears.
+- [ ] Back to Student Mode works.
+- [ ] Sign in and confirm Staff Dashboard loads.
+- [ ] Sign out again and confirm Staff Auth Gate returns.

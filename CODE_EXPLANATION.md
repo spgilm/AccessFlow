@@ -1538,3 +1538,8 @@ v50.1 fixes invalid JSX syntax in four Student Mode panels that caused Render/Vi
 ## v51.1 Staff Mode Fix
 
 StaffView now imports `StaffReleaseReadinessPanel` before rendering the v50 release-readiness dashboard.
+
+
+## v51.2 Staff Auth Gate Fix
+
+`App.jsx` now renders `StaffAuthGate` when `mode === "staff"` and `session` is missing. `StaffView` only renders after sign-in.
