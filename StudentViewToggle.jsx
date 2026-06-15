@@ -7941,3 +7941,146 @@ a:focus-visible,
 [data-theme="dark"] .gui-review-summary strong {
   color: #ffe066;
 }
+
+
+/* v53.1: upgraded editable choice wheel */
+.choice-wheel-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  width: min(100%, 17rem);
+  aspect-ratio: 1;
+  padding-top: 1.2rem;
+}
+
+.choice-wheel-pointer {
+  position: absolute;
+  top: -0.25rem;
+  z-index: 2;
+  color: var(--danger);
+  font-size: 2rem;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.18));
+}
+
+.spinning-choice-wheel {
+  transition: transform 1400ms cubic-bezier(0.12, 0.74, 0.16, 1);
+  will-change: transform;
+}
+
+.spinning-choice-wheel.is-spinning {
+  filter: saturate(1.15);
+}
+
+.wheel-label-editor {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wheel-label-editor label {
+  min-width: 0;
+}
+
+.wheel-label-editor input {
+  min-height: 3rem;
+}
+
+.upgraded-wheel-layout .wheel-controls {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (max-width: 520px) {
+  .wheel-label-editor {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* v53.2: student choice-to-schedule clarity */
+.schedule-choice-launcher {
+  display: grid;
+  gap: 1rem;
+  border-width: 3px;
+  border-color: var(--primary);
+}
+
+.schedule-choice-quick-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.schedule-choice-button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 6.25rem;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem;
+  background: var(--control-bg);
+  color: var(--primary-strong);
+  text-align: left;
+  font-weight: 950;
+}
+
+.schedule-choice-button strong,
+.schedule-choice-button span {
+  display: block;
+}
+
+.schedule-choice-button span {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 850;
+}
+
+.schedule-choice-button:active {
+  transform: scale(0.99);
+}
+
+.schedule-choice-visual {
+  width: 4.25rem;
+  height: 4.25rem;
+  border-radius: 1.15rem;
+  font-size: 2.4rem;
+}
+
+.choice-card-action {
+  min-width: fit-content;
+}
+
+@media (min-width: 760px) {
+  .schedule-choice-quick-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .schedule-choice-quick-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-choice-button {
+    min-height: 5.5rem;
+  }
+}
+
+[data-theme="dark"] .schedule-choice-launcher {
+  background: #052f52;
+  color: #ffffff;
+  border-color: #ffe066;
+}
+
+[data-theme="dark"] .schedule-choice-button {
+  background: #063b66;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .schedule-choice-button span {
+  color: #ffffff;
+}

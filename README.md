@@ -2133,3 +2133,13 @@ v53 changes the default Student Mode from a full 8-tab layout to a lower-clutter
 ## Version feature history
 
 Per-version report files have been consolidated into `VERSION_FEATURES.md` so the project root is less cluttered.
+
+
+## v53.1 Choice Wheel Upgrade
+
+v53.1 upgrades the Choice Wheel game so it visually spins and lets the user label each color segment with a custom choice.
+
+
+## v53.2 Student Choice-to-Schedule Clarity Fix
+
+v53.2 makes student independence more visible. The Core student navigation is now Schedule, Add, Talk, Help, Calm. The Schedule screen also includes an Add to schedule launcher so students can add approved staff-created choices without remembering where the old Choose screen is.

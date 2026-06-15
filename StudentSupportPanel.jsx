@@ -85,8 +85,8 @@ export default function StaffChoiceBankPanel({
     <section className="panel staff-bank-panel simple-bank-panel" aria-labelledby="staff-bank-heading">
       <div className="section-heading-row">
         <div>
-          <p className="eyebrow">Student choices</p>
-          <h2 id="staff-bank-heading">Choices for {selectedProfile?.name ?? "this student"}</h2>
+          <p className="eyebrow">Student schedule choices</p>
+          <h2 id="staff-bank-heading">Activities the student can add</h2>
         </div>
       </div>
 
@@ -95,7 +95,7 @@ export default function StaffChoiceBankPanel({
           <div className="bank-step-number" aria-hidden="true">1</div>
           <div>
             <h3>Make a choice card</h3>
-            <p>Create an approved activity the student can choose.</p>
+            <p>Create an approved activity the student can add to their schedule.</p>
           </div>
 
           <label>
@@ -107,7 +107,7 @@ export default function StaffChoiceBankPanel({
                 placeholder="Example: eat an orange"
                 onChange={(event) => setTaskText(event.target.value)}
               />
-              <button type="submit">Save choice</button>
+              <button type="submit">Save schedule choice</button>
             </div>
           </label>
         </form>
@@ -124,8 +124,8 @@ export default function StaffChoiceBankPanel({
       {!hasChoices ? (
         <div className="empty-bank-message">
           <div className="empty-visual" aria-hidden="true">➕</div>
-          <p>No student choices yet.</p>
-          <p className="field-help">Add one choice above. Then it will appear in Student Mode.</p>
+          <p>No schedule choices yet.</p>
+          <p className="field-help">Add one activity above. Then the student can add it from Student Mode.</p>
         </div>
       ) : (
         <div className="bank-choice-list simplified-bank-list" aria-label="Saved student choices">

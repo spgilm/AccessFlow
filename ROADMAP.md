@@ -194,3 +194,13 @@ v53 is a deliberate pause on feature expansion. It tests a lower-clutter default
 ## Version feature file note
 
 Version-specific feature summaries are now consolidated into `VERSION_FEATURES.md` to reduce root-directory clutter.
+
+
+## v53.1 choice wheel note
+
+The Choice Wheel is now a usable configurable choice tool. Future work can move custom wheel labels into staff-managed profiles or let staff create multiple saved wheels.
+
+
+## v53.2 independence-path note
+
+v53.2 corrects the first declutter pass by making student schedule-building visible again. Future declutter work must preserve the visible path from student choice to schedule independence.

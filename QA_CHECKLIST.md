@@ -510,3 +510,27 @@ Use this checklist before adding more features.
 - [ ] `VERSION_FEATURES.md` exists.
 - [ ] The ZIP does not contain scattered `V##_...md` report files.
 - [ ] README, CODE_EXPLANATION, QA_CHECKLIST, and ROADMAP still exist.
+
+
+## v53.1 Choice Wheel Checks
+
+- [ ] Open Student Mode with Games enabled.
+- [ ] Open Games → Choice Wheel.
+- [ ] Edit each color label.
+- [ ] Press Spin and confirm the wheel visually rotates.
+- [ ] Confirm the result shows the selected custom label.
+- [ ] Confirm Reset labels restores color defaults.
+- [ ] Other games still open.
+
+
+## v53.2 Choice-to-Schedule Checks
+
+- [ ] Student Mode Core preset shows Schedule, Add, Talk, Help, Calm.
+- [ ] Schedule tab shows Add to schedule / Pick something to do.
+- [ ] Pressing an activity choice adds it to the schedule.
+- [ ] Add tab opens and also lets the student add activities.
+- [ ] Talk remains communication-focused, not schedule-building.
+- [ ] Staff Choices tab clearly describes activities the student can add.
+- [ ] Empty state explains staff must add activity choices first.
+- [ ] v52 games still work when enabled.
+- [ ] Staff Auth Gate still appears when signed out.

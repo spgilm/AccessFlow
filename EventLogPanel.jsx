@@ -1,5 +1,5 @@
 /**
- * Student-facing approved activity chooser with category filtering.
+ * Student-facing approved activity adder with category filtering.
  *
  * Comment added in v15 to make the prototype easier to study and modify.
  */
@@ -41,10 +41,10 @@ export default function StudentChoiceBank({
   return (
     <section className="panel focused-panel student-choice-screen" aria-labelledby="student-choice-heading">
       <div className="focus-header">
-        <p className="eyebrow">Choose</p>
-        <h2 id="student-choice-heading">Pick an activity</h2>
+        <p className="eyebrow">Add</p>
+        <h2 id="student-choice-heading">Add to my schedule</h2>
         {showText ? (
-          <p>Choose one card to add it to {profile?.name ? `${profile.name}'s` : "your"} schedule.</p>
+          <p>Pick one card to add it to {profile?.name ? `${profile.name}'s` : "your"} schedule.</p>
         ) : null}
       </div>
 
@@ -68,7 +68,7 @@ export default function StudentChoiceBank({
         <div className="small-empty-state">
           <div className="empty-visual" aria-hidden="true">➕</div>
           <h3>No choices yet</h3>
-          <p>Staff can add choices.</p>
+          <p>Staff can add activity choices in Staff Mode.</p>
         </div>
       ) : (
         <div className="choice-card-grid">
@@ -89,7 +89,7 @@ export default function StudentChoiceBank({
               {showText ? (
                 <span className="choice-card-label">{item.label}</span>
               ) : null}
-              {showText ? <span className="choice-card-action">Add</span> : null}
+              {showText ? <span className="choice-card-action">Add to schedule</span> : null}
             </button>
           ))}
         </div>

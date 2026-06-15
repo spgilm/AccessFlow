@@ -12,7 +12,14 @@ const rpsChoices = [
   { id: "scissors", label: "Scissors", visual: "✌️" },
 ];
 
-const wheelChoices = ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"];
+const defaultWheelChoices = [
+  { color: "Red", label: "Red" },
+  { color: "Blue", label: "Blue" },
+  { color: "Yellow", label: "Yellow" },
+  { color: "Green", label: "Green" },
+  { color: "Purple", label: "Purple" },
+  { color: "Orange", label: "Orange" },
+];
 
 const wordList = [
   "SMILE",
@@ -153,35 +160,102 @@ function RockPaperScissorsGame() {
 }
 
 function ChoiceWheelGame() {
+  const [wheelChoices, setWheelChoices] = useState(defaultWheelChoices);
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [spinCount, setSpinCount] = useState(0);
+  const [spinRotation, setSpinRotation] = useState(0);
+  const [isSpinning, setIsSpinning] = useState(false);
 
-  function spinWheel() {
-    setSpinCount((current) => current + 1);
-    setSelectedIndex(Math.floor(Math.random() * wheelChoices.length));
+  function updateChoiceLabel(index, label) {
+    setWheelChoices((current) =>
+      current.map((choice, choiceIndex) => (choiceIndex === index ? { ...choice, label } : choice))
+    );
   }
 
+  function spinWheel() {
+    if (isSpinning) {
+      return;
+    }
+
+    const nextSelectedIndex = Math.floor(Math.random() * wheelChoices.length);
+    const segmentSize = 360 / wheelChoices.length;
+    const targetRotation = 360 * 5 + (360 - nextSelectedIndex * segmentSize - segmentSize / 2);
+
+    setSelectedIndex(null);
+    setIsSpinning(true);
+    setSpinRotation((currentRotation) => currentRotation + targetRotation);
+
+    window.setTimeout(() => {
+      setSelectedIndex(nextSelectedIndex);
+      setIsSpinning(false);
+    }, 1400);
+  }
+
+  function resetLabels() {
+    setWheelChoices(defaultWheelChoices);
+    setSelectedIndex(null);
+    setSpinRotation(0);
+  }
+
+  const selectedChoice = selectedIndex === null ? null : wheelChoices[selectedIndex];
+
   return (
-    <GameCard title="Choice / Color Wheel" description="Tap spin to choose a color. This can become a choice wheel later.">
-      <div className="wheel-layout">
-        <div className="choice-wheel" aria-hidden="true" data-spin-count={spinCount}>
-          {wheelChoices.map((choice, index) => (
-            <span key={choice} className={`wheel-chip wheel-chip-${index + 1}`}>
-              {choice.slice(0, 1)}
-            </span>
-          ))}
+    <GameCard
+      title="Choice Wheel"
+      description="Label the color spaces, then spin the wheel to pick one."
+    >
+      <div className="wheel-layout upgraded-wheel-layout">
+        <div className="choice-wheel-stage">
+          <span className="choice-wheel-pointer" aria-hidden="true">
+            ▼
+          </span>
+          <div
+            className={`choice-wheel spinning-choice-wheel ${isSpinning ? "is-spinning" : ""}`}
+            aria-hidden="true"
+            style={{ transform: `rotate(${spinRotation}deg)` }}
+          >
+            {wheelChoices.map((choice, index) => (
+              <span key={choice.color} className={`wheel-chip wheel-chip-${index + 1}`}>
+                {choice.label.trim().slice(0, 2) || choice.color.slice(0, 1)}
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="wheel-controls">
-          <button type="button" className="primary-wide-button" onClick={spinWheel}>
-            Spin
+          <button
+            type="button"
+            className="primary-wide-button"
+            onClick={spinWheel}
+            disabled={isSpinning}
+          >
+            {isSpinning ? "Spinning..." : "Spin"}
           </button>
 
           <div className="game-status-card" role="status">
             <span>Result</span>
-            <strong>{selectedIndex === null ? "No color yet" : wheelChoices[selectedIndex]}</strong>
+            <strong>{selectedChoice ? selectedChoice.label || selectedChoice.color : "No choice yet"}</strong>
+            <p>{selectedChoice ? `${selectedChoice.color} space was selected.` : "Add labels, then spin."}</p>
           </div>
+
+          <button type="button" className="secondary-button" onClick={resetLabels} disabled={isSpinning}>
+            Reset labels
+          </button>
         </div>
+      </div>
+
+      <div className="wheel-label-editor" aria-label="Edit wheel labels">
+        {wheelChoices.map((choice, index) => (
+          <label key={choice.color}>
+            {choice.color} space
+            <input
+              type="text"
+              value={choice.label}
+              maxLength="20"
+              onChange={(event) => updateChoiceLabel(index, event.target.value)}
+              disabled={isSpinning}
+            />
+          </label>
+        ))}
       </div>
     </GameCard>
   );

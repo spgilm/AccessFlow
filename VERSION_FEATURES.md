@@ -2,6 +2,42 @@
 
 This file replaces the scattered per-version report markdown files. It keeps the feature history in one place so the project root stays less cluttered.
 
+## v53.2 — Student Choice-to-Schedule Clarity Fix
+
+Restores the independence path after the v53 declutter pass.
+
+Changes:
+
+```txt
+Default Core navigation is now Schedule, Add, Talk, Help, Calm
+Choose tab is renamed Add for student-facing clarity
+Schedule screen now includes an Add to schedule launcher
+Students can add approved choices directly from Schedule
+Staff choice-bank language now says schedule choices / activities the student can add
+Empty states explain that staff must add activity choices first
+```
+
+Product decision:
+
+```txt
+Independence tools should be visible in the student workflow.
+Decluttering should not hide the path to self-directed scheduling.
+```
+
+## v53.1 — Choice Wheel Upgrade
+
+Upgraded the Games tab Choice Wheel.
+
+Changes:
+
+```txt
+Wheel visually spins before selecting
+Each color segment can be labeled with a custom choice
+Result shows the selected custom label
+Reset labels button added
+Color names are defaults, not fixed choices
+```
+
 ## Current release: v53.0 — GUI Declutter Trial
 
 **Purpose:** pause feature expansion and test a lower-clutter Student Mode.

@@ -1,95 +1,206 @@
-# AccessFlow Architecture Overview
+/**
+ * Visual coverage helpers.
+ *
+ * Audits communication-button items and suggests Font Awesome icons when
+ * a label has weak visual support. Labels remain the semantic value.
+ */
+const keywordIconRules = [
+  ["bathroom", "toilet"],
+  ["toilet", "toilet"],
+  ["help", "help"],
+  ["support", "help"],
+  ["quiet", "quiet"],
+  ["loud", "loud"],
+  ["headphone", "headphones"],
+  ["break", "pause"],
+  ["wait", "clock"],
+  ["time", "clock"],
+  ["later", "clock"],
+  ["yes", "check"],
+  ["done", "check"],
+  ["finished", "check"],
+  ["no", "xmark"],
+  ["stop", "stop"],
+  ["different", "repeat"],
+  ["again", "repeat"],
+  ["choice", "comment"],
+  ["say", "comment"],
+  ["tell", "comment"],
+  ["question", "question"],
+  ["understand", "question"],
+  ["show", "eye"],
+  ["look", "eye"],
+  ["read", "book"],
+  ["book", "book"],
+  ["school", "book"],
+  ["work", "briefcase"],
+  ["job", "briefcase"],
+  ["task", "briefcase"],
+  ["materials", "briefcase"],
+  ["walk", "walk"],
+  ["movement", "walk"],
+  ["ride", "bus"],
+  ["bus", "bus"],
+  ["transport", "bus"],
+  ["home", "home"],
+  ["safe", "safety"],
+  ["call", "phone"],
+  ["phone", "phone"],
+  ["food", "food"],
+  ["snack", "food"],
+  ["drink", "drink"],
+  ["water", "drink"],
+  ["sick", "dizzy"],
+  ["hurt", "circle-exclamation"],
+  ["pain", "circle-exclamation"],
+  ["emergency", "circle-exclamation"],
+  ["mad", "angry"],
+  ["angry", "angry"],
+  ["sad", "sad"],
+  ["tired", "tired"],
+  ["happy", "happy"],
+  ["excited", "excited"],
+  ["space", "pause"],
+  ["clean", "trash"],
+  ["trash", "trash"],
+  ["clothes", "clothes"],
+  ["laundry", "clothes"],
+];
 
-## Current architecture
+export const visualAuditGroups = [
+  ["aac.coreWords", "AAC · Core words"],
+  ["aac.quickPhrases", "AAC · Quick phrases"],
+  ["aac.feelings", "AAC · Feelings"],
+  ["aac.intensityLevels", "AAC · Intensity"],
+  ["aac.socialScripts", "AAC · Social scripts"],
+  ["communication.sensoryRequests", "Communication · Sensory requests"],
+  ["self.yesNoResponses", "Self-advocacy · Yes/No"],
+  ["self.helpTopics", "Self-advocacy · Help topics"],
+  ["self.helpActions", "Self-advocacy · Help actions"],
+  ["self.decisionChoices", "Self-advocacy · Decision choices"],
+  ["self.stuckReasons", "Self-advocacy · Stuck reasons"],
+  ["self.stuckStrategies", "Self-advocacy · Stuck strategies"],
+  ["self.scheduleChangeRequests", "Self-advocacy · Schedule change requests"],
+  ["life.communityCards", "Life skills · Community cards"],
+  ["life.vocationalActions", "Life skills · Vocational actions"],
+];
 
-AccessFlow is currently a React/Vite frontend prototype with optional Supabase snapshot sync.
+export function getVisualSource(item) {
+  if (item?.visual?.type === "image" || item?.imageUrl) return "saved image/photo";
+  if (item?.visual?.type === "fontawesome" || item?.icon) return "Font Awesome";
+  if (item?.visual?.type === "emoji" || item?.emoji) return "emoji";
+  return "text fallback";
+}
 
-```txt
-React UI
-  ↓
-App.jsx state coordinator
-  ↓
-Profile/schedule/documentation data in localStorage
-  ↓
-Optional Supabase snapshot save/load
-```
+export function suggestIconForLabel(label = "") {
+  const lower = String(label).toLowerCase();
 
-## Primary runtime modules
+  const match = keywordIconRules.find(([keyword]) => lower.includes(keyword));
+  return match?.[1] ?? "comment";
+}
 
-```txt
-src/App.jsx
-src/components/
-src/data/
-src/utils/
-src/services/
-src/hooks/
-```
+export function getByPath(settings, path) {
+  const [domain, key] = path.split(".");
 
-## Key state areas
+  if (domain === "aac") return settings.aacExpansionSettings?.[key] ?? [];
+  if (domain === "communication") return settings.communicationSupportSettings?.[key] ?? [];
+  if (domain === "self") return settings.selfAdvocacySupportSettings?.[key] ?? [];
+  if (domain === "life") return settings.lifeSkillsSettings?.[key] ?? [];
 
-```txt
-profiles
-selectedProfileId
-templates
-scheduleDate
-documentationDate
-mode
-studentViewMode
-session
-syncMetadata
-displaySettings
-independenceSettings
-supportEvents
-progressGoals
-visualLibrary
-choiceBoardItems
-```
+  return [];
+}
 
-## Current data persistence
+export function setByPath(settings, path, nextItems) {
+  const [domain, key] = path.split(".");
 
-- Browser localStorage is the primary client-side persistence layer.
-- Supabase snapshot sync stores a full workspace payload.
-- Normalized Supabase tables are scaffolded but are not yet active.
+  if (domain === "aac") {
+    return {
+      ...settings,
+      aacExpansionSettings: {
+        ...settings.aacExpansionSettings,
+        [key]: nextItems,
+      },
+    };
+  }
 
-## Student-facing design principle
+  if (domain === "communication") {
+    return {
+      ...settings,
+      communicationSupportSettings: {
+        ...settings.communicationSupportSettings,
+        [key]: nextItems,
+      },
+    };
+  }
 
-Student/client autonomy remains primary. Staff tooling should configure and support the student experience without making Student Mode visually overwhelming.
+  if (domain === "self") {
+    return {
+      ...settings,
+      selfAdvocacySupportSettings: {
+        ...settings.selfAdvocacySupportSettings,
+        [key]: nextItems,
+      },
+    };
+  }
 
-## Current architecture risks
+  if (domain === "life") {
+    return {
+      ...settings,
+      lifeSkillsSettings: {
+        ...settings.lifeSkillsSettings,
+        [key]: nextItems,
+      },
+    };
+  }
 
-- `App.jsx` is large and should be split into domain hooks.
-- Snapshot sync is not sufficient for production audit trails.
-- Uploaded images inside snapshots can become large.
-- Role permissions are not enforced by a production backend.
-- Offline/PWA behavior is app-shell level, not full offline-first sync.
+  return settings;
+}
 
+export function buildVisualCoverageRows(settings) {
+  return visualAuditGroups.map(([path, label]) => {
+    const items = getByPath(settings, path);
+    const rows = items.map((item) => {
+      const source = getVisualSource(item);
+      const suggestedIcon = suggestIconForLabel(item.label);
+      const needsSuggestion = source === "emoji" || source === "text fallback";
 
-## v27 refactor update
+      return {
+        ...item,
+        source,
+        suggestedIcon,
+        needsSuggestion,
+      };
+    });
 
-v27 extracts pure helper logic from `App.jsx` into utility modules. This does not complete the full architectural split, but it reduces coupling and makes the next hook-based refactor safer.
+    return {
+      path,
+      label,
+      total: rows.length,
+      savedVisualCount: rows.filter((item) => item.source === "saved image/photo").length,
+      iconCount: rows.filter((item) => item.source === "Font Awesome").length,
+      emojiOnlyCount: rows.filter((item) => item.source === "emoji").length,
+      textFallbackCount: rows.filter((item) => item.source === "text fallback").length,
+      rows,
+    };
+  });
+}
 
-Extracted modules:
+export function applySuggestedIconsToSettings(settings) {
+  return visualAuditGroups.reduce((current, [path]) => {
+    const items = getByPath(current, path);
+    const nextItems = items.map((item) => {
+      const source = getVisualSource(item);
 
-```txt
-readAloudHelpers
-cloudErrorHelpers
-studentActionHelpers
-dateCopyHelpers
-staffExportHelpers
-workspacePayloadHelpers
-```
+      if (source === "saved image/photo" || source === "Font Awesome") {
+        return item;
+      }
 
+      return {
+        ...item,
+        icon: item.icon || suggestIconForLabel(item.label),
+      };
+    });
 
-## v28 hook extraction update
-
-v28 moves side effects into React hooks. The main app coordinator no longer directly owns theme sync, read-aloud event listeners, auth session subscription, legacy StudentView migration, or cloud dirty-state tracking.
-
-
-## v29 action hook extraction update
-
-v29 continues modularization by moving action-heavy handler groups into hooks.
-`App.jsx` still coordinates app state, but more behavior now lives in domain modules.
-
-## v30 architecture update
-
-v30 changes `App.jsx` into a smaller application shell/coordinator. Most user-action logic now lives in hooks under `src/hooks/`.
+    return setByPath(current, path, nextItems);
+  }, settings);
+}

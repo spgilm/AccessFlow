@@ -139,7 +139,7 @@ export const featurePresets = [
       showScheduleTab: true,
       showRelaxTab: true,
       showGamesTab: false,
-      showChooseTab: false,
+      showChooseTab: true,
       showMakeTab: false,
       showChoiceBoardTab: true,
       showHelpTab: true,

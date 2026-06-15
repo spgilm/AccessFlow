@@ -12,6 +12,7 @@ import ScheduleDatePicker from "./ScheduleDatePicker.jsx";
 import StudentBreakPlan from "./StudentBreakPlan.jsx";
 import StudentActivityDetail from "./StudentActivityDetail.jsx";
 import StudentChoiceBank from "./StudentChoiceBank.jsx";
+import StudentScheduleChoiceLauncher from "./StudentScheduleChoiceLauncher.jsx";
 import StudentGuidedScheduleBuilder from "./StudentGuidedScheduleBuilder.jsx";
 import StudentChoiceBoard from "./StudentChoiceBoard.jsx";
 import StudentSupportPanel from "./StudentSupportPanel.jsx";
@@ -139,6 +140,7 @@ export default function StudentView({
     displaySettings?.studentModeLayout === "firstThenOnly" ? "firstThen" : "schedule"
   );
   const studentTabs = useMemo(() => resolveStudentTabs(displaySettings), [displaySettings]);
+  const hasAddTab = studentTabs.some((tab) => tab.id === "choose");
   const currentActivity = activities.find((activity) => !activity.completed) ?? activities[0] ?? null;
   const currentActivityIndex = currentActivity
     ? activities.findIndex((activity) => activity.id === currentActivity.id)
@@ -316,6 +318,15 @@ useEffect(() => {
             />
           ) : null}
 
+          <StudentScheduleChoiceLauncher
+            libraryItems={studentActivityLibrary}
+            independenceSettings={independenceSettings}
+            displaySettings={displaySettings}
+            onAddActivity={onStudentAddActivity}
+            canOpenAddTab={hasAddTab}
+            onOpenAddTab={() => setActiveStudentTab("choose")}
+          />
+
           {hasActivityReadinessTools ? (
             <StudentToolGroup
               title="Activity support"
@@ -488,7 +499,7 @@ useEffect(() => {
       ) : null}
 
       {activeStudentTab === "choose" ? (
-        <section className="student-tab-screen choose-tab-stack" aria-label="Choose activities">
+        <section className="student-tab-screen choose-tab-stack" aria-label="Add activities to schedule">
           {displaySettings?.showGuidedScheduleBuilder !== false && independenceSettings.studentCanBuildSchedule ? (
             <StudentGuidedScheduleBuilder
               profile={profile}

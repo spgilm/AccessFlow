@@ -368,7 +368,7 @@ function getStudentPreviewSummary() {
     >
       <option value="profile">Me</option>
       <option value="schedule">Schedule</option>
-      <option value="choose">Choose</option>
+      <option value="choose">Add</option>
       <option value="make">Make</option>
       <option value="board">Talk</option>
       <option value="help">Help</option>
@@ -466,7 +466,7 @@ function getStudentPreviewSummary() {
     ["showStudentToolSummary", "Show student settings summary"],
     ["showProfileTab", "Show Me tab"],
     ["showScheduleTab", "Show Schedule tab"],
-    ["showChooseTab", "Show Choose tab"],
+    ["showChooseTab", "Show Add tab"],
     ["showMakeTab", "Show Make tab"],
     ["showChoiceBoardTab", "Show Talk tab"],
     ["showHelpTab", "Show Help tab"],

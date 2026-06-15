@@ -75,9 +75,9 @@ export function getDisplaySettings(profile) {
 export const studentNavigationPresets = [
   {
     id: "core",
-    label: "Core: Schedule, Talk, Help, Calm",
-    description: "Default low-clutter layout for most students.",
-    tabs: ["schedule", "board", "help", "relax"],
+    label: "Core: Schedule, Add, Talk, Help, Calm",
+    description: "Default low-clutter layout with schedule-building visible.",
+    tabs: ["schedule", "choose", "board", "help", "relax"],
   },
   {
     id: "simple",
@@ -114,7 +114,7 @@ export const studentNavigationPresets = [
 const studentTabDefinitions = {
   profile: { id: "profile", label: "Me" },
   schedule: { id: "schedule", label: "Schedule" },
-  choose: { id: "choose", label: "Choose" },
+  choose: { id: "choose", label: "Add" },
   make: { id: "make", label: "Make" },
   board: { id: "board", label: "Talk" },
   help: { id: "help", label: "Help" },

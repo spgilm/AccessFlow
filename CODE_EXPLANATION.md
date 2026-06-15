@@ -1568,3 +1568,13 @@ Student tab resolution now includes Help. StaffView now includes Reports. CSS ov
 ## Version feature history
 
 `VERSION_FEATURES.md` is now the single version-feature log. Individual `V##_...md` report files are no longer kept in the root build package.
+
+
+## v53.1 Choice Wheel Upgrade
+
+`ChoiceWheelGame` in `StudentGamesPanel.jsx` now stores editable wheel choices, applies animated rotation during spin, and reports the selected custom label.
+
+
+## v53.2 Student Choice-to-Schedule Clarity Fix
+
+`StudentScheduleChoiceLauncher.jsx` is a new Schedule-screen component that shows staff-approved activity-bank choices and calls `onStudentAddActivity({ type: 'bank', choiceId })`. `displaySettings.js` now labels the choice tab as Add and includes it in the Core navigation preset.
