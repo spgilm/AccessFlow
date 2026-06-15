@@ -1,0 +1,77 @@
+/**
+ * Student-facing schedule activity card with icon editing, done/undo state, and optional timer.
+ *
+ * Comment added in v15 to make the prototype easier to study and modify.
+ */
+import EmojiPickerButton from "./EmojiPickerButton.jsx";
+import TimerButton from "./TimerButton.jsx";
+import { shouldShowText, shouldShowVisuals } from "../../data/displaySettings.js";
+
+export default function ActivityCard({
+  activity,
+  isSelected,
+  onSelect,
+  onToggleComplete,
+  onUpdateVisual,
+  displaySettings,
+}) {
+  const showText = shouldShowText(displaySettings);
+  const showVisuals = shouldShowVisuals(displaySettings);
+  const statusText = activity.completed ? "Complete" : "Not complete";
+  const actionText = isSelected ? "Hide smaller steps" : "Show smaller steps";
+
+  return (
+    <article
+      className={`activity-card ${activity.completed ? "is-complete" : ""} ${
+        isSelected ? "is-selected" : ""
+      }`}
+    >
+      <div className="activity-card-main-row">
+        {showVisuals ? (
+          <EmojiPickerButton
+            visual={activity.visual ?? activity.emoji}
+            displayVisual={activity.completed ? "✅" : undefined}
+            label={activity.label}
+            className="activity-visual-picker"
+            onChange={(visual) => onUpdateVisual?.(activity.id, visual)}
+          />
+        ) : null}
+
+        <button
+          className="activity-main-button"
+          type="button"
+          onClick={() => onSelect(activity.id)}
+          aria-pressed={isSelected}
+          aria-label={`${actionText} for ${activity.label}. Status: ${statusText}.`}
+        >
+          {showText ? (
+            <span className="activity-text">
+              <span className="activity-label">{activity.label}</span>
+              <span className="activity-status">{isSelected ? "Steps open" : statusText}</span>
+            </span>
+          ) : (
+            <span className="activity-text sr-only">
+              <span className="activity-label">{activity.label}</span>
+              <span className="activity-status">{isSelected ? "Steps open" : statusText}</span>
+            </span>
+          )}
+        </button>
+      </div>
+
+      <TimerButton minutes={activity.timerMinutes} label={activity.label} />
+
+      <button
+        className="complete-button"
+        type="button"
+        onClick={() => onToggleComplete(activity.id)}
+        aria-label={
+          activity.completed
+            ? `Mark ${activity.label} as not complete`
+            : `Mark ${activity.label} as complete`
+        }
+      >
+        {activity.completed ? "Undo" : "Done"}
+      </button>
+    </article>
+  );
+}

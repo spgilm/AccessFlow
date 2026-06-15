@@ -1,3 +1,28 @@
+## Documentation
+
+Project documentation is organized in:
+
+```txt
+docs/
+  README.md
+  development/
+  project/
+  compliance/
+  deployment/
+  design/
+  refactors/
+```
+
+Start here:
+
+- [Documentation index](docs/README.md)
+- [File structure](docs/development/FILE_STRUCTURE.md)
+- [Code explanation](docs/development/CODE_EXPLANATION.md)
+- [QA checklist](docs/development/QA_CHECKLIST.md)
+- [Version features](docs/project/VERSION_FEATURES.md)
+- [Roadmap](docs/project/ROADMAP.md)
+
+
 
 > **Prototype safety warning:** Do not enter real student/client data. AccessFlow is not currently HIPAA, FERPA, agency-compliance, audit-trail, or records-retention ready. Use mock data only.
 
@@ -528,7 +553,7 @@ This version focuses on real-world daily use while keeping the student-facing fl
 - Daily schedule templates.
 - Structured Break Plan.
 - Code comments added across `src`.
-- `CODE_EXPLANATION.md` added as a developer cheat sheet.
+- `docs/development/CODE_EXPLANATION.md` added as a developer cheat sheet.
 
 ### Google OAuth flag
 
@@ -2132,7 +2157,7 @@ v53 changes the default Student Mode from a full 8-tab layout to a lower-clutter
 
 ## Version feature history
 
-Per-version report files have been consolidated into `VERSION_FEATURES.md` so the project root is less cluttered.
+Per-version report files have been consolidated into `docs/project/VERSION_FEATURES.md` so the project root is less cluttered.
 
 
 ## v53.1 Choice Wheel Upgrade
@@ -2143,3 +2168,13 @@ v53.1 upgrades the Choice Wheel game so it visually spins and lets the user labe
 ## v53.2 Student Choice-to-Schedule Clarity Fix
 
 v53.2 makes student independence more visible. The Core student navigation is now Schedule, Add, Talk, Help, Calm. The Schedule screen also includes an Add to schedule launcher so students can add approved staff-created choices without remembering where the old Choose screen is.
+
+
+## v53.3 Play Tab Access Fix
+
+v53.3 restores visible game access by adding Play to the default Core Student Mode navigation. Core now shows Schedule, Add, Talk, Help, Calm, and Play.
+
+
+## v54 File Structure Organization
+
+v54 reorganizes `src/components` from one flat folder into feature-oriented folders: app, shared, student, and staff. See `docs/development/FILE_STRUCTURE.md` for the folder map.
