@@ -20,7 +20,7 @@ export const defaultDisplaySettings = {
   showChoiceBoardTab: true,
   showHelpTab: true,
   showRelaxTab: true,
-  showGamesTab: false,
+  showGamesTab: true,
   showGuidedScheduleBuilder: true,
   showAboutMePanel: true,
   showWords: true,

@@ -73,7 +73,8 @@ function getStudentPreviewSummary() {
   );
 
   if (preset) {
-    return `Navigation preset: ${preset.label}.`;
+    const includesPlay = preset.tabs?.includes("games");
+    return `Navigation preset: ${preset.label}.${includesPlay ? " Play is visible." : " Play is hidden in this preset."}`;
   }
 
   return "Student Mode will use the selected navigation and display settings.";
@@ -86,6 +87,11 @@ function getStudentPreviewSummary() {
           <p className="eyebrow">Profiles</p>
           <h2 id="profile-heading">Student / client</h2>
         </div>
+      </div>
+
+      <div className="staff-preview-note shared-student-workspace-note" aria-label="Shared student workspace note">
+        <strong>Shared staff student list</strong>
+        <span>Student profiles are intended to be shared across staff in the same workspace. After adding or editing students, use Settings → Shared staff workspace → Save shared student list so other staff can load them.</span>
       </div>
 
       <div className="profile-layout">
@@ -346,6 +352,32 @@ function getStudentPreviewSummary() {
       Use Core for the normal default. Play stays visible, while Me/Make/extra builder tools stay hidden unless needed.
     </small>
   </label>
+
+  <div className="staff-preview-note play-access-helper" aria-label="Play tab access helper">
+    <strong>Need the Play tab?</strong>
+    <span>
+      Use the Core preset to show Schedule, Add, Talk, Help, Calm, and Play. If a student is on Simple or Custom, Play may be hidden.
+    </span>
+    <div className="row-actions">
+      <button
+        type="button"
+        className="secondary-button"
+        onClick={() =>
+          onUpdateProfile(selectedProfile.id, {
+            displaySettings: {
+              ...displaySettings,
+              studentModeLayout: "tabs",
+              studentNavigationPreset: "core",
+              showGamesTab: true,
+              defaultStudentView: "schedule",
+            },
+          })
+        }
+      >
+        Enable Play tab
+      </button>
+    </div>
+  </div>
 
   <label>
     Student panel layout

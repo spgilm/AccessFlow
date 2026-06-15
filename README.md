@@ -16,6 +16,8 @@ docs/
 Start here:
 
 - [Documentation index](docs/README.md)
+- [Student side guide](docs/user/STUDENT_SIDE_GUIDE.md)
+- [Staff side guide](docs/user/STAFF_SIDE_GUIDE.md)
 - [File structure](docs/development/FILE_STRUCTURE.md)
 - [Code explanation](docs/development/CODE_EXPLANATION.md)
 - [QA checklist](docs/development/QA_CHECKLIST.md)
@@ -2178,3 +2180,18 @@ v53.3 restores visible game access by adding Play to the default Core Student Mo
 ## v54 File Structure Organization
 
 v54 reorganizes `src/components` from one flat folder into feature-oriented folders: app, shared, student, and staff. See `docs/development/FILE_STRUCTURE.md` for the folder map.
+
+
+## v55.1 Student Visual + Play Access Fix
+
+v55.1 restores larger student emoji/icon visuals and adds an explicit Staff-side Enable Play tab button under Student display/access settings.
+
+
+## v56 Staff Declutter and User Guides
+
+v56 groups each Staff Mode tab into expandable sections so large staff tabs are easier to read. It also adds full Student Side and Staff Side user guides in `docs/user/`.
+
+
+## v56.1 Shared Staff Student Workspace
+
+v56.1 changes cloud snapshot loading so all signed-in staff using the same workspace label can load the same shared student list. See `docs/user/STAFF_SIDE_GUIDE.md` and `database/v56-1-shared-staff-workspace-policies.sql`.

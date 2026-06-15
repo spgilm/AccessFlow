@@ -1592,3 +1592,17 @@ Components are now grouped by product surface and workflow. The refactor moves c
 ## v55 Documentation Structure
 
 Markdown documentation is now grouped under `docs/` instead of living flat in the root directory. The root keeps `README.md` only. The docs index is `docs/README.md`.
+
+
+## v55.1 Student Visual + Play Access Fix
+
+v55.1 adds CSS overrides that restore larger `VisualSupport` emoji and FontAwesome sizing in student-facing visual containers. `ProfileManager` now includes a Play access helper and an Enable Play tab button that applies the Core navigation preset.
+
+## v56 Staff Declutter
+
+`StaffView.jsx` now uses a local `StaffToolGroup` component to organize each staff tab into expandable sections. This preserves the same tools while reducing the amount of visible content on each tab. User-facing guide documentation now lives in `docs/user/`.
+
+
+## v56.1 Shared Staff Workspace
+
+`loadLatestWorkspaceSnapshot` now queries by `workspace_label` without filtering to the signed-in user. `saveWorkspaceSnapshot` still records the signed-in user as `user_id`. The UI now describes this as a shared staff workspace rather than a private per-account snapshot.

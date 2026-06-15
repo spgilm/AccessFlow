@@ -8084,3 +8084,171 @@ a:focus-visible,
 [data-theme="dark"] .schedule-choice-button span {
   color: #ffffff;
 }
+
+
+/* v55.1: restore full-size student visual icons */
+.visual-support {
+  display: grid;
+  place-items: center;
+}
+
+.visual-emoji {
+  font-size: inherit;
+  line-height: 1;
+}
+
+.visual-fontawesome {
+  font-size: inherit;
+}
+
+.visual-fontawesome svg {
+  width: 0.86em;
+  height: 0.86em;
+}
+
+.activity-visual.visual-emoji,
+.activity-visual.visual-fontawesome {
+  font-size: 3.85rem;
+}
+
+.choice-card-visual.visual-emoji,
+.choice-card-visual.visual-fontawesome {
+  font-size: 3.75rem;
+}
+
+.schedule-choice-visual.visual-emoji,
+.schedule-choice-visual.visual-fontawesome {
+  font-size: 3.15rem;
+}
+
+.now-next-visual.visual-emoji,
+.now-next-visual.visual-fontawesome {
+  font-size: 2.95rem;
+}
+
+.detail-visual.visual-emoji,
+.detail-visual.visual-fontawesome {
+  font-size: 3.35rem;
+}
+
+.guided-choice-visual.visual-emoji,
+.guided-choice-visual.visual-fontawesome {
+  font-size: 2.45rem;
+}
+
+.choice-board-visual.visual-emoji,
+.choice-board-visual.visual-fontawesome,
+.activity-visual-picker.visual-emoji,
+.activity-visual-picker.visual-fontawesome {
+  font-size: calc(var(--student-visual-size, 4.25rem) * 0.76);
+}
+
+.student-touch-large .activity-visual-picker,
+.student-touch-large .choice-board-visual,
+.student-touch-large .choice-card-visual,
+.student-touch-large .schedule-choice-visual,
+.student-touch-extraLarge .activity-visual-picker,
+.student-touch-extraLarge .choice-board-visual,
+.student-touch-extraLarge .choice-card-visual,
+.student-touch-extraLarge .schedule-choice-visual {
+  font-size: calc(var(--student-visual-size) * 0.72);
+}
+
+.student-touch-large .activity-visual,
+.student-touch-extraLarge .activity-visual {
+  font-size: calc(var(--student-visual-size) * 0.82);
+}
+
+.student-touch-large .guided-choice-visual,
+.student-touch-extraLarge .guided-choice-visual {
+  font-size: calc(var(--student-visual-size) * 0.58);
+}
+
+
+/* v56: staff-side declutter groups */
+.staff-tab-screen {
+  display: grid;
+  gap: 1rem;
+}
+
+.staff-tool-group {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--panel-bg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.staff-tool-group summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: var(--tap-target);
+  padding: 1rem;
+  cursor: pointer;
+  color: var(--primary-strong);
+  font-weight: 950;
+}
+
+.staff-tool-group summary::after {
+  content: "Open";
+  border: 2px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+  background: var(--control-bg);
+  color: var(--primary-strong);
+  font-size: 0.8rem;
+  font-weight: 950;
+}
+
+.staff-tool-group[open] summary::after {
+  content: "Close";
+}
+
+.staff-tool-group summary span {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.staff-tool-group summary strong {
+  font-size: 1.1rem;
+}
+
+.staff-tool-group summary small {
+  color: var(--muted);
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.staff-tool-group-body {
+  display: grid;
+  gap: 1rem;
+  padding: 0 1rem 1rem;
+}
+
+.staff-tool-group-body > .panel,
+.staff-tool-group-body > .staff-management-grid,
+.staff-tool-group-body > .workspace-grid {
+  box-shadow: none;
+}
+
+[data-theme="dark"] .staff-tool-group {
+  background: #052f52;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .staff-tool-group summary {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .staff-tool-group summary small {
+  color: #ffffff;
+}
+
+[data-theme="dark"] .staff-tool-group summary::after {
+  background: #063b66;
+  color: #ffffff;
+  border-color: #ffe066;
+}

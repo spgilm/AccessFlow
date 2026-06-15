@@ -12,7 +12,7 @@ export function formatCloudError(action, error) {
   }
 
   if (lowerMessage.includes("row-level security") || lowerMessage.includes("violates row-level security")) {
-    return `${action} failed: RLS blocked the request. Confirm the user_id column and auth.uid() policies are installed.`;
+    return `${action} failed: RLS blocked the request. Confirm the shared staff workspace RLS policy is installed for accessflow_workspace_snapshots.`;
   }
 
   if (lowerMessage.includes("jwt") || lowerMessage.includes("invalid token")) {

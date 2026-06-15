@@ -133,7 +133,7 @@ export function useCloudSnapshotActions({
         lastSavedAt: savedAt,
         lastSnapshotId: saved?.id ?? current.lastSnapshotId ?? null,
       }));
-      setSyncStatus(`Cloud snapshot saved at ${new Date(savedAt).toLocaleString()}.`);
+      setSyncStatus(`Shared staff workspace saved at ${new Date(savedAt).toLocaleString()}. Other staff can load this student list.`);
     } catch (error) {
       setSyncStatus(formatCloudError("Cloud save", error));
     } finally {
@@ -143,7 +143,7 @@ export function useCloudSnapshotActions({
 
   async function handleLoadCloudSnapshot() {
     const shouldLoad = window.confirm(
-      "Load the latest cloud snapshot? This will replace the current browser workspace with the latest Supabase snapshot for this signed-in account."
+      "Load the latest shared staff workspace? This will replace the current browser workspace with the latest shared student list for this workspace label."
     );
 
     if (!shouldLoad) {
@@ -158,11 +158,11 @@ export function useCloudSnapshotActions({
       const snapshot = await loadLatestWorkspaceSnapshot();
 
       if (!snapshot?.payload) {
-        setSyncStatus("No cloud snapshot found for this signed-in account.");
+        setSyncStatus("No shared staff workspace snapshot found yet. Save one from any staff account first.");
         return;
       }
 
-      restoreWorkspaceFromPayload(snapshot.payload, "Supabase", { markCloudClean: true });
+      restoreWorkspaceFromPayload(snapshot.payload, "shared staff workspace", { markCloudClean: true });
       const loadedAt = snapshot.updated_at ?? snapshot.created_at ?? new Date().toISOString();
       setSyncMetadata((current) => ({
         ...current,

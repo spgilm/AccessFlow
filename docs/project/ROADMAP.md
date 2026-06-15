@@ -218,3 +218,17 @@ v54 makes the codebase easier to grow by organizing components by product surfac
 ## v55 documentation structure note
 
 v55 organizes markdown documentation into the `docs/` folder. Future docs should be added to the relevant subfolder instead of the project root.
+
+
+## v55.1 visual/play access note
+
+v55.1 corrects two issues from the declutter/file-organization work: student icons became visually too small, and Play was still too hard to discover from Staff Mode.
+
+## v56 staff declutter note
+
+v56 makes Staff Mode easier to read by grouping dense tabs into expandable sections. Future staff tools should be added to the appropriate group instead of being appended directly to the tab as another always-visible panel.
+
+
+## v56.1 shared staff workspace note
+
+v56.1 improves collaboration by making the prototype snapshot model workspace-scoped for staff. A future production version still needs true organizations, workspace membership, roles, row-level permissions, and audit logs.

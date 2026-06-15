@@ -1,10 +1,10 @@
--- AccessFlow v10 Supabase auth-scoped prototype schema
+-- AccessFlow v56.1 Supabase shared-staff prototype schema
 --
 -- This schema supports manual cloud snapshots from the static frontend.
--- Each authenticated user can only access their own snapshots via RLS.
+-- Signed-in staff can read shared workspace snapshots for the configured workspace label. Inserts remain tied to the staff user who saved the snapshot.
 --
 -- This is still a prototype. Production should use normalized tables and
--- organization-scoped permissions.
+-- organization-scoped permissions before real data use.
 
 create extension if not exists pgcrypto;
 
@@ -61,7 +61,7 @@ drop policy if exists "prototype_delete_accessflow_snapshots"
   on public.accessflow_workspace_snapshots;
 
 -- Explicit API grants for signed-in users.
--- RLS policies below still restrict users to their own rows.
+-- RLS policies below allow authenticated staff to read shared snapshots, while writes remain tied to the saving user.
 grant usage on schema public to authenticated;
 grant select, insert, update, delete
 on table public.accessflow_workspace_snapshots
@@ -80,26 +80,38 @@ drop policy if exists "users_update_own_accessflow_snapshots"
 drop policy if exists "users_delete_own_accessflow_snapshots"
   on public.accessflow_workspace_snapshots;
 
-create policy "users_read_own_accessflow_snapshots"
+drop policy if exists "staff_read_shared_accessflow_workspace_snapshots"
+  on public.accessflow_workspace_snapshots;
+
+drop policy if exists "staff_insert_shared_accessflow_workspace_snapshots"
+  on public.accessflow_workspace_snapshots;
+
+drop policy if exists "staff_update_own_accessflow_workspace_snapshots"
+  on public.accessflow_workspace_snapshots;
+
+drop policy if exists "staff_delete_own_accessflow_workspace_snapshots"
+  on public.accessflow_workspace_snapshots;
+
+create policy "staff_read_shared_accessflow_workspace_snapshots"
 on public.accessflow_workspace_snapshots
 for select
 to authenticated
-using (auth.uid() = user_id);
+using (workspace_label is not null);
 
-create policy "users_insert_own_accessflow_snapshots"
+create policy "staff_insert_shared_accessflow_workspace_snapshots"
 on public.accessflow_workspace_snapshots
 for insert
 to authenticated
-with check (auth.uid() = user_id);
+with check (auth.uid() = user_id and workspace_label is not null);
 
-create policy "users_update_own_accessflow_snapshots"
+create policy "staff_update_own_accessflow_workspace_snapshots"
 on public.accessflow_workspace_snapshots
 for update
 to authenticated
 using (auth.uid() = user_id)
-with check (auth.uid() = user_id);
+with check (auth.uid() = user_id and workspace_label is not null);
 
-create policy "users_delete_own_accessflow_snapshots"
+create policy "staff_delete_own_accessflow_workspace_snapshots"
 on public.accessflow_workspace_snapshots
 for delete
 to authenticated

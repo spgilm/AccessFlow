@@ -2,6 +2,91 @@
 
 This file replaces the scattered per-version report markdown files. It keeps the feature history in one place so the project root stays less cluttered.
 
+## v56.1 — Shared Staff Student Workspace
+
+Changed prototype cloud sync semantics so student profiles are treated as workspace-level records rather than staff-owned records.
+
+Behavior:
+
+```txt
+Any signed-in staff account can create a student profile.
+A staff member saves the shared student list from Settings.
+Other signed-in staff using the same workspace label can load that shared student list.
+All loaded students are available in the Staff Mode student selector.
+```
+
+Implementation notes:
+
+```txt
+loadLatestWorkspaceSnapshot now loads the latest snapshot by workspace_label, not by user_id.
+saveWorkspaceSnapshot still records the saving staff user_id.
+SupabaseSyncPanel now says Shared staff workspace.
+database/v56-1-shared-staff-workspace-policies.sql documents the prototype RLS update.
+```
+
+Safety:
+
+This is still a prototype sharing model. It is not a production HIPAA/FERPA organization-membership model.
+
+## v56.0 — Staff Declutter + User Guides
+
+Staff Mode tabs were reorganized into expandable sections so each tab is easier to scan.
+
+Added staff-side expandable groups:
+
+```txt
+Dashboard: Daily overview / Readiness and clutter review / Feature guide
+Setup: Guided setup wizard
+Students: Profile and presets / About Me and templates / Motivation and regulation / Communication and AAC
+Choices: Student schedule choices / Talk board and First-Then / Visual library and icons
+Schedule: Date and routine shortcuts / Review and add / Edit schedule and steps
+Notes: Daily note / Goals and accessibility / Session notes and event log
+Reports: Progress and handoff / Communication and support patterns
+Settings: Prototype safety and data health / Account and cloud sync / Security and exports / Danger zone
+```
+
+Added full user guides:
+
+```txt
+docs/user/STUDENT_SIDE_GUIDE.md
+docs/user/STAFF_SIDE_GUIDE.md
+```
+
+Product decision:
+
+```txt
+Staff Mode can contain many tools, but each tab should show a readable workflow rather than one long stack of panels.
+```
+
+## v55.1 — Student Visual Size + Play Access Fix
+
+Fixed two student-facing usability problems.
+
+Changes:
+
+```txt
+Restored larger emoji/icon sizing inside student visual containers
+Added Staff-side Play access helper
+Added Enable Play tab button in Staff Mode -> Students -> Student display/access settings
+Default custom tab visibility now keeps Play enabled
+Student navigation preview now says whether Play is visible or hidden
+```
+
+Staff path:
+
+```txt
+Staff Mode -> Students -> Student display and access settings -> Enable Play tab
+```
+
+The button sets:
+
+```txt
+studentModeLayout: tabs
+studentNavigationPreset: core
+showGamesTab: true
+defaultStudentView: schedule
+```
+
 ## v55.0 — Documentation Structure Cleanup
 
 Reorganized markdown documentation so the project root stays focused on app files.

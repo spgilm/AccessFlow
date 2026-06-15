@@ -39,7 +39,7 @@ export default function SupabaseSyncPanel({
       <div className="section-heading-row">
         <div>
           <p className="eyebrow">Backend</p>
-          <h2 id="supabase-sync-heading">Supabase sync</h2>
+          <h2 id="supabase-sync-heading">Shared staff workspace</h2>
         </div>
       </div>
 
@@ -54,10 +54,15 @@ export default function SupabaseSyncPanel({
         </strong>
         <p>
           {status.configured
-            ? `Workspace label: ${status.workspaceLabel}`
-            : "Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Render to enable authenticated cloud snapshots."}
+            ? `Shared workspace label: ${status.workspaceLabel}`
+            : "Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in Render to enable authenticated shared workspace snapshots."}
         </p>
-        <p className="backend-account-line">Staff account: {currentEmail}</p>
+        {status.configured ? (
+          <p className="field-help">
+            All signed-in staff using this same workspace label can load the same student list after another staff member saves it.
+          </p>
+        ) : null}
+        <p className="backend-account-line">Signed-in staff: {currentEmail}</p>
       </div>
 
       <div className="backend-checklist" aria-label="Supabase setup checklist">
@@ -110,7 +115,7 @@ export default function SupabaseSyncPanel({
           onClick={onSaveCloudSnapshot}
           disabled={!canSync}
         >
-          {isSyncing ? "Working..." : "Save cloud snapshot"}
+          {isSyncing ? "Working..." : "Save shared student list"}
         </button>
 
         <button
@@ -119,12 +124,12 @@ export default function SupabaseSyncPanel({
           onClick={onLoadCloudSnapshot}
           disabled={!canSync}
         >
-          {isSyncing ? "Working..." : "Load latest snapshot"}
+          {isSyncing ? "Working..." : "Load shared student list"}
         </button>
       </div>
 
       <p className="field-help load-warning">
-        Loading a cloud snapshot replaces the current browser workspace. AccessFlow asks for confirmation before loading.
+        Loading the shared student list replaces this browser workspace with the latest saved workspace for all staff using this workspace label. AccessFlow asks for confirmation before loading.
       </p>
 
       {syncStatus ? (
@@ -136,10 +141,10 @@ export default function SupabaseSyncPanel({
       <div className="prototype-warning" role="note">
         <strong>Prototype data boundary</strong>
         <p>
-          Use fake names and test records only. v10 improves sync clarity and student independence, but it is still not approved for real student/client private data.
+          Use fake names and test records only. v56.1 shares prototype student profiles across signed-in staff accounts that use the same workspace label, but it is still not approved for real student/client private data.
         </p>
         <p>
-          Production use still needs organization roles, audit logging, data retention rules, image storage policies, and a normalized database model.
+          Production use still needs organization membership, role-based workspace permissions, audit logging, data retention rules, image storage policies, and a normalized database model.
         </p>
       </div>
     </section>

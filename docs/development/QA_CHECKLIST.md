@@ -572,3 +572,40 @@ Use this checklist before adding more features.
 - [ ] `docs/refactors` exists.
 - [ ] `docs/project/VERSION_FEATURES.md` contains v55.
 - [ ] App source files are unchanged except for version/docs references.
+
+
+## v55.1 Student Visual + Play Access Checks
+
+- [ ] Student emoji visuals fill their visual containers again.
+- [ ] Activity cards show large emojis/icons.
+- [ ] Add-to-schedule choices show large emojis/icons.
+- [ ] Student Mode shows Play when using Core navigation.
+- [ ] Staff Mode -> Students shows a Play access helper.
+- [ ] Pressing Enable Play tab makes Play visible.
+- [ ] Choice Wheel still opens inside Play.
+- [ ] Build succeeds on Render.
+
+## v56 Staff Declutter + User Guide Checks
+
+- [ ] Staff Dashboard shows expandable groups.
+- [ ] Staff Students tab is grouped into readable sections.
+- [ ] Staff Choices tab separates schedule choices from Talk buttons and visual library tools.
+- [ ] Staff Schedule tab separates date/routine tools, review/add tools, and editing tools.
+- [ ] Staff Notes tab separates daily note, goals/accessibility, and observation/event logs.
+- [ ] Staff Reports tab separates progress/handoff from support-pattern tools.
+- [ ] Staff Settings tab separates safety/data health, account/cloud, security/exports, and danger zone.
+- [ ] `docs/user/STUDENT_SIDE_GUIDE.md` exists.
+- [ ] `docs/user/STAFF_SIDE_GUIDE.md` exists.
+- [ ] Play and Add remain available in Student Mode.
+- [ ] Build succeeds on Render.
+
+
+## v56.1 Shared Staff Workspace Checks
+
+- [ ] Staff A can create a student profile.
+- [ ] Staff A can save the shared student list from Settings.
+- [ ] Staff B can load the shared student list from Settings.
+- [ ] Staff B can select the student profile Staff A created.
+- [ ] SupabaseSyncPanel says Shared staff workspace.
+- [ ] database/v56-1-shared-staff-workspace-policies.sql exists.
+- [ ] Prototype warning still says not to use real student/client data.

@@ -134,7 +134,7 @@ export async function saveWorkspaceSnapshot(payload) {
   const session = await getCurrentSession();
 
   if (!session?.user?.id) {
-    throw new Error("Sign in before saving to Supabase.");
+    throw new Error("Sign in before saving to the shared staff workspace.");
   }
 
   const { data, error } = await supabase
@@ -144,7 +144,7 @@ export async function saveWorkspaceSnapshot(payload) {
       user_id: session.user.id,
       payload,
     })
-    .select("id, updated_at")
+    .select("id, updated_at, user_id")
     .single();
 
   if (error) {
@@ -159,14 +159,13 @@ export async function loadLatestWorkspaceSnapshot() {
   const session = await getCurrentSession();
 
   if (!session?.user?.id) {
-    throw new Error("Sign in before loading from Supabase.");
+    throw new Error("Sign in before loading the shared staff workspace.");
   }
 
   const { data, error } = await supabase
     .from("accessflow_workspace_snapshots")
-    .select("id, payload, created_at, updated_at")
+    .select("id, payload, created_at, updated_at, user_id")
     .eq("workspace_label", workspaceLabel)
-    .eq("user_id", session.user.id)
     .order("updated_at", { ascending: false })
     .limit(1)
     .maybeSingle();
