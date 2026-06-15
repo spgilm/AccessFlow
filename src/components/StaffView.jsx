@@ -1,5 +1,5 @@
 /**
- * Staff-facing workflow screen. Groups staff tools into Setup, Students, Choices, Schedule, Notes, and Save tabs.
+ * Staff-facing workflow screen. Groups staff tools into Dashboard, Setup, Students, Choices, Schedule, Notes, Reports, and Settings tabs.
  *
  * Comment added in v15 to make the prototype easier to study and modify.
  */
@@ -56,6 +56,7 @@ import StaffAlternativeAccessGuidePanel from "./StaffAlternativeAccessGuidePanel
 import StaffAacExpansionPanel from "./StaffAacExpansionPanel.jsx";
 import StaffVisualCoveragePanel from "./StaffVisualCoveragePanel.jsx";
 import StaffReleaseReadinessPanel from "./StaffReleaseReadinessPanel.jsx";
+import StaffGuiReviewPanel from "./StaffGuiReviewPanel.jsx";
 import SupabaseSyncPanel from "./SupabaseSyncPanel.jsx";
 import TemplateManager from "./TemplateManager.jsx";
 import PrototypeWarningPanel from "./PrototypeWarningPanel.jsx";
@@ -73,7 +74,7 @@ const staffTabs = [
   { id: "schedule", label: "Schedule" },
   { id: "notes", label: "Notes" },
   { id: "reports", label: "Reports" },
-  { id: "save", label: "Save" },
+  { id: "save", label: "Settings" },
 ];
 
 function WorkflowTabs({ tabs, activeTab, onChange, label }) {
@@ -257,6 +258,8 @@ export default function StaffView({
       visualLibrary={visualLibrary}
       supportEvents={supportEvents}
     />
+
+    <StaffGuiReviewPanel displaySettings={displaySettings} />
 
     <StaffFeatureGuidePanel onGoToTab={setActiveStaffTab} />
   </>
@@ -600,8 +603,8 @@ export default function StaffView({
       {activeStaffTab === "save" ? (
         <section className="staff-tab-screen" aria-labelledby="staff-save-heading">
           <div className="focus-header compact-focus-header">
-            <p className="eyebrow">Save</p>
-            <h2 id="staff-save-heading">Account, cloud, and export</h2>
+            <p className="eyebrow">Settings</p>
+            <h2 id="staff-save-heading">Account, cloud, export, and security</h2>
           </div>
 
           <PrototypeWarningPanel />

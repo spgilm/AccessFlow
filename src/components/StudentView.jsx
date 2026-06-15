@@ -1,5 +1,5 @@
 /**
- * Student-facing workflow screen. v51 splits tools into Profile, Schedule, Choose, Make, Board, Help, Relax, and Games so each screen has one clearer job.
+ * Student-facing workflow screen. v53 keeps advanced tools available but defaults to a lower-clutter Schedule, Talk, Help, and Calm layout.
  *
  * Comment added in v15 to make the prototype easier to study and modify.
  */
@@ -271,7 +271,7 @@ useEffect(() => {
       {activeStudentTab === "profile" ? (
         <section className="student-tab-screen student-profile-screen" aria-labelledby="student-profile-heading">
           <div className="focus-header compact-focus-header">
-            <p className="eyebrow">Profile</p>
+            <p className="eyebrow">Me</p>
             <h2 id="student-profile-heading">About me</h2>
             <p>My preferences, check-ins, rewards, and progress in one place.</p>
           </div>
@@ -519,9 +519,9 @@ useEffect(() => {
       {activeStudentTab === "board" ? (
         <section className="student-tab-screen student-board-screen" aria-labelledby="student-board-heading">
           <div className="focus-header compact-focus-header">
-            <p className="eyebrow">Board</p>
-            <h2 id="student-board-heading">Words and choices</h2>
-            <p>Communication boards, choice board, self-advocacy, and community/work cards.</p>
+            <p className="eyebrow">Talk</p>
+            <h2 id="student-board-heading">Talk and choices</h2>
+            <p>Communication boards, choice buttons, AAC words, and community/work cards.</p>
           </div>
 
           <StudentChoiceBoard
@@ -677,7 +677,7 @@ useEffect(() => {
       {activeStudentTab === "relax" ? (
         <section className="student-tab-screen student-relax-screen" aria-labelledby="student-relax-heading">
           <div className="focus-header compact-focus-header">
-            <p className="eyebrow">Relax</p>
+            <p className="eyebrow">Calm</p>
             <h2 id="student-relax-heading">Help me calm down</h2>
             <p>Sensory supports, regulation, waiting help, and calm communication.</p>
           </div>

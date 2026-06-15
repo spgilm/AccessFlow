@@ -2123,3 +2123,13 @@ v51.4 fixes Student Mode showing duplicate tab bars by removing the old `student
 ## v52 Simple Games Pack
 
 v52 adds a real Student Mode Games panel with Rock Paper Scissors, Choice / Color Wheel, Word Rescue, Tic Tac Toe, Snake, Dino Jump, Memory Match, and Float Bird. Games are prototype-level, touch-friendly, low-stimulation, and do not require student/client data.
+
+
+## v53 GUI Declutter Trial
+
+v53 changes the default Student Mode from a full 8-tab layout to a lower-clutter Core preset: Schedule, Talk, Help, Calm. Advanced sections such as Me, Choose, Make, and Games remain available through staff-controlled navigation presets.
+
+
+## Version feature history
+
+Per-version report files have been consolidated into `VERSION_FEATURES.md` so the project root is less cluttered.

@@ -184,3 +184,13 @@ v51.3 stabilizes the navigation model before visual beautification. The next pol
 ## v52 simple games note
 
 v52 starts the Games area with simple prototype games. Future versions can add staff controls for hiding specific games, difficulty settings, visual themes, sound toggles, and game-based reinforcement options.
+
+
+## v53 GUI declutter note
+
+v53 is a deliberate pause on feature expansion. It tests a lower-clutter default Student Mode and introduces navigation presets so future features can stay available without overwhelming the student interface.
+
+
+## Version feature file note
+
+Version-specific feature summaries are now consolidated into `VERSION_FEATURES.md` to reduce root-directory clutter.

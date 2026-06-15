@@ -5,7 +5,7 @@
  */
 import { useState } from "react";
 import { getIndependenceSettings } from "../data/independenceSettings.js";
-import { getDisplaySettings } from "../data/displaySettings.js";
+import { getDisplaySettings, studentNavigationPresets } from "../data/displaySettings.js";
 import { getVisualPreferenceLabel, visualPreferenceOptions } from "../utils/visualPreferences.js";
 
 export default function ProfileManager({
@@ -61,22 +61,22 @@ export default function ProfileManager({
 
 function getStudentPreviewSummary() {
   if (displaySettings.studentModeLayout === "boardOnly") {
-    return "Student Mode will open as a communication board only.";
+    return "Student Mode will open as Talk only.";
   }
 
   if (displaySettings.studentModeLayout === "firstThenOnly") {
     return "Student Mode will show a First / Then view only.";
   }
 
-  if (displaySettings.interfaceLevel === "simple") {
-    return "Student Mode will show a simplified Schedule, Board, Relax, and Games layout.";
+  const preset = studentNavigationPresets.find(
+    (item) => item.id === (displaySettings.studentNavigationPreset ?? "core")
+  );
+
+  if (preset) {
+    return `Navigation preset: ${preset.label}.`;
   }
 
-  if (displaySettings.interfaceLevel === "advanced") {
-    return "Student Mode will show the full Profile, Schedule, Choose, Make, Board, Relax, and Games workflow.";
-  }
-
-  return "Student Mode will show the standard Profile, Schedule, Choose, Make, Board, Relax, and Games workflow.";
+  return "Student Mode will use the selected navigation and display settings.";
 }
 
   return (
@@ -240,6 +240,7 @@ function getStudentPreviewSummary() {
                 studentModeLayout: "tabs",
                 studentPanelLayout: "minimal",
                 defaultStudentView: "schedule",
+                studentNavigationPreset: "simple",
                 showChooseTab: false,
                 showMakeTab: false,
                 showChoiceBoardTab: true,
@@ -262,10 +263,11 @@ function getStudentPreviewSummary() {
                   studentModeLayout: "tabs",
                   studentPanelLayout: "open",
                   defaultStudentView: "schedule",
+                  studentNavigationPreset: "full",
                   showChooseTab: true,
                   showMakeTab: true,
                   showChoiceBoardTab: true,
-                showHelpTab: true,
+                  showHelpTab: true,
                   showProgress: true,
                   showPromptControls: true,
                   showStepNumbers: true,
@@ -283,10 +285,11 @@ function getStudentPreviewSummary() {
                   studentModeLayout: "tabs",
                   studentPanelLayout: "grouped",
                   defaultStudentView: "schedule",
-                  showChooseTab: true,
-                  showMakeTab: true,
+                  studentNavigationPreset: "core",
+                  showChooseTab: false,
+                  showMakeTab: false,
                   showChoiceBoardTab: true,
-                showHelpTab: true,
+                  showHelpTab: true,
                   showProgress: true,
                   showPromptControls: false,
                   showStepNumbers: true,
@@ -327,6 +330,24 @@ function getStudentPreviewSummary() {
   </label>
 
   <label>
+    Student navigation preset
+    <select
+      value={displaySettings.studentNavigationPreset ?? "core"}
+      onChange={(event) => updateDisplaySetting("studentNavigationPreset", event.target.value)}
+      disabled={displaySettings.studentModeLayout !== "tabs"}
+    >
+      {studentNavigationPresets.map((preset) => (
+        <option key={preset.id} value={preset.id}>
+          {preset.label}
+        </option>
+      ))}
+    </select>
+    <small className="field-help">
+      Use Core for a low-clutter default. Use Full only for advanced students who can handle all tools.
+    </small>
+  </label>
+
+  <label>
     Student panel layout
     <select
       value={displaySettings.studentPanelLayout ?? "grouped"}
@@ -345,13 +366,13 @@ function getStudentPreviewSummary() {
       onChange={(event) => updateDisplaySetting("defaultStudentView", event.target.value)}
       disabled={displaySettings.studentModeLayout !== "tabs"}
     >
-      <option value="profile">Profile</option>
+      <option value="profile">Me</option>
       <option value="schedule">Schedule</option>
       <option value="choose">Choose</option>
       <option value="make">Make</option>
-      <option value="board">Board</option>
+      <option value="board">Talk</option>
       <option value="help">Help</option>
-      <option value="relax">Relax</option>
+      <option value="relax">Calm</option>
       <option value="games">Games</option>
     </select>
   </label>
@@ -443,13 +464,13 @@ function getStudentPreviewSummary() {
     ["eyeGazeFriendly", "Eye-gaze friendly spacing"],
     ["showBoardActivitySection", "Show activities section on Board"],
     ["showStudentToolSummary", "Show student settings summary"],
-    ["showProfileTab", "Show Profile tab"],
+    ["showProfileTab", "Show Me tab"],
     ["showScheduleTab", "Show Schedule tab"],
     ["showChooseTab", "Show Choose tab"],
     ["showMakeTab", "Show Make tab"],
-    ["showChoiceBoardTab", "Show Board tab"],
+    ["showChoiceBoardTab", "Show Talk tab"],
     ["showHelpTab", "Show Help tab"],
-    ["showRelaxTab", "Show Relax tab"],
+    ["showRelaxTab", "Show Calm tab"],
     ["showGamesTab", "Show Games tab"],
     ["showGuidedScheduleBuilder", "Show guided schedule builder"],
     ["showAboutMePanel", "Show About Me profile"],
@@ -474,7 +495,7 @@ function getStudentPreviewSummary() {
   <strong>Student Mode preview</strong>
   <span>{getStudentPreviewSummary()}</span>
   <small>
-    Touch size: {displaySettings.touchSize}. Text/visual display: {displaySettings.textDisplay}. Visual preference: {getVisualPreferenceLabel(displaySettings)}. Panel layout: {displaySettings.studentPanelLayout ?? "grouped"}.
+    Touch size: {displaySettings.touchSize}. Text/visual display: {displaySettings.textDisplay}. Visual preference: {getVisualPreferenceLabel(displaySettings)}. Navigation: {displaySettings.studentNavigationPreset ?? "core"}. Panel layout: {displaySettings.studentPanelLayout ?? "grouped"}.
   </small>
 </div>
 

@@ -490,3 +490,23 @@ Use this checklist before adding more features.
 - [ ] Student and Staff still show one 8-tab navigation bar.
 - [ ] Staff Auth Gate still appears when signed out.
 - [ ] Build succeeds on Render.
+
+
+## v53 GUI Declutter Trial Checks
+
+- [ ] Student Mode default shows Schedule, Talk, Help, and Calm.
+- [ ] Student labels say Me, Talk, and Calm instead of Profile, Board, and Relax.
+- [ ] Staff Mode shows Settings instead of Save.
+- [ ] Staff Dashboard shows the v53 GUI review / declutter panel.
+- [ ] Staff Students tab lets staff select Core, Simple, Communication, Builder, Full, or Custom navigation.
+- [ ] Full preset shows Me, Schedule, Choose, Make, Talk, Help, Calm, and Games.
+- [ ] Games still work when Games is enabled.
+- [ ] Staff Auth Gate still appears when signed out.
+- [ ] Build succeeds on Render.
+
+
+## Version feature file check
+
+- [ ] `VERSION_FEATURES.md` exists.
+- [ ] The ZIP does not contain scattered `V##_...md` report files.
+- [ ] README, CODE_EXPLANATION, QA_CHECKLIST, and ROADMAP still exist.

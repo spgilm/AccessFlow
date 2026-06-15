@@ -1558,3 +1558,13 @@ Student tab resolution now includes Help. StaffView now includes Reports. CSS ov
 ## v52 Simple Games Pack
 
 `StudentGamesPanel.jsx` contains the v52 games. `StudentView.jsx` imports and renders `StudentGamesPanel` inside the existing Games tab. `styles.css` adds the shared game-card, board, grid, wheel, snake, dino, memory, and float-game styles.
+
+
+## v53 GUI Declutter Trial
+
+`displaySettings.js` now exports `studentNavigationPresets`. `resolveStudentTabs` uses the selected preset before falling back to custom visibility toggles. `ProfileManager` exposes the preset selector. `StaffGuiReviewPanel` gives staff a dashboard-level declutter check.
+
+
+## Version feature history
+
+`VERSION_FEATURES.md` is now the single version-feature log. Individual `V##_...md` report files are no longer kept in the root build package.

@@ -12,14 +12,15 @@ export const defaultDisplaySettings = {
   touchSize: "standard",
   textDisplay: "iconsAndWords",
   visualPreference: "balanced",
-  showProfileTab: true,
+  studentNavigationPreset: "core",
+  showProfileTab: false,
   showScheduleTab: true,
-  showChooseTab: true,
-  showMakeTab: true,
+  showChooseTab: false,
+  showMakeTab: false,
   showChoiceBoardTab: true,
   showHelpTab: true,
   showRelaxTab: true,
-  showGamesTab: true,
+  showGamesTab: false,
   showGuidedScheduleBuilder: true,
   showAboutMePanel: true,
   showWords: true,
@@ -71,6 +72,69 @@ export function getDisplaySettings(profile) {
   };
 }
 
+export const studentNavigationPresets = [
+  {
+    id: "core",
+    label: "Core: Schedule, Talk, Help, Calm",
+    description: "Default low-clutter layout for most students.",
+    tabs: ["schedule", "board", "help", "relax"],
+  },
+  {
+    id: "simple",
+    label: "Simple: Schedule, Help, Calm",
+    description: "Lowest-clutter layout for students who need fewer choices.",
+    tabs: ["schedule", "help", "relax"],
+  },
+  {
+    id: "communication",
+    label: "Communication: Talk, Help, Calm, Schedule",
+    description: "Prioritizes communication and support tools.",
+    tabs: ["board", "help", "relax", "schedule"],
+  },
+  {
+    id: "builder",
+    label: "Builder: Schedule, Choose, Make, Help",
+    description: "For students practicing schedule planning and autonomy.",
+    tabs: ["schedule", "choose", "make", "help"],
+  },
+  {
+    id: "full",
+    label: "Full: Me, Schedule, Choose, Make, Talk, Help, Calm, Games",
+    description: "Shows the complete advanced Student Mode.",
+    tabs: ["profile", "schedule", "choose", "make", "board", "help", "relax", "games"],
+  },
+  {
+    id: "custom",
+    label: "Custom toggles",
+    description: "Uses the individual tab visibility checkboxes.",
+    tabs: [],
+  },
+];
+
+const studentTabDefinitions = {
+  profile: { id: "profile", label: "Me" },
+  schedule: { id: "schedule", label: "Schedule" },
+  choose: { id: "choose", label: "Choose" },
+  make: { id: "make", label: "Make" },
+  board: { id: "board", label: "Talk" },
+  help: { id: "help", label: "Help" },
+  relax: { id: "relax", label: "Calm" },
+  games: { id: "games", label: "Games" },
+};
+
+function buildTabsFromPreset(presetId, settings) {
+  const preset = studentNavigationPresets.find((item) => item.id === presetId);
+
+  if (!preset || preset.id === "custom") {
+    return null;
+  }
+
+  return preset.tabs
+    .filter((tabId) => tabId !== "make" || settings.interfaceLevel !== "simple")
+    .map((tabId) => studentTabDefinitions[tabId])
+    .filter(Boolean);
+}
+
 export function resolveStudentTabs(displaySettings) {
   const settings = {
     ...defaultDisplaySettings,
@@ -78,33 +142,37 @@ export function resolveStudentTabs(displaySettings) {
   };
 
   if (settings.studentModeLayout === "boardOnly") {
-    return [{ id: "board", label: "Board" }];
+    return [{ id: "board", label: "Talk" }];
   }
 
   if (settings.studentModeLayout === "firstThenOnly") {
     return [{ id: "schedule", label: "First / Then" }];
   }
 
+  const presetTabs = buildTabsFromPreset(settings.studentNavigationPreset, settings);
+
+  if (presetTabs) {
+    return presetTabs;
+  }
+
   if (settings.interfaceLevel === "simple") {
     return [
-      settings.showProfileTab !== false ? { id: "profile", label: "Profile" } : null,
-      { id: "schedule", label: "Schedule" },
-      settings.showChoiceBoardTab !== false ? { id: "board", label: "Board" } : null,
-      settings.showHelpTab !== false ? { id: "help", label: "Help" } : null,
-      settings.showRelaxTab !== false ? { id: "relax", label: "Relax" } : null,
-      settings.showGamesTab !== false ? { id: "games", label: "Games" } : null,
+      settings.showScheduleTab !== false ? studentTabDefinitions.schedule : null,
+      settings.showChoiceBoardTab !== false ? studentTabDefinitions.board : null,
+      settings.showHelpTab !== false ? studentTabDefinitions.help : null,
+      settings.showRelaxTab !== false ? studentTabDefinitions.relax : null,
     ].filter(Boolean);
   }
 
   return [
-    settings.showProfileTab !== false ? { id: "profile", label: "Profile" } : null,
-    settings.showScheduleTab !== false ? { id: "schedule", label: "Schedule" } : null,
-    settings.showChooseTab !== false ? { id: "choose", label: "Choose" } : null,
-    settings.showMakeTab !== false && settings.interfaceLevel !== "simple" ? { id: "make", label: "Make" } : null,
-    settings.showChoiceBoardTab !== false ? { id: "board", label: "Board" } : null,
-    settings.showHelpTab !== false ? { id: "help", label: "Help" } : null,
-    settings.showRelaxTab !== false ? { id: "relax", label: "Relax" } : null,
-    settings.showGamesTab !== false ? { id: "games", label: "Games" } : null,
+    settings.showProfileTab !== false ? studentTabDefinitions.profile : null,
+    settings.showScheduleTab !== false ? studentTabDefinitions.schedule : null,
+    settings.showChooseTab !== false ? studentTabDefinitions.choose : null,
+    settings.showMakeTab !== false && settings.interfaceLevel !== "simple" ? studentTabDefinitions.make : null,
+    settings.showChoiceBoardTab !== false ? studentTabDefinitions.board : null,
+    settings.showHelpTab !== false ? studentTabDefinitions.help : null,
+    settings.showRelaxTab !== false ? studentTabDefinitions.relax : null,
+    settings.showGamesTab !== false ? studentTabDefinitions.games : null,
   ].filter(Boolean);
 }
 

@@ -7874,3 +7874,70 @@ a:focus-visible,
   color: #001a2e;
   border-color: #ffe066;
 }
+
+
+/* v53: GUI declutter trial */
+.student-flow .workflow-tabs {
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+}
+
+.gui-review-panel,
+.gui-review-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.gui-review-summary {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.gui-review-summary article,
+.gui-review-list article {
+  display: grid;
+  gap: 0.35rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 0.85rem;
+  background: var(--surface-strong);
+}
+
+.gui-review-summary strong {
+  color: var(--primary-strong);
+  font-size: 1.2rem;
+}
+
+.gui-review-list article span {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-weight: 950;
+}
+
+.gui-review-list article.is-ready span {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.gui-review-list article.needs-review span {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.gui-review-list article p {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+[data-theme="dark"] .gui-review-summary article,
+[data-theme="dark"] .gui-review-list article {
+  background: #052f52;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] .gui-review-summary strong {
+  color: #ffe066;
+}
